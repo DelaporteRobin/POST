@@ -1,0 +1,39 @@
+{
+    "SERVICE GENERAUX": {
+        "CompanyLocation": "PARIS",
+        "CompanyWebsite": "https://generaux.services/",
+        "CompanyAnswer": null,
+        "CompanyContact": {
+            "Emile Asselineau": {
+                "mail": "",
+                "website": "https://www.linkedin.com/in/emile-asselineau/"
+            },
+            "Emma Le Louarn": {
+                "mail": "",
+                "website": "https://www.linkedin.com/in/emma-le-louarn/"
+            }
+        }
+    },
+    "rrr": {
+        "CompanyLocation": "",
+        "CompanyWebsite": "",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        }
+    },
+    "farfarf": {
+        "CompanyLocation": "",
+        "CompanyWebsite": "farfa",
+        "CompanyAnswer": "bonjour le monde",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        }
+    }
+}

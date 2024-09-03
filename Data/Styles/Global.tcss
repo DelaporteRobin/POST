@@ -1,0 +1,68 @@
+/* TCSS FOR THE GLOBAL WIDGETS */
+
+ListView {
+	border:round white;
+}
+TextArea {
+	border:round white;
+}
+ListView, TextArea {
+	border-title-align:left;
+	border-title-style:bold;
+}
+
+/*
+ScrollableContainer {
+	height:1fr;
+}
+*/
+
+
+
+
+/* TCSS CODE FOR THE MODAL SCREEN TO CREATE CONTACT */
+POST_AddContact {
+	align: center middle;
+}
+
+#modal_createcontact_container {
+	padding: 0 1;
+	width: 30%;
+
+	align: center middle;
+
+}
+
+#modal_newcompany_otheranswer {
+	height:8;
+
+	border-title-align:left;
+	border-title-style:bold;
+
+}
+
+#modal_addcontact_container {
+	height:5;
+	/*background: blue;*/
+}
+#modal_newcontact_container {
+	align: center middle;
+	height:5;
+}
+
+#modal_newcontactname, #modal_newcontactmail, #modal_newcontactwebsite {
+	width:33.33333%;
+}
+
+#modal_horizontal_container {
+	align: center middle;
+	height:7;
+}
+
+#modal_create_contact_button, #modal_cancel_contact_button {
+	margin-right:15;
+	margin-left:15;
+}
+
+
+
