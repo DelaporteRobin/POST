@@ -2,7 +2,7 @@
     "service g\u00e9n\u00e9raux": {
         "CompanyLocation": "paris",
         "CompanyWebsite": "https://generaux.services/",
-        "CompanyAnswer": "hello world",
+        "CompanyAnswer": false,
         "CompanyContact": {
             "Emile Asselineau": {
                 "mail": "",
@@ -18,10 +18,10 @@
             }
         }
     },
-    "testgarga": {
-        "CompanyLocation": "",
+    "test": {
+        "CompanyLocation": "paris",
         "CompanyWebsite": "",
-        "CompanyAnswer": "bonjour le monde!",
+        "CompanyAnswer": "",
         "CompanyContact": {
             "": {
                 "mail": "",

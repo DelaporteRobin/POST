@@ -6,7 +6,7 @@ from functools import partial
 
 
 from textual.app import App, ComposeResult
-from textual.widgets import Markdown, TextArea, RadioSet, RadioButton, Input, Log, Rule, Collapsible, Checkbox, SelectionList, LoadingIndicator, DataTable, Sparkline, DirectoryTree, Rule, Label, Button, Static, ListView, ListItem, OptionList, Header, SelectionList, Footer, Markdown, TabbedContent, TabPane, Input, DirectoryTree, Select, Tabs
+from textual.widgets import Markdown, DataTable,TextArea, RadioSet, RadioButton, Input, Log, Rule, Collapsible, Checkbox, SelectionList, LoadingIndicator, DataTable, Sparkline, DirectoryTree, Rule, Label, Button, Static, ListView, ListItem, OptionList, Header, SelectionList, Footer, Markdown, TabbedContent, TabPane, Input, DirectoryTree, Select, Tabs
 from textual.widgets.option_list import Option, Separator
 from textual.widgets.selection_list import Selection
 from textual.validation import Function, Number
@@ -14,6 +14,8 @@ from textual.screen import Screen, ModalScreen
 from textual import events
 from textual.containers import ScrollableContainer, Grid, Horizontal, Vertical, Container, VerticalScroll
 from textual import on, work
+
+from rich.text import Text 
 
 from datetime import datetime
 from pyfiglet import Figlet
@@ -109,9 +111,8 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			self.newcompany_contactlist_container = ScrollableContainer(id="modal_newcompany_contactlist")
 			yield self.newcompany_contactlist_container
 
-			if self.mode == "create":
-				new_contact = Modal_Contact()
-				self.newcompany_contactlist_container.mount(new_contact)
+
+			
 
 
 
@@ -122,20 +123,32 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 				yield Button("Quit", variant="error", id="modal_cancel_contact_button")
 
 
+		
+	
+
+	def on_mount(self) -> None:
 		#IF IN EDIT MODE LOAD THE DICTIONNARY OF THE SELECTED COMPANY
 		#AND UPDATE THE PAGE
 		if self.mode == "edit":
 			self.load_company_data_function(Modal_Contact)
+
+		if self.mode == "create":
+			new_contact = Modal_Contact()
+			self.newcompany_contactlist_container.mount(new_contact)
+		
 			
 
 
 	def on_button_pressed(self, event: Button.Pressed) -> None:
-		if event.button.id == "test":
-			self.display_message_function(self.query("#modal_newcontactname"))
+		#if event.button.id == "test":
+		#	self.display_message_function(self.query("#modal_newcontactname"))
+
 		if event.button.id == "quit":
 			self.app.exit()
+
 		elif event.button.id == "modal_cancel_contact_button":
 			self.app.pop_screen()
+
 		elif event.button.id == "modal_addcontacttolist_button":
 			new_contact = Modal_Contact()
 			#self.display_message_function(new_contact)
@@ -216,9 +229,11 @@ class POST_Application(App, POST_CommonApplication):
 				yield Button("ADD CONTACT", id="button_addcontact")
 				yield Button("EDIT CONTACT", id="button_editcontact")
 
-				self.listview_studiolist = ListView(id="listview_studiolist")
-				self.listview_studiolist.border_title = "Studio list"
-				yield self.listview_studiolist
+				#self.listview_studiolist = ListView(id="listview_studiolist")
+				#self.listview_studiolist.border_title = "Studio list"
+				#yield self.listview_studiolist
+				self.datatable_studiolist = DataTable(id = "datatable_studiolist")
+				yield self.datatable_studiolist
 
 
 
@@ -237,15 +252,34 @@ class POST_Application(App, POST_CommonApplication):
 		if event.key == "p":	
 			self.exit()
 
+		if event.key == "delete":
+			#self.display_message_function("hello")
+			#get selected item in list and delete the key from the dictionnary
+			value = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+			del self.company_dictionnary[value]
+			self.save_company_dictionnary_function()
+			self.update_informations_function()
+			self.display_message_function("Company removed from dictionnary")
+
+
 
 	
 	def on_button_pressed(self, event: Button.Pressed) -> None:
 		if event.button.id == "button_addcontact":
+
+			
+			#self.display_message_function(value)
 			self.push_screen(POST_AddContact("create"))
 
+
+
 		if event.button.id == "button_editcontact":
+
+			studio = list(self.company_dictionnary.keys())[self.query_one("#datatable_studiolist").cursor_coordinate[1]]
+			#value = self.company_dictionnary[list(self.company_dictionnary.keys())[(self.query_one("#datatable_studiolist").cursor_coordinate[1])]]
 			#get the selection
-			studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+
+			#studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
 
 
 			self.push_screen(POST_AddContact("edit", studio))
@@ -255,17 +289,27 @@ class POST_Application(App, POST_CommonApplication):
 
 	def update_informations_function(self):
 		
-		self.listview_studiolist.clear()
+		#self.listview_studiolist.clear()
+		self.datatable_studiolist.clear()
 
 		self.load_company_dictionnary_function()
 		self.display_message_function(self.company_dictionnary)
 		self.display_message_function("UPDATE")
 
+
+		rows = ["Location", "Company"]
+		self.datatable_studiolist.add_columns(*rows)
+
+		
+		i = 0
 		for key, value in self.company_dictionnary.items():
 
-			label = Label(key)
+			#label = Label(key)
+			self.datatable_studiolist.add_row(value["CompanyLocation"], key, height=1, key = i,label=Text(str(i)))
+			i+=1
 
-			self.listview_studiolist.append(ListItem(label))
+			
+		
 
 
 
