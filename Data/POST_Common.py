@@ -41,11 +41,11 @@ class POST_CommonApplication:
 	def save_company_dictionnary_function(self):
 		try:
 			with open(os.path.join(os.getcwd(), "Data/User/UserCompanyData.json"), "w") as save_file:
-				json.dump(self.company_dictionnary, save_file, indent=4)
+				json.dump(self.app.company_dictionnary, save_file, indent=4)
 
 		
-		except:
-			self.display_error_function("Impossible to save dictionnary")
+		except Exception as e:
+			self.display_error_function("Impossible to save dictionnary\n%s"%e)
 			return False
 		else:
 			self.display_message_function("Dictionnary saved")
@@ -56,11 +56,12 @@ class POST_CommonApplication:
 
 
 	def load_company_dictionnary_function(self):
-		try:
+		try:	
 			with open(os.path.join(os.getcwd(), "Data/User/UserCompanyData.json"), "r") as read_file:
-				self.company_dictionnary = json.load(read_file)
-		except:
-			self.display_error_function("Impossible to load company dictionnary")
+				self.app.company_dictionnary = json.load(read_file)
+		
+		except Exception as e:
+			self.display_error_function("Impossible to load company dictionnary\n%s"%e)
 		else:
 			self.display_message_function("Company dictionnary loaded")
 		
@@ -110,11 +111,64 @@ class POST_CommonApplication:
 
 
 			#replace the value in the company dictionnary and save the new dictionnary
-			if self.query_one("#modal_newcompanyname").value in self.company_dictionnary:
+			if (self.mode != "edit") and (self.query_one("#modal_newcompanyname").value in self.app.company_dictionnary):
 				self.display_error_function("That company is already registered in the dictionnary")
 			else:
-				self.company_dictionnary[self.query_one("#modal_newcompanyname").value] = company_informations
+				self.app.company_dictionnary[self.query_one("#modal_newcompanyname").value] = company_informations
 				value = self.save_company_dictionnary_function()
+				#update the value in interface
+				self.app.update_informations_function()
+
+
+
+
+
+
+
+	def load_company_data_function(self, Modal_Contact):
+		self.display_message_function(self.studio)
+		try:
+			studio_data = self.app.company_dictionnary[self.studio]
+		except:
+			self.display_error_function("Impossible to get studio data")
+		else:
+			self.newcompany_name.value = self.studio 
+			self.newcompany_location.value = studio_data["CompanyLocation"]
+			self.newcompany_website.value = studio_data["CompanyWebsite"]
+
+			if studio_data["CompanyAnswer"] == True:
+				self.newcompany_answer.value = 1
+			elif studio_data["CompanyAnswer"] == False:
+				self.newcompany_answer.value = 2
+			elif studio_data["CompanyAnswer"] == None:
+				self.newcompany_answer.value = 3
+			else:
+				self.newcompany_otheranswer.disabled=False
+				self.newcompany_answer.value = 4
+				self.newcompany_otheranswer.text = studio_data["CompanyAnswer"]
+
+
+			#create contact
+			if studio_data["CompanyContact"] != None:
+				for i in range(len(list(studio_data["CompanyContact"].keys()))):
+
+					#self.display_message_function(i)
+					contact_name = list(studio_data["CompanyContact"].keys())[i]
+					contact_mail = studio_data["CompanyContact"][contact_name]["mail"]
+					contact_website = studio_data["CompanyContact"][contact_name]["website"]
+
+					#self.display_message_function(contact_name)
+					new_contact = Modal_Contact(contact_name, contact_mail, contact_website)
+					self.newcompany_contactlist_container.mount(new_contact)
+
+
+
+
+					
+
+				
+
+
 
 
 

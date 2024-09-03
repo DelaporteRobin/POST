@@ -13,7 +13,7 @@ from textual.validation import Function, Number
 from textual.screen import Screen, ModalScreen
 from textual import events
 from textual.containers import ScrollableContainer, Grid, Horizontal, Vertical, Container, VerticalScroll
-from textual import on
+from textual import on, work
 
 from datetime import datetime
 from pyfiglet import Figlet
@@ -30,11 +30,33 @@ from Data.POST_Common import POST_CommonApplication
 
 
 class Modal_Contact(Static):
+	
+
+	def __init__(self, name="", mail="", website=""):
+
+		super().__init__()
+
+		#self.app.display_message_function("%s ; %s ; %s"%(name, mail, website))
+
+		self.contact_name = name 
+		self.website = website
+		self.mail = mail 
+		
+
+
+		
+
+
+		
+
+		#self.app.display_message_function(name)
+
+
 	def compose(self) -> ComposeResult:
 		with Horizontal(id="modal_newcontact_container"):
-			self.modal_newcontactname = Input(placeholder="Name", type="text", id="modal_newcontactname")
-			self.modal_newcontactmail = Input(placeholder="Mail", type="text", id="modal_newcontactmail")
-			self.modal_newcontactwebsite = Input(placeholder="Website", type="text", id="modal_newcontactwebsite")
+			self.modal_newcontactname = Input(placeholder="Name", value = self.contact_name, type="text", id="modal_newcontactname")
+			self.modal_newcontactmail = Input(placeholder="Mail", value = self.mail, type="text", id="modal_newcontactmail")
+			self.modal_newcontactwebsite = Input(placeholder="Website", value=self.website, type="text", id="modal_newcontactwebsite")
 
 			yield self.modal_newcontactname
 			yield self.modal_newcontactmail
@@ -50,11 +72,16 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 
 	CSS_PATH = ["Data/Styles/Dark_Theme.tcss", "Data/Styles/Global.tcss"]
 
+	def __init__(self, mode, studio=None):
+		super().__init__()
+		self.mode = mode
+		self.studio = studio
+		self.app.display_message_function("%s ; %s"%(mode, studio))
 
 
 
 	def compose(self) -> ComposeResult:
-		self.company_dictionnary = app.company_dictionnary
+		self.app.company_dictionnary
 		#self.display_message_function = app.display_message_function
 		#self.display_error_function = app.display_error_function
 
@@ -79,8 +106,13 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 				yield Button("Add contact", id="modal_addcontacttolist_button")
 				yield Button("Remove contact", id="modal_removecontactfromlist_button")
 			
-			self.newcompany_contactlist_container = ScrollableContainer(Modal_Contact(), id="modal_newcompany_contactlist")
+			self.newcompany_contactlist_container = ScrollableContainer(id="modal_newcompany_contactlist")
 			yield self.newcompany_contactlist_container
+
+			if self.mode == "create":
+				new_contact = Modal_Contact()
+				self.newcompany_contactlist_container.mount(new_contact)
+
 
 
 			yield Rule(line_style="double")
@@ -88,10 +120,18 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			with Horizontal(id="modal_horizontal_container"):
 				yield Button("Create", variant="primary", id="modal_create_contact_button")
 				yield Button("Quit", variant="error", id="modal_cancel_contact_button")
+
+
+		#IF IN EDIT MODE LOAD THE DICTIONNARY OF THE SELECTED COMPANY
+		#AND UPDATE THE PAGE
+		if self.mode == "edit":
+			self.load_company_data_function(Modal_Contact)
 			
 
 
 	def on_button_pressed(self, event: Button.Pressed) -> None:
+		if event.button.id == "test":
+			self.display_message_function(self.query("#modal_newcontactname"))
 		if event.button.id == "quit":
 			self.app.exit()
 		elif event.button.id == "modal_cancel_contact_button":
@@ -110,6 +150,7 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 
 		elif event.button.id == "modal_create_contact_button":
 			self.add_company_function()
+
 
 	
 	def on_select_changed(self, event: Select.Changed) -> None:
@@ -159,7 +200,7 @@ class POST_Application(App, POST_CommonApplication):
 		self.user_settings = {}
 
 
-		self.load_company_dictionnary_function()
+		#self.load_company_dictionnary_function()
 
 
 
@@ -193,25 +234,39 @@ class POST_Application(App, POST_CommonApplication):
 
 
 	async def on_key(self, event: events.Key) -> None:
-		if event.key == "p":
+		if event.key == "p":	
 			self.exit()
 
 
-
+	
 	def on_button_pressed(self, event: Button.Pressed) -> None:
 		if event.button.id == "button_addcontact":
-			self.push_screen(POST_AddContact())
+			self.push_screen(POST_AddContact("create"))
 
+		if event.button.id == "button_editcontact":
+			#get the selection
+			studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+
+
+			self.push_screen(POST_AddContact("edit", studio))
+			#self.update_informations_function()
 
 
 
 	def update_informations_function(self):
+		
 		self.listview_studiolist.clear()
 
+		self.load_company_dictionnary_function()
+		self.display_message_function(self.company_dictionnary)
+		self.display_message_function("UPDATE")
+
 		for key, value in self.company_dictionnary.items():
+
 			label = Label(key)
 
 			self.listview_studiolist.append(ListItem(label))
+
 
 
 

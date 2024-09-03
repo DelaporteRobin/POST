@@ -66,3 +66,18 @@ POST_AddContact {
 
 
 
+
+
+
+
+
+/* CODE ABOUT THE MAIN PAGE */
+#left_vertical_container {
+	width:20%;
+	height: 1fr;
+}
+
+
+#right_vertical_container {
+	height: 1fr;
+}

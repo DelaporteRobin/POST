@@ -1,34 +1,27 @@
 {
-    "SERVICE GENERAUX": {
-        "CompanyLocation": "PARIS",
+    "service g\u00e9n\u00e9raux": {
+        "CompanyLocation": "paris",
         "CompanyWebsite": "https://generaux.services/",
-        "CompanyAnswer": null,
+        "CompanyAnswer": "hello world",
         "CompanyContact": {
             "Emile Asselineau": {
                 "mail": "",
                 "website": "https://www.linkedin.com/in/emile-asselineau/"
             },
-            "Emma Le Louarn": {
+            "emma le louarn": {
                 "mail": "",
                 "website": "https://www.linkedin.com/in/emma-le-louarn/"
-            }
-        }
-    },
-    "rrr": {
-        "CompanyLocation": "",
-        "CompanyWebsite": "",
-        "CompanyAnswer": "",
-        "CompanyContact": {
-            "": {
+            },
+            "coucou": {
                 "mail": "",
                 "website": ""
             }
         }
     },
-    "farfarf": {
+    "testgarga": {
         "CompanyLocation": "",
-        "CompanyWebsite": "farfa",
-        "CompanyAnswer": "bonjour le monde",
+        "CompanyWebsite": "",
+        "CompanyAnswer": "bonjour le monde!",
         "CompanyContact": {
             "": {
                 "mail": "",
