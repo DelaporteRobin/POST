@@ -81,3 +81,17 @@ POST_AddContact {
 #right_vertical_container {
 	height: 1fr;
 }
+
+
+
+#right_vertical_container1 {
+	width:40%;
+}
+
+#right_mailpreset_container {
+	width:25%;
+}
+
+#textarea_prompt {
+	height: 15;
+}

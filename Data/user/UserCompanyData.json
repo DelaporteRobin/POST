@@ -22,10 +22,16 @@
         "CompanyLocation": "paris",
         "CompanyWebsite": "",
         "CompanyAnswer": "",
+        "CompanyContact": {}
+    },
+    "ROBIN STUDIO": {
+        "CompanyLocation": "Lyon",
+        "CompanyWebsite": "robin_test_studio.com",
+        "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
-                "website": ""
+            "Robin": {
+                "mail": "robindelaporte1207@gmail.com",
+                "website": "https://www.linkedin.com/in/robin-delaporte-15b274203/"
             }
         }
     }

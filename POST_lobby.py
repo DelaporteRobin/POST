@@ -1,12 +1,15 @@
 import os
 import sys
 import time 
+import re
+import dns.resolver
+import webbrowser
 
 from functools import partial
 
 
 from textual.app import App, ComposeResult
-from textual.widgets import Markdown, DataTable,TextArea, RadioSet, RadioButton, Input, Log, Rule, Collapsible, Checkbox, SelectionList, LoadingIndicator, DataTable, Sparkline, DirectoryTree, Rule, Label, Button, Static, ListView, ListItem, OptionList, Header, SelectionList, Footer, Markdown, TabbedContent, TabPane, Input, DirectoryTree, Select, Tabs
+from textual.widgets import Markdown, MarkdownViewer, DataTable,TextArea, RadioSet, RadioButton, Input, Log, Rule, Collapsible, Checkbox, SelectionList, LoadingIndicator, DataTable, Sparkline, DirectoryTree, Rule, Label, Button, Static, ListView, ListItem, OptionList, Header, SelectionList, Footer, Markdown, TabbedContent, TabPane, Input, DirectoryTree, Select, Tabs
 from textual.widgets.option_list import Option, Separator
 from textual.widgets.selection_list import Selection
 from textual.validation import Function, Number
@@ -229,20 +232,76 @@ class POST_Application(App, POST_CommonApplication):
 				yield Button("ADD CONTACT", id="button_addcontact")
 				yield Button("EDIT CONTACT", id="button_editcontact")
 
-				#self.listview_studiolist = ListView(id="listview_studiolist")
-				#self.listview_studiolist.border_title = "Studio list"
-				#yield self.listview_studiolist
-				self.datatable_studiolist = DataTable(id = "datatable_studiolist")
-				yield self.datatable_studiolist
+				self.listview_studiolist = ListView(id="listview_studiolist")
+				self.listview_studiolist.border_title = "Studio list"
+				yield self.listview_studiolist
+				#self.datatable_studiolist = DataTable(id = "datatable_studiolist")
+				#yield self.datatable_studiolist
 
 
+			with Horizontal(id = "right_horizontal_container"):
+				with Vertical(id="right_vertical_container1"):
+					self.markdown_studio = Markdown("Hello World")
+					yield self.markdown_studio
 
-			with Vertical(id="right_vertical_container"):
-				self.markdown_studio = Markdown("""INFORMATIONS...""")
-				yield self.markdown_studio
+				with Horizontal(id="right_mail_container"):
+
+					with Vertical(id="right_mailpreset_container"):
+						self.input_presetname = Input(placeholder="Mail preset name", id="input_presetname")
+						yield self.input_presetname
+						yield Button("Create preset", id="button_createpreset")
+						yield Button("Save preset", id="button_savepreset")
+						yield Button("Delete preset", id="button_deletepreset")
+						self.checkbox_copilot = Checkbox("Toggle copilot")
+						yield self.checkbox_copilot
+
+						self.listview_mailpreset = ListView(id="listview_mailpreset")
+						yield self.listview_mailpreset
+						self.listview_mailpreset.border_title = "Preset list"
+					
+					with Vertical(id="right_mailtext_container"):
+						with Collapsible(title="Copilot settings", id="right_mailprompt_collapsible"):
+							self.textarea_prompt = TextArea(id="textarea_prompt")
+							yield self.textarea_prompt
+							self.textarea_prompt.border_title = "Copilot prompt"
+						self.textarea_mail = TextArea(id="textarea_mail")
+						yield self.textarea_mail
+						self.textarea_mail.border_title = "Mail"
 
 
+	def on_mount(self) -> None:
 		self.update_informations_function()
+
+
+
+
+
+	def on_button_pressed(self, event: Button.Pressed) -> None:
+		if event.button.id == "button_createpreset":
+			self.create_mail_preset_function()
+
+
+		if event.button.id == "button_addcontact":
+
+			
+			#self.display_message_function(value)
+			self.push_screen(POST_AddContact("create"))
+
+
+
+		if event.button.id == "button_editcontact":
+
+			#studio = list(self.company_dictionnary.keys())[self.query_one("#datatable_studiolist").cursor_coordinate[1]]
+			#value = self.company_dictionnary[list(self.company_dictionnary.keys())[(self.query_one("#datatable_studiolist").cursor_coordinate[1])]]
+			#get the selection
+
+			studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+
+
+			self.push_screen(POST_AddContact("edit", studio))
+			#self.update_informations_function()
+
+
 
 
 
@@ -263,49 +322,78 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
-	
-	def on_button_pressed(self, event: Button.Pressed) -> None:
-		if event.button.id == "button_addcontact":
+	def on_markdown_link_clicked(self, event: Markdown.LinkClicked) -> None:
+		link = event.href
 
+		#check if email or internet adress
+		email_regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
+		url_regex = r'^(https?://)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(/.*)?$'
+
+
+
+		
+
+
+		#test the dns check
+		if re.match(url_regex, link):
+			#self.display_message_function("website adress")
+			#open the link in a webbrower
+			webbrowser.open(link)
+		else:
+			try:
+				domain = link.split("@")[1]
+				dns.resolver.resolve(domain, "MX")
+			except Exception as e:
+				self.display_error_function("Link not recognized\n%s"%e)
+			else:
+				self.display_message_function("Email adress")
+
+		
+
+
+
+	def on_list_view_selected(self, event: ListView.Selected) -> None:
+		if event.list_view.id == "listview_studiolist":
+			#check the content in the selection by getting the studio name
+			index = self.listview_studiolist.index
+			#get the content of the dictionnary
+			#and fill the markdown viewer with the company informations
+			company_name = list(self.company_dictionnary.keys())[index]
+			company_data = self.company_dictionnary[company_name]
 			
-			#self.display_message_function(value)
-			self.push_screen(POST_AddContact("create"))
+			markdown = self.generate_markdown_function(company_name, company_data)
+
+			self.markdown_studio.update(markdown)
 
 
 
-		if event.button.id == "button_editcontact":
-
-			studio = list(self.company_dictionnary.keys())[self.query_one("#datatable_studiolist").cursor_coordinate[1]]
-			#value = self.company_dictionnary[list(self.company_dictionnary.keys())[(self.query_one("#datatable_studiolist").cursor_coordinate[1])]]
-			#get the selection
-
-			#studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
 
 
-			self.push_screen(POST_AddContact("edit", studio))
-			#self.update_informations_function()
+	
+	
 
 
 
 	def update_informations_function(self):
 		
-		#self.listview_studiolist.clear()
-		self.datatable_studiolist.clear()
+		self.listview_studiolist.clear()
+		#self.datatable_studiolist.clear()
 
 		self.load_company_dictionnary_function()
 		self.display_message_function(self.company_dictionnary)
 		self.display_message_function("UPDATE")
 
 
-		rows = ["Location", "Company"]
-		self.datatable_studiolist.add_columns(*rows)
+		#rows = ["Location", "Company"]
+		#self.datatable_studiolist.add_columns(*rows)
 
 		
 		i = 0
 		for key, value in self.company_dictionnary.items():
 
-			#label = Label(key)
-			self.datatable_studiolist.add_row(value["CompanyLocation"], key, height=1, key = i,label=Text(str(i)))
+			label = Label("[ %s ] %s"%(value["CompanyLocation"], key))
+			#self.datatable_studiolist.add_row(value["CompanyLocation"], key, height=1, key = i,label=Text("hello"))
+			self.listview_studiolist.append(ListItem(label))
 			i+=1
 
 			

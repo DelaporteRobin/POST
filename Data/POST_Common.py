@@ -164,6 +164,105 @@ class POST_CommonApplication:
 
 
 
+
+
+	def generate_markdown_function(self, company_name, company_data):
+		markdown = """
+# Company name : __%s__
+
+- Company location : %s
+"""%(company_name, company_data["CompanyLocation"])
+
+		
+		if company_data["CompanyAnswer"] not in [True, False, None]:
+			markdown += """
+
+> [!WARNING]
+> Answer is different : %s
+"""%(company_data["CompanyAnswer"])
+		
+		elif company_data["CompanyAnswer"] == True:
+			markdown += """
+> [!IMPORTANT]
+> The company said Yes
+"""
+		elif company_data["CompanyAnswer"] == False:
+			markdown += """
+> [!ERROR]
+> The company said No
+"""
+		else:
+			markdown += """
+No answer from the company
+"""
+		
+
+
+		#CONTACT PART
+		markdown += """
+Website of the company : [%s](%s)
+"""%(company_name, company_data["CompanyWebsite"])
+
+		markdown += """
+## Contact from the company 
+"""
+		if company_data["CompanyContact"] != {}:
+			for contact_name, contact_data in company_data["CompanyContact"].items():
+				markdown += """
+- %s
+	- Mail : %s
+	- Website : %s
+"""%(contact_name, contact_data["mail"], contact_data["website"])
+		else:
+			markdown += """
+> [!WARNING]
+> No contact from that company!
+"""
+
+
+		
+
+		return markdown
+
+
+
+
+
+	def letter_verification_function(self, text):
+		letter = "abcdefghijklmnopqrstuvwxyz"
+		capital = letter.upper()
+		figure = "0123456789"
+
+		list_letter = list(letter)
+		list_capital = list(capital)
+		list_figure = list(figure)
+
+
+		list_text = list(text)
+		if len(list_text) == 0:
+			return False 
+		else:
+			for i in range(len(list_text)):
+				if (list_text[i] in list_letter) or (list_text[i] in list_capital) or (list_text[i] in list_figure):
+					return True 
+			return False
+
+
+
+
+
+
+	def create_mail_preset_function(self):
+		#get the content in the field
+		preset_name = self.input_presetname.value
+		preset_content = self.textarea_mail.text
+
+		if (self.letter_verification_function(preset_name) == False) or (self.letter_verification_function(preset_content)==False):
+			self.display_error_function("You have to enter a name and a content for the mail preset")
+			return
+
+		self.display_message_function(content)
+
 					
 
 				
