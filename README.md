@@ -1,16 +1,16 @@
 # TASKLIST FOR THE POST PROGRAM
 
 - Add more settings about the mails you send:
-	. did I already sent a mail before
-	. what is the main topic about that studio (commercials...) --> in the studio settings
-	. what is the language of the mail
-	. what are the informations I should replace in the mail by the informations of the user?
+	- did I already sent a mail before
+	- what is the main topic about that studio (commercials) in the studio settings
+	- what is the language of the mail
+	- what are the informations I should replace in the mail by the informations of the user?
 		--> Maybe create a dictionnary of informations about the user that the AI would adapt
-	. what is the model you want to use?
+	- what is the model you want to use?
 - Start to implement the tcss theme
 - Add more details about the studio :
-	. type of studio : commercials, animations, series...
-	. the last time you contacted the studio
+	- type of studio : commercials, animations, series
+	- the last time you contacted the studio
 
 
 # how to display informations to user
