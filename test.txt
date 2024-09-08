@@ -1,0 +1,82 @@
+Bonjour,
+
+Je m'appelle Robin et je suis un artiste 3D, récemment diplômé de l'ESMA de Lyon, avec une spécialisation actuelle en texture et modélisation. Je suis passionné par l'art et la créativité audacieuse, et je m'efforce de donner à mes projets un aspect visuel saisissant et original.
+
+Bien que mon école m'ait orienté vers les studios de cinéma d'animation, je suis personnellement attiré par la publicité, les clips, l'événementiel et la mode. Je crois qu'il s'agit d'un monde où l'image doit immédiatement capter l'attention, et où la recherche constante de l'originalité est essentielle pour créer quelque chose d'unique et de percutant. Après avoir vu le travail de votre studio, je suis convaincu qu'il travaille dans cette optique, ce qui m'intéresse beaucoup.
+
+Ma curiosité naturelle et mon goût pour l'apprentissage m'amènent souvent à sortir de ma zone de confort et à repousser les limites de mes compétences. J'ai récemment participé à la création du court métrage TRASH, qui a d'ailleurs remporté le premier prix du public cette année. C'est un projet que j'ai beaucoup aimé et qui m'a permis de développer mes compétences en matière de lookdev, de sculpture et de modélisation.
+
+Je vous laisse ci-joint mon CV ainsi que le lien pour visualiser ma DemoReel contenant mes projets personnels, ainsi que des breakdowns du court métrage TRASH sur lequel j'ai travaillé cette année. J'espère que ma sincérité et mon enthousiasme pour votre travail vous convaincront de considérer ma candidature.
+
+Je vous remercie d'avance pour l'attention que vous porterez à ma candidature et je serais ravi de pouvoir échanger avec vous lors d'un entretien. Dans cette attente, je reste à votre disposition pour toute information complémentaire.
+
+Cordialement,
+
+Robin
+You are a junior 3d artist graduated from [school_name] and you
+want to write an email to this studio [studio_name] mainly
+active on projects such as [project type]
+
+Take this template of email and adapt the details and eventually
+add relevant informations to make that email attractive for
+recruiters.
+
+
+
+
+here is the mail preset you have to adapt : 
+
+Bonjour,
+
+Je suis un artiste 3d (spécialisé pour le moment en texture et modélisation), fraîchement 
+diplômé de l'ESMA Lyon et à la recherche d'emploi.
+Je suis passionné par l'art, à la recherche constante de l'audace créative et j'essaie
+toujours de faire transparaître dans mes projets un visuel impactant et original.
+
+Bien que mon école m'oriente plus vers des studios de film d'animation, je me sens 
+bien plus attiré par le fait de travailler dans la publicité, les clips, le monde de
+l'événementiel ou encore la mode.
+De mon point de vue, c'est un monde où l'image doit immédiatement capter l'attention et 
+où il faut être constamment à la recherche de l'originalité afin de créer quelque chose d'unique et de percutant.
+Je pense que votre studio travaille dans cette optique et ça m'intéresse beaucoup.
+
+Curieux de nature, j'ai une nature polyvalente et un goût pour l'apprentissage. 
+J'apprécie me mettre en danger afin de toujours repousser mes limites et découvrir 
+des choses nouvelles et je pense que cela pourrait être utile dans la réalisation de vos projets.
+
+Je vous laisse ci-joint mon CV ainsi que le lien pour visualiser ma DemoReel
+contenant les projets personnels que j'ai pu faire en dehors de mon école
+ainsi que des breakdown du court métrage TRASH sur lequel j'ai travaillé
+cette année.
+
+Je vous remercie d'avance pour l'attention que vous porterez à ma candidature
+en espérant que ma sincérité vous aura convaincu.
+Je serai plus qu'heureux de pouvoir échanger avec vous lors d'un entretien.
+Dans cette attention je reste à votre disposition pour toute information
+complémentaire.
+
+
+
+Mes sincères salutations.
+
+
+
+Delaporte Robin
+
+
+
+adapt the mail so it correspond if you send it to that company : service généraux
+
+if you want more informations about this company to generate the mail, there is the website link : https://generaux.services/
+
+
+
+Try if possible to integrate in this email these details about yourself a subtle way:
+
+- je m'appelle Robin et je suis récemment diplomé de l'ESMA
+
+- j'ai participé à la création du court métrage TRASH
+
+- ce court métrage a d'ailleurs gagné le premier prix du public
+
+- je recherche en lookdev / sculpt / modeling

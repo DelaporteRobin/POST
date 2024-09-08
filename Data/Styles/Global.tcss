@@ -20,12 +20,17 @@ ScrollableContainer {
 
 
 
+/* TCSS CODE FOR THE MODAL SCREEN OF USER SETTINGS */
+
+
+
+
 /* TCSS CODE FOR THE MODAL SCREEN TO CREATE CONTACT */
-POST_AddContact {
+POST_AddContact, POST_UserInfos {
 	align: center middle;
 }
 
-#modal_createcontact_container {
+#modal_createcontact_container, #modal_usersettings_vertical_container {
 	padding: 0 1;
 	width: 30%;
 

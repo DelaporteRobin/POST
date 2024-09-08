@@ -1,6 +1,7 @@
 import os
 import sys
 import time 
+from groq import Groq
 
 from functools import partial
 
@@ -261,10 +262,156 @@ Website of the company : [%s](%s)
 			self.display_error_function("You have to enter a name and a content for the mail preset")
 			return
 
-		self.display_message_function(content)
+		#self.display_message_function(preset_content)
+
+
+		#check if the preset is not already registered in the dictionnary
+		if "mailPreset" not in self.user_preset:
+			self.user_preset["mailPreset"] = {}
+		if preset_name not in list(self.user_preset["mailPreset"].keys()):
+			#self.user_preset[preset_name] = preset_content
+			preset_list = self.user_preset["mailPreset"]
+			preset_list[preset_name] = preset_content
+			self.user_preset["mailPreset"] = preset_list
+			self.save_mail_preset_function()
+			self.update_informations_function()
+		else:
+			self.display_error_function("A preset with the same name is already registered")
+
+
+
+	def load_mail_preset_function(self):
+		try:
+			with open(os.path.join(os.getcwd(), "Data/User/UserPreset.json"), "r") as read_file:
+				self.user_preset = json.load(read_file)
+		except Exception as e:
+			self.display_error_function("Impossible to load mail presets\n%s"%e)
+		else:
+			self.display_message_function("Presets loaded")
+			self.display_message_function(self.user_preset)
+
+
+
+
+	def save_mail_preset_function(self):
+		try:
+			with open(os.path.join(os.getcwd(), "Data/User/UserPreset.json"), "w") as save_file:
+				json.dump(self.user_preset, save_file, indent=4)
+		except Exception as e:
+			self.display_error_function("Impossible to save preset\n%s"%e)
+		else:
+			self.display_message_function("Preset saved")
+
+
+
+
+
+	def save_user_settings_function(self):
+		try:
+			with open("data/user/UserSettings.json", "w") as save_file:
+				json.dump(self.app.user_settings, save_file, indent=4)
+		except Exception as e:
+			self.app.display_error_function("Impossible to save user settings\n%s"%e)
+			return
+		else:
+			self.app.display_message_function("User settings saved")
+
+
+
+
+	def load_user_settings_function(self):
+		try:
+			with open("data/user/UserSettings.json", "r") as read_file:
+				self.app.user_settings = json.load(read_file)
+		except Exception as e:
+			self.display_error_function("Impossible to load user settings\n%s"%e)
+		else:
+			self.display_message_function("User settings loaded")
 
 					
 
+
+
+
+
+	def generate_with_copilot_function(self):
+		#get all informations
+		"""
+			the studio selected
+			the preset selected (content)
+			the prompt
+			the user settings
+
+			and generate a new mail with informations
+		"""
+		prompt_content = self.textarea_prompt.text
+		user_settings = self.user_settings["UserPromptDetails"]
+		studio_selected = self.company_dictionnary[list(self.company_dictionnary.keys())[self.listview_studiolist.index]]
+
+		try:
+			preset_selected = self.user_preset["mailPreset"][list(self.user_preset["mailPreset"].keys())[self.listview_mailpreset.index]]
+		except:
+			self.display_error_function("Impossible to get mail preset!")
+			return
+		else:
+			self.display_message_function(preset_selected)
+
+		prompt_format = """
+%s\n\n
+
+here is the mail preset you have to adapt : \n
+%s\n\n
+
+adapt the mail so it correspond if you send it to that company : %s\n
+if you want more informations about this company to generate the mail, there is the website link : %s\n
+
+"""%( prompt_content, preset_selected, list(self.company_dictionnary.keys())[self.listview_studiolist.index], studio_selected["CompanyWebsite"], )
+
+		if len(user_settings) > 0:
+
+			prompt_format += """
+Try if possible to integrate in this email these details about yourself a subtle way:\n
+"""				
+			for info in user_settings:
+				if self.letter_verification_function(info)==True:
+					prompt_format+="- %s\n"%info
+
+
+		
+
+
+
+		#try:
+		#try to create the client for groq
+		client = Groq(
+			api_key = os.environ.get("GROQ_API_KEY"),
+		)
+
+		chat_completion = client.chat.completions.create(
+		    messages=[
+		        {
+		            "role": "user",
+		            "content": prompt_format.encode("utf-8").decode("utf-8"),
+		        }
+		    ],
+		    model="mixtral-8x7b-32768",
+		)
+		"""
+		except Exception as e:
+			self.display_error_function("Impossible to generate with copilot\n%s"%e)
+		else:
+
+
+		"""
+		self.display_message_function("success")
+
+			
+		
+		with open(os.path.join(os.getcwd(), "test.txt"), "w") as save_file:
+			save_file.write(chat_completion.choices[0].message.content)
+
+		with open(os.path.join(os.getcwd(), "test.txt"), "a") as save_file:
+			save_file.write(prompt_format)
 				
 
 

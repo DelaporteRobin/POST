@@ -42,16 +42,9 @@ class Modal_Contact(Static):
 		super().__init__()
 
 		#self.app.display_message_function("%s ; %s ; %s"%(name, mail, website))
-
 		self.contact_name = name 
 		self.website = website
 		self.mail = mail 
-		
-
-
-		
-
-
 		
 
 		#self.app.display_message_function(name)
@@ -66,6 +59,11 @@ class Modal_Contact(Static):
 			yield self.modal_newcontactname
 			yield self.modal_newcontactmail
 			yield self.modal_newcontactwebsite
+
+
+
+
+
 
 
 
@@ -116,7 +114,6 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 
 
 			
-
 
 
 			yield Rule(line_style="double")
@@ -177,7 +174,102 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 				self.newcompany_otheranswer.disabled=False
 			else:
 				self.newcompany_otheranswer.disabled=True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class ExtendedTextArea(TextArea):
+    """A subclass of TextArea with parenthesis-closing functionality."""
+
+    def _on_key(self, event: events.Key) -> None:
+        if event.key == "enter":
+            self.insert("\n-")
+            #self.move_cursor_relative(columns=-1)
+            event.prevent_default()
+
+
+
+
+
+
+
+
+class POST_UserInfos(ModalScreen, POST_CommonApplication):
+
+
+	CSS_PATH = ["Data/Styles/Dark_Theme.tcss", "Data/Styles/Global.tcss"]
+
+
+	def __init__(self):
+		super().__init__()
 	
+
+	def compose(self) -> ComposeResult:
+
+		with VerticalScroll(id="modal_usersettings_vertical_container"):
+
+		
+			self.textarea_usersettings = ExtendedTextArea.code_editor()
+			yield self.textarea_usersettings
+			
+
+			yield Rule(line_style="double")
+
+			with Horizontal(id="modal_usersettings_horizontal_container"):
+				yield Button("Save", variant="primary", id="modal_usersettings_button_save")
+				yield Button("Quit", variant="error", id="modal_usersettings_button_quit")
+
+
+	def on_button_pressed(self, event: Button.Pressed) -> None:
+		#if event.button.id == "test":
+		#	self.display_message_function(self.query("#modal_newcontactname"))
+
+		if event.button.id == "modal_usersettings_button_quit":
+			self.app.pop_screen()
+
+		if event.button.id == "modal_usersettings_button_save":
+			content = self.textarea_usersettings.text
+			splited_content = content.split("-")
+
+			#for line in splited_content:
+			#	self.app.display_message_function(line)
+			self.app.user_settings["UserPromptDetails"] = splited_content
+
+			self.save_user_settings_function()
+
+
+	def on_mount(self) -> None:
+		#apply user settings in the text area
+		#self.display_message_function(self.app.user_settings)
+		content = self.app.user_settings["UserPromptDetails"]
+		
+		#self.app.display_message_function(type(content))
+
+		for line in content:
+			if self.letter_verification_function(line)==True:
+				#self.app.display_message_function("-%s"%line)
+				self.textarea_usersettings.insert("-%s"%line)
+
+	
+
 
 
 
@@ -214,6 +306,7 @@ class POST_Application(App, POST_CommonApplication):
 
 		self.company_dictionnary = {}
 		self.user_settings = {}
+		self.user_preset = {}
 
 
 		#self.load_company_dictionnary_function()
@@ -229,6 +322,7 @@ class POST_Application(App, POST_CommonApplication):
 		with Horizontal(id="main_horizontal_container"):
 
 			with Vertical(id="left_vertical_container"):
+				yield Button("USER INFOS", id="button_userinfos")
 				yield Button("ADD CONTACT", id="button_addcontact")
 				yield Button("EDIT CONTACT", id="button_editcontact")
 
@@ -252,8 +346,7 @@ class POST_Application(App, POST_CommonApplication):
 						yield Button("Create preset", id="button_createpreset")
 						yield Button("Save preset", id="button_savepreset")
 						yield Button("Delete preset", id="button_deletepreset")
-						self.checkbox_copilot = Checkbox("Toggle copilot")
-						yield self.checkbox_copilot
+						yield Button("Use copilot", id="button_usecopilot")
 
 						self.listview_mailpreset = ListView(id="listview_mailpreset")
 						yield self.listview_mailpreset
@@ -264,6 +357,9 @@ class POST_Application(App, POST_CommonApplication):
 							self.textarea_prompt = TextArea(id="textarea_prompt")
 							yield self.textarea_prompt
 							self.textarea_prompt.border_title = "Copilot prompt"
+
+							with Horizontal(id="right_mailtext_horizontal"):
+								yield Button("Save copilot prompt", id="button_saveprompt")
 						self.textarea_mail = TextArea(id="textarea_mail")
 						yield self.textarea_mail
 						self.textarea_mail.border_title = "Mail"
@@ -273,19 +369,49 @@ class POST_Application(App, POST_CommonApplication):
 		self.update_informations_function()
 
 
-
-
-
 	def on_button_pressed(self, event: Button.Pressed) -> None:
 		if event.button.id == "button_createpreset":
 			self.create_mail_preset_function()
 
 
-		if event.button.id == "button_addcontact":
+		if event.button.id == "button_saveprompt":
+			content = self.textarea_prompt.text 
+			self.display_message_function(content)
 
+			
+			self.user_preset["CopilotPrompt"] = content
+
+			self.save_mail_preset_function()
+
+
+		if event.button.id == "button_usecopilot":
+			generate = self.generate_with_copilot_function()
+			
+
+
+		if event.button.id == "button_addcontact":
 			
 			#self.display_message_function(value)
 			self.push_screen(POST_AddContact("create"))
+
+
+		if event.button.id == "button_userinfos":
+			self.push_screen(POST_UserInfos())
+
+
+		if event.button.id == "button_savepreset":
+			#get the content of the list selection
+			#get the content of the text
+			#replace in the dictionnary and save the new dictionnary
+			index = self.listview_mailpreset.index
+			preset_list = self.user_preset["mailPreset"]
+			preset_name = list(preset_list.keys())[index]
+
+			new_preset_content = self.textarea_mail.text 
+			preset_list[preset_name] = new_preset_content
+			self.user_preset["mailPreset"]
+			self.save_mail_preset_function()
+			self.update_informations_function()
 
 
 
@@ -307,6 +433,8 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
+
+
 	async def on_key(self, event: events.Key) -> None:
 		if event.key == "p":	
 			self.exit()
@@ -319,6 +447,9 @@ class POST_Application(App, POST_CommonApplication):
 			self.save_company_dictionnary_function()
 			self.update_informations_function()
 			self.display_message_function("Company removed from dictionnary")
+
+
+
 
 
 
@@ -366,6 +497,24 @@ class POST_Application(App, POST_CommonApplication):
 			self.markdown_studio.update(markdown)
 
 
+		if event.list_view.id == "listview_mailpreset":
+
+			#clear the content of the text area
+			#and fill it with the content of that mail preset if possible
+			index = self.listview_mailpreset.index
+			preset_name = list(self.user_preset["mailPreset"].keys())[index]
+			self.textarea_mail.clear()
+
+			#self.display_message_function(preset_name)
+			#self.display_message_function(self.user_preset["mailPreset"])
+			try:
+				self.textarea_mail.insert(self.user_preset["mailPreset"][preset_name],(0,0))
+			except:
+				pass
+
+
+
+
 
 
 
@@ -377,10 +526,18 @@ class POST_Application(App, POST_CommonApplication):
 	def update_informations_function(self):
 		
 		self.listview_studiolist.clear()
+		self.listview_mailpreset.clear()
+		self.textarea_prompt.clear()
 		#self.datatable_studiolist.clear()
 
 		self.load_company_dictionnary_function()
-		self.display_message_function(self.company_dictionnary)
+		self.load_mail_preset_function()
+		self.load_user_settings_function()
+
+		if "CopilotPrompt" in self.user_preset:
+			self.textarea_prompt.insert(self.user_preset["CopilotPrompt"])
+
+		#self.display_message_function(self.company_dictionnary)
 		self.display_message_function("UPDATE")
 
 
@@ -395,6 +552,14 @@ class POST_Application(App, POST_CommonApplication):
 			#self.datatable_studiolist.add_row(value["CompanyLocation"], key, height=1, key = i,label=Text("hello"))
 			self.listview_studiolist.append(ListItem(label))
 			i+=1
+
+
+		try:
+			for key, value in self.user_preset["mailPreset"].items():
+				self.listview_mailpreset.append(ListItem(Label(key)))
+		except:
+			pass
+
 
 			
 		
