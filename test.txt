@@ -1,21 +1,28 @@
-Bonjour,
+Subject: Excited to apply for a 3D Artist position at Service Généraux
 
-Je m'appelle Robin et je suis un artiste 3D, récemment diplômé de l'ESMA de Lyon, avec une spécialisation actuelle en texture et modélisation. Je suis passionné par l'art et la créativité audacieuse, et je m'efforce de donner à mes projets un aspect visuel saisissant et original.
+Hello Service Généraux team,
 
-Bien que mon école m'ait orienté vers les studios de cinéma d'animation, je suis personnellement attiré par la publicité, les clips, l'événementiel et la mode. Je crois qu'il s'agit d'un monde où l'image doit immédiatement capter l'attention, et où la recherche constante de l'originalité est essentielle pour créer quelque chose d'unique et de percutant. Après avoir vu le travail de votre studio, je suis convaincu qu'il travaille dans cette optique, ce qui m'intéresse beaucoup.
+I hope this email finds you well. I am writing to express my interest in any potential 3D Artist positions available at your esteemed studio. My name is Robin, and I have recently graduated from ESMA Lyon with a strong focus on sculpting, modeling, and lookdev.
 
-Ma curiosité naturelle et mon goût pour l'apprentissage m'amènent souvent à sortir de ma zone de confort et à repousser les limites de mes compétences. J'ai récemment participé à la création du court métrage TRASH, qui a d'ailleurs remporté le premier prix du public cette année. C'est un projet que j'ai beaucoup aimé et qui m'a permis de développer mes compétences en matière de lookdev, de sculpture et de modélisation.
+During my time at ESMA, I had the privilege of serving as co-director for the short film TRASH. This experience allowed me to collaborate with a talented team, pushing my problem-solving skills and creativity to new heights. You can view the project and my reel on my personal website: [robin3dartist.com](http://robin3dartist.com).
 
-Je vous laisse ci-joint mon CV ainsi que le lien pour visualiser ma DemoReel contenant mes projets personnels, ainsi que des breakdowns du court métrage TRASH sur lequel j'ai travaillé cette année. J'espère que ma sincérité et mon enthousiasme pour votre travail vous convaincront de considérer ma candidature.
+As a 3D artist, I am particularly intrigued by the balance between artistic and technical aspects of our field. In addition to my artistic skills, I have a growing interest in coding and pipeline development. I believe that my artistic and technical background would make me a valuable addition to your team.
 
-Je vous remercie d'avance pour l'attention que vous porterez à ma candidature et je serais ravi de pouvoir échanger avec vous lors d'un entretien. Dans cette attente, je reste à votre disposition pour toute information complémentaire.
+Service Généraux has a reputation for creating high-quality, captivating 3D content, and I am eager to contribute to your studio's success. I am confident that my passion for 3D art and my collaborative mindset will allow me to excel in a role with your team.
 
-Cordialement,
+Thank you for considering my application. I look forward to the possibility of discussing my qualifications further and exploring how I might fit within the Service Généraux family.
+
+Best regards,
 
 Robin
-You are a junior 3d artist graduated from [school_name] and you
-want to write an email to this studio [studio_name] mainly
-active on projects such as [project type]
+3D Artist
+[robin3dartist.com](http://robin3dartist.com)
+robin.3dartist@gmail.com
+(+33) 123 456 789
+
+
+You are a junior 3d artist and you
+want to write an email to a 3d studio
 
 Take this template of email and adapt the details and eventually
 add relevant informations to make that email attractive for
@@ -26,42 +33,7 @@ recruiters.
 
 here is the mail preset you have to adapt : 
 
-Bonjour,
-
-Je suis un artiste 3d (spécialisé pour le moment en texture et modélisation), fraîchement 
-diplômé de l'ESMA Lyon et à la recherche d'emploi.
-Je suis passionné par l'art, à la recherche constante de l'audace créative et j'essaie
-toujours de faire transparaître dans mes projets un visuel impactant et original.
-
-Bien que mon école m'oriente plus vers des studios de film d'animation, je me sens 
-bien plus attiré par le fait de travailler dans la publicité, les clips, le monde de
-l'événementiel ou encore la mode.
-De mon point de vue, c'est un monde où l'image doit immédiatement capter l'attention et 
-où il faut être constamment à la recherche de l'originalité afin de créer quelque chose d'unique et de percutant.
-Je pense que votre studio travaille dans cette optique et ça m'intéresse beaucoup.
-
-Curieux de nature, j'ai une nature polyvalente et un goût pour l'apprentissage. 
-J'apprécie me mettre en danger afin de toujours repousser mes limites et découvrir 
-des choses nouvelles et je pense que cela pourrait être utile dans la réalisation de vos projets.
-
-Je vous laisse ci-joint mon CV ainsi que le lien pour visualiser ma DemoReel
-contenant les projets personnels que j'ai pu faire en dehors de mon école
-ainsi que des breakdown du court métrage TRASH sur lequel j'ai travaillé
-cette année.
-
-Je vous remercie d'avance pour l'attention que vous porterez à ma candidature
-en espérant que ma sincérité vous aura convaincu.
-Je serai plus qu'heureux de pouvoir échanger avec vous lors d'un entretien.
-Dans cette attention je reste à votre disposition pour toute information
-complémentaire.
-
-
-
-Mes sincères salutations.
-
-
-
-Delaporte Robin
+hello world! or maybe not!
 
 
 
@@ -71,12 +43,16 @@ if you want more informations about this company to generate the mail, there is 
 
 
 
+
+
 Try if possible to integrate in this email these details about yourself a subtle way:
 
-- je m'appelle Robin et je suis récemment diplomé de l'ESMA
+-  je m'appelle Robin
 
-- j'ai participé à la création du court métrage TRASH
+-  je suis récemment diplomé de l'ESMA Lyon
 
-- ce court métrage a d'ailleurs gagné le premier prix du public
+-  j'ai été co director sur le court métrage TRASH
 
-- je recherche en lookdev / sculpt / modeling
+-  je suis spécialisé en sculpt / modeling et lookdev
+
+-  je suis aussi également intéressé par le code et le pipeline

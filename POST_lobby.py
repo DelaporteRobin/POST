@@ -34,6 +34,21 @@ from Data.POST_Common import POST_CommonApplication
 
 
 
+
+
+# EXTENDED CLASS OF TEXTUAL WITH ADDITIONNAL FEATURES
+class ExtendedTextArea(TextArea):
+    """A subclass of TextArea with parenthesis-closing functionality."""
+
+    def _on_key(self, event: events.Key) -> None:
+        if event.key == "enter":
+            self.insert("\n-")
+            #self.move_cursor_relative(columns=-1)
+            event.prevent_default()
+
+
+
+
 class Modal_Contact(Static):
 	
 
@@ -93,6 +108,10 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			self.newcompany_name = Input(placeholder="Company name", type="text", id="modal_newcompanyname")
 			self.newcompany_location = Input(placeholder="Company location", type="text", id="modal_newcompanylocation")
 			self.newcompany_website = Input(placeholder="Company website", type="text", id="modal_newcompany_website")
+
+			self.newcompany_details = ExtendedTextArea(id="modal_newcompany_details")
+			self.newcompany_details.border_title = "Company details"
+
 			self.newcompany_answer = Select( [("Yes",1), ("No", 2), ("No answer",3), ("Other",4)], id="modal_newcompany_answer")
 			self.newcompany_otheranswer = TextArea(id="modal_newcompany_otheranswer", disabled=True)
 			self.newcompany_otheranswer.border_title = "Other answer / Details"
@@ -100,6 +119,7 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			yield self.newcompany_name
 			yield self.newcompany_location
 			yield self.newcompany_website
+			yield self.newcompany_details
 			yield self.newcompany_answer
 
 			
@@ -119,7 +139,10 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			yield Rule(line_style="double")
 
 			with Horizontal(id="modal_horizontal_container"):
-				yield Button("Create", variant="primary", id="modal_create_contact_button")
+				if self.mode == "create":
+					yield Button("Create", variant="primary", id="modal_create_contact_button")
+				else:
+					yield Button("Save", variant="primary", id="modal_create_contact_button")
 				yield Button("Quit", variant="error", id="modal_cancel_contact_button")
 
 
@@ -135,6 +158,8 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 		if self.mode == "create":
 			new_contact = Modal_Contact()
 			self.newcompany_contactlist_container.mount(new_contact)
+
+
 		
 			
 
@@ -196,14 +221,6 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 
 
 
-class ExtendedTextArea(TextArea):
-    """A subclass of TextArea with parenthesis-closing functionality."""
-
-    def _on_key(self, event: events.Key) -> None:
-        if event.key == "enter":
-            self.insert("\n-")
-            #self.move_cursor_relative(columns=-1)
-            event.prevent_default()
 
 
 
@@ -227,7 +244,10 @@ class POST_UserInfos(ModalScreen, POST_CommonApplication):
 		with VerticalScroll(id="modal_usersettings_vertical_container"):
 
 		
-			self.textarea_usersettings = ExtendedTextArea.code_editor()
+			self.input_usersettingsjob = Input(placeholder = "What job are you looking for", id="input_usersettingsjob")
+			yield self.input_usersettingsjob
+
+			self.textarea_usersettings = ExtendedTextArea(id="textarea_usersettings")
 			yield self.textarea_usersettings
 			
 
@@ -252,6 +272,8 @@ class POST_UserInfos(ModalScreen, POST_CommonApplication):
 			#for line in splited_content:
 			#	self.app.display_message_function(line)
 			self.app.user_settings["UserPromptDetails"] = splited_content
+			if self.letter_verification_function(self.input_usersettingsjob.value) == True:
+				self.app.user_settings["UserJobSearched"] = self.input_usersettingsjob.value.split("/")
 
 			self.save_user_settings_function()
 
@@ -267,6 +289,11 @@ class POST_UserInfos(ModalScreen, POST_CommonApplication):
 			if self.letter_verification_function(line)==True:
 				#self.app.display_message_function("-%s"%line)
 				self.textarea_usersettings.insert("-%s"%line)
+
+		try:
+			self.input_usersettingsjob.value = "/".join(self.app.user_settings["UserJobSearched"])
+		except:
+			pass
 
 	
 
@@ -421,10 +448,14 @@ class POST_Application(App, POST_CommonApplication):
 			#value = self.company_dictionnary[list(self.company_dictionnary.keys())[(self.query_one("#datatable_studiolist").cursor_coordinate[1])]]
 			#get the selection
 
-			studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+			try:
+				studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
 
 
-			self.push_screen(POST_AddContact("edit", studio))
+				self.push_screen(POST_AddContact("edit", studio))
+			except TypeError:
+				self.display_error_function("No studio selected")
+				
 			#self.update_informations_function()
 
 

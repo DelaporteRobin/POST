@@ -8,9 +8,13 @@
 		--> Maybe create a dictionnary of informations about the user that the AI would adapt
 	- what is the model you want to use?
 - Start to implement the tcss theme
+
+
+
 - Add more details about the studio :
 	- type of studio : commercials, animations, series
 	- the last time you contacted the studio
+	- the time when you can contact the studio (in 2 month for instance)
 
 
 # how to display informations to user

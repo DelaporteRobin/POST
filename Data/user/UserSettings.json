@@ -1,9 +1,16 @@
 {
     "UserPromptDetails": [
         "",
-        "je m'appelle Robin et je suis r\u00e9cemment diplom\u00e9 de l'ESMA\n",
-        "j'ai particip\u00e9 \u00e0 la cr\u00e9ation du court m\u00e9trage TRASH\n",
-        "ce court m\u00e9trage a d'ailleurs gagn\u00e9 le premier prix du public\n",
-        "je recherche en lookdev / sculpt / modeling"
+        " je m'appelle Robin\n",
+        " je suis r\u00e9cemment diplom\u00e9 de l'ESMA Lyon\n",
+        " j'ai \u00e9t\u00e9 co director sur le court m\u00e9trage TRASH\n",
+        " je suis sp\u00e9cialis\u00e9 en sculpt / modeling et lookdev\n",
+        " je suis aussi \u00e9galement int\u00e9ress\u00e9 par le code et le pipeline"
+    ],
+    "UserJobSearched": [
+        "Modeling",
+        "Sculpt",
+        "Lookdev",
+        "Pipeline"
     ]
 }

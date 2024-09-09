@@ -80,6 +80,7 @@ class POST_CommonApplication:
 			"CompanyWebsite":self.query_one("#modal_newcompany_website").value,
 			"CompanyAnswer":None,
 			"CompanyContact":None,
+			"CompanyDetails":self.newcompany_details.text,
 		}
 
 		if self.query_one("#modal_newcompany_answer").value == 1:
@@ -137,6 +138,14 @@ class POST_CommonApplication:
 			self.newcompany_location.value = studio_data["CompanyLocation"]
 			self.newcompany_website.value = studio_data["CompanyWebsite"]
 
+			try:
+				if self.letter_verification_function(studio_data["CompanyDetails"]) == False:
+					self.newcompany_details.insert("-")
+				else:
+					self.newcompany_details.text = studio_data["CompanyDetails"]
+			except:
+				self.newcompany_details.insert("-")
+
 			if studio_data["CompanyAnswer"] == True:
 				self.newcompany_answer.value = 1
 			elif studio_data["CompanyAnswer"] == False:
@@ -173,6 +182,19 @@ class POST_CommonApplication:
 
 - Company location : %s
 """%(company_name, company_data["CompanyLocation"])
+
+
+		try:
+			if self.letter_verification_function(company_data["CompanyDetails"])==True:
+				#try to split the list of elements
+				markdown+= "\n# More informations about the company\n"
+				details_list = company_data["CompanyDetails"].split("-")
+
+				for detail in details_list:
+					if self.letter_verification_function(detail)==True:
+						markdown += "- %s\n"%detail
+		except:
+			pass
 
 		
 		if company_data["CompanyAnswer"] not in [True, False, None]:
@@ -365,7 +387,34 @@ here is the mail preset you have to adapt : \n
 adapt the mail so it correspond if you send it to that company : %s\n
 if you want more informations about this company to generate the mail, there is the website link : %s\n
 
+
+
 """%( prompt_content, preset_selected, list(self.company_dictionnary.keys())[self.listview_studiolist.index], studio_selected["CompanyWebsite"], )
+		try:
+			if self.letter_verification_function(self.user_settings["UserJobSearched"])==True:
+				prompt_format+="note that you are looking / interested by these positions in the company : \n"
+
+				for job in self.user_settings["UserJobSearched"]:
+					if self.letter_verification_function(job) == True:
+						prompt_format+="- %s\n"%job
+		except:
+			pass 
+
+
+
+			
+		try:
+			if self.letter_verification_function(self.company_dictionnary[studio_selected]["CompanyDetails"])==True:
+				prompt_format+="\nHere is a list of details about the company you want to contact,\nWhat they do, their style... : \n"
+				details_list = self.company_dictionnary[studio_selected]["CompanyDetails"].split("-")
+
+				for detail in details_list:
+					if self.letter_verification_function(detail)==True:
+						prompt_format += "-%s\n"%detail
+		except:
+			pass
+
+
 
 		if len(user_settings) > 0:
 
@@ -411,7 +460,12 @@ Try if possible to integrate in this email these details about yourself a subtle
 			save_file.write(chat_completion.choices[0].message.content)
 
 		with open(os.path.join(os.getcwd(), "test.txt"), "a") as save_file:
-			save_file.write(prompt_format)
+			save_file.write("\n\n%s"%prompt_format)
+
+
+		#replace text in the mail preset area
+		self.textarea_mail.clear()
+		self.textarea_mail.insert(chat_completion.choices[0].message.content)
 				
 
 
