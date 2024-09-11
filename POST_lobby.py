@@ -4,6 +4,8 @@ import time
 import re
 import dns.resolver
 import webbrowser
+import pendulum
+import pyperclip 
 
 from functools import partial
 
@@ -17,6 +19,8 @@ from textual.screen import Screen, ModalScreen
 from textual import events
 from textual.containers import ScrollableContainer, Grid, Horizontal, Vertical, Container, VerticalScroll
 from textual import on, work
+
+from textual_datepicker import DateSelect, DatePicker
 
 from rich.text import Text 
 
@@ -38,13 +42,18 @@ from Data.POST_Common import POST_CommonApplication
 
 # EXTENDED CLASS OF TEXTUAL WITH ADDITIONNAL FEATURES
 class ExtendedTextArea(TextArea):
-    """A subclass of TextArea with parenthesis-closing functionality."""
+	"""A subclass of TextArea with parenthesis-closing functionality."""
 
-    def _on_key(self, event: events.Key) -> None:
-        if event.key == "enter":
-            self.insert("\n-")
-            #self.move_cursor_relative(columns=-1)
-            event.prevent_default()
+	def _on_key(self, event: events.Key) -> None:
+		if event.key == "enter":
+			self.insert("\n-")
+			#self.move_cursor_relative(columns=-1)
+			event.prevent_default()
+
+
+
+
+
 
 
 
@@ -83,6 +92,7 @@ class Modal_Contact(Static):
 
 
 
+
 class POST_AddContact(ModalScreen, POST_CommonApplication): 
 
 
@@ -94,6 +104,7 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 		super().__init__()
 		self.mode = mode
 		self.studio = studio
+		self.date = str(datetime.now())
 		self.app.display_message_function("%s ; %s"%(mode, studio))
 
 
@@ -109,6 +120,10 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			self.newcompany_location = Input(placeholder="Company location", type="text", id="modal_newcompanylocation")
 			self.newcompany_website = Input(placeholder="Company website", type="text", id="modal_newcompany_website")
 
+			
+
+			
+
 			self.newcompany_details = ExtendedTextArea(id="modal_newcompany_details")
 			self.newcompany_details.border_title = "Company details"
 
@@ -116,14 +131,27 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			self.newcompany_otheranswer = TextArea(id="modal_newcompany_otheranswer", disabled=True)
 			self.newcompany_otheranswer.border_title = "Other answer / Details"
 
+
+
 			yield self.newcompany_name
 			yield self.newcompany_location
 			yield self.newcompany_website
+			#yield Button("Last time company was reached", id="modal_newcompany_datebutton")
+
+			self.newcompany_contacted_checkbox = Checkbox("")
+			with Collapsible(title = "Last time company was reached : ", id="modal_collapsible_dateselector"):
+				
+				self.modal_dateselect = DateSelect(placeholder="please select",format="YYYY-MM-DD",picker_mount="#modal_collapsible_dateselector",date=pendulum.parse(str(datetime.now())), id="modal_date")
+				yield self.modal_dateselect
+
+				   
+				
 			yield self.newcompany_details
 			yield self.newcompany_answer
 
 			
 			yield self.newcompany_otheranswer
+
 
 			with Horizontal(id="modal_addcontact_container"):
 				yield Button("Add contact", id="modal_addcontacttolist_button")
@@ -132,8 +160,6 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			self.newcompany_contactlist_container = ScrollableContainer(id="modal_newcompany_contactlist")
 			yield self.newcompany_contactlist_container
 
-
-			
 
 
 			yield Rule(line_style="double")
@@ -160,6 +186,19 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			self.newcompany_contactlist_container.mount(new_contact)
 
 
+
+
+
+	def on_date_picker_selected(self, event: DatePicker.Selected) -> None:
+		self.date = event.date
+		
+		if datetime.strptime(self.date.to_date_string(), "%Y-%m-%d") > datetime.now():
+			self.display_error_function("This date is in the futur!")
+			return
+		widget = self.query_one("#modal_collapsible_dateselector").title = "Last time company was reached : %s"%pendulum.parse(str(self.date))
+		self.display_message_function("UPDATED")
+
+
 		
 			
 
@@ -173,6 +212,10 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 
 		elif event.button.id == "modal_cancel_contact_button":
 			self.app.pop_screen()
+
+		elif event.button.id == "modal_newcompany_datebutton":
+			date = self.app.push_screen(POST_DateSelector())
+			self.display_message_function(date)
 
 		elif event.button.id == "modal_addcontacttolist_button":
 			new_contact = Modal_Contact()
@@ -352,6 +395,7 @@ class POST_Application(App, POST_CommonApplication):
 				yield Button("USER INFOS", id="button_userinfos")
 				yield Button("ADD CONTACT", id="button_addcontact")
 				yield Button("EDIT CONTACT", id="button_editcontact")
+				yield Button("DELETE CONTACT", id="button_deletecontact", variant="error")
 
 				self.listview_studiolist = ListView(id="listview_studiolist")
 				self.listview_studiolist.border_title = "Studio list"
@@ -374,6 +418,10 @@ class POST_Application(App, POST_CommonApplication):
 						yield Button("Save preset", id="button_savepreset")
 						yield Button("Delete preset", id="button_deletepreset")
 						yield Button("Use copilot", id="button_usecopilot")
+
+						yield Rule()
+
+						yield Button("Copy content", id="button_copycontent")
 
 						self.listview_mailpreset = ListView(id="listview_mailpreset")
 						yield self.listview_mailpreset
@@ -413,6 +461,14 @@ class POST_Application(App, POST_CommonApplication):
 
 		if event.button.id == "button_usecopilot":
 			generate = self.generate_with_copilot_function()
+
+
+		if event.button.id == "button_copycontent":
+			if self.letter_verification_function(self.textarea_mail.selected_text)==True:
+				pyperclip.copy(self.textarea_mail.selected_text)
+			else:
+				pyperclip.copy(self.textarea_mail.text)
+			self.display_message_function("copied")
 			
 
 
@@ -424,6 +480,12 @@ class POST_Application(App, POST_CommonApplication):
 
 		if event.button.id == "button_userinfos":
 			self.push_screen(POST_UserInfos())
+
+		if event.button.id == "button_deletecontact":
+			
+
+			self.delete_company_function()
+
 
 
 		if event.button.id == "button_savepreset":
@@ -467,8 +529,6 @@ class POST_Application(App, POST_CommonApplication):
 
 
 	async def on_key(self, event: events.Key) -> None:
-		if event.key == "p":	
-			self.exit()
 
 		if event.key == "delete":
 			#self.display_message_function("hello")
@@ -580,6 +640,12 @@ class POST_Application(App, POST_CommonApplication):
 		for key, value in self.company_dictionnary.items():
 
 			label = Label("[ %s ] %s"%(value["CompanyLocation"], key))
+
+			
+			if "CompanyDate" in value:
+				label.styles.background = "#679414"
+			
+
 			#self.datatable_studiolist.add_row(value["CompanyLocation"], key, height=1, key = i,label=Text("hello"))
 			self.listview_studiolist.append(ListItem(label))
 			i+=1

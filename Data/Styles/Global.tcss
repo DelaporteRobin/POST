@@ -1,15 +1,16 @@
 /* TCSS FOR THE GLOBAL WIDGETS */
 
 ListView {
-	border:round white;
+	border:round $primary;
 }
 TextArea {
-	border:round white;
+	border:round $primary;
 }
 ListView, TextArea {
 	border-title-align:left;
 	border-title-style:bold;
 }
+
 
 /*
 ScrollableContainer {
@@ -26,7 +27,7 @@ ScrollableContainer {
 
 
 /* TCSS CODE FOR THE MODAL SCREEN TO CREATE CONTACT */
-POST_AddContact, POST_UserInfos {
+POST_AddContact, POST_UserInfos	 {
 	align: center middle;
 }
 

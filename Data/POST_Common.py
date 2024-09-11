@@ -2,6 +2,7 @@ import os
 import sys
 import time 
 from groq import Groq
+import pendulum
 
 from functools import partial
 
@@ -73,6 +74,7 @@ class POST_CommonApplication:
 
 
 	def add_company_function(self):
+		self.display_message_function(self.date)
 		#get informations
 		company_informations = {
 			#"CompanyName":self.query_one("#modal_newcompanyname").value,
@@ -81,8 +83,8 @@ class POST_CommonApplication:
 			"CompanyAnswer":None,
 			"CompanyContact":None,
 			"CompanyDetails":self.newcompany_details.text,
+			"CompanyDate":str(self.date)
 		}
-
 		if self.query_one("#modal_newcompany_answer").value == 1:
 			company_informations["CompanyAnswer"] = True
 		elif self.query_one("#modal_newcompany_answer").value == 2:
@@ -124,6 +126,21 @@ class POST_CommonApplication:
 
 
 
+	def delete_company_function(self):
+		studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+		try:
+			del self.company_dictionnary[studio]
+		except:
+			self.display_error_function("Impossible to remove studio")
+			return
+		else:
+			self.display_message_function("Studio removed")
+			self.save_company_dictionnary_function()
+			self.update_informations_function()
+
+
+
+
 
 
 
@@ -145,6 +162,15 @@ class POST_CommonApplication:
 					self.newcompany_details.text = studio_data["CompanyDetails"]
 			except:
 				self.newcompany_details.insert("-")
+
+			#self.display_message_function(studio_data)
+			if "CompanyDate" in studio_data:
+				self.query_one("#modal_collapsible_dateselector").title = studio_data["CompanyDate"]
+
+				if type(studio_data["CompanyDate"]) == str:
+					self.modal_dateselect.date = pendulum.parse(studio_data["CompanyDate"])
+				else:
+					self.modal_dateselect.date = studio_data["CompanyDate"]
 
 			if studio_data["CompanyAnswer"] == True:
 				self.newcompany_answer.value = 1
@@ -225,6 +251,27 @@ No answer from the company
 		markdown += """
 Website of the company : [%s](%s)
 """%(company_name, company_data["CompanyWebsite"])
+
+
+		if "CompanyDate" in company_data:
+			markdown += "Last time the studio was contacted : %s\n\n"%company_data["CompanyDate"]
+			#get the time difference with today
+			today = datetime.now()
+			date = company_data["CompanyDate"]
+
+			if type(date) == str:
+				date = pendulum.parse(date).to_date_string()
+				date = datetime.strptime(date, "%Y-%m-%d")
+			
+
+			delta = (today - date).days
+			if delta > 7:
+				markdown += "\nIt was %s week(s) ago" % int(delta/7)
+			else:
+				markdown += "\nIt was %s day(s) ago" % delta
+
+			#self.display_message_function((today - date).days)
+			
 
 		markdown += """
 ## Contact from the company 
@@ -310,7 +357,7 @@ Website of the company : [%s](%s)
 			self.display_error_function("Impossible to load mail presets\n%s"%e)
 		else:
 			self.display_message_function("Presets loaded")
-			self.display_message_function(self.user_preset)
+			#self.display_message_function(self.user_preset)
 
 
 

@@ -1,24 +1,22 @@
-Subject: Excited to apply for a 3D Artist position at Service Généraux
+Subject: Excited to apply for a 3D Artist position at Alter Bureau
 
-Hello Service Généraux team,
+Hello Alter Bureau team,
 
-I hope this email finds you well. I am writing to express my interest in any potential 3D Artist positions available at your esteemed studio. My name is Robin, and I have recently graduated from ESMA Lyon with a strong focus on sculpting, modeling, and lookdev.
+I hope this message finds you well. I am Robin, a recent graduate of ESMA Lyon, with a strong passion for 3D art and a recent success as a co-director for the short film TRASH.
 
-During my time at ESMA, I had the privilege of serving as co-director for the short film TRASH. This experience allowed me to collaborate with a talented team, pushing my problem-solving skills and creativity to new heights. You can view the project and my reel on my personal website: [robin3dartist.com](http://robin3dartist.com).
+I came across your studio's incredible work on your website (<https://www.alterbureau.com/>) and was particularly impressed by your blend of creativity, storytelling, and attention to detail in the 3D art you produce. It is with great enthusiasm that I express my interest in joining your team as a 3D Artist.
 
-As a 3D artist, I am particularly intrigued by the balance between artistic and technical aspects of our field. In addition to my artistic skills, I have a growing interest in coding and pipeline development. I believe that my artistic and technical background would make me a valuable addition to your team.
+My specialties lie in sculpting, modeling, and lookdev, and I am constantly eager to learn and grow. I have a strong foundation in industry-standard software such as ZBrush, Maya, Substance Painter, and Mari, which I believe align with the tools you use. Additionally, I have a growing interest in code and pipeline development, allowing me to contribute to process optimization and automation in the studio.
 
-Service Généraux has a reputation for creating high-quality, captivating 3D content, and I am eager to contribute to your studio's success. I am confident that my passion for 3D art and my collaborative mindset will allow me to excel in a role with your team.
+My ultimate goal is to combine my skills and passion in the world of 3D, whether in the realm of advertising or fashion. I am also deeply drawn to the luxury industry and the challenges it presents for visually stunning and immersive creations. I believe my background and experience would be an excellent match with Alter Bureau's projects and client base.
 
-Thank you for considering my application. I look forward to the possibility of discussing my qualifications further and exploring how I might fit within the Service Généraux family.
+I have attached some of my most recent modeling and lookdev projects. I am more than happy to provide more examples, a resume, or discuss any questions about my work.
 
-Best regards,
+Thank you for your time and consideration. I eagerly look forward to the opportunity to contribute my skills to the Alter Bureau team and help create even more amazing work.
+
+Warm regards,
 
 Robin
-3D Artist
-[robin3dartist.com](http://robin3dartist.com)
-robin.3dartist@gmail.com
-(+33) 123 456 789
 
 
 You are a junior 3d artist and you
@@ -33,13 +31,13 @@ recruiters.
 
 here is the mail preset you have to adapt : 
 
-hello world! or maybe not!
+hello world! 
 
 
 
-adapt the mail so it correspond if you send it to that company : service généraux
+adapt the mail so it correspond if you send it to that company : ALTER BUREAU
 
-if you want more informations about this company to generate the mail, there is the website link : https://generaux.services/
+if you want more informations about this company to generate the mail, there is the website link : https://www.alterbureau.com/
 
 
 
@@ -56,3 +54,7 @@ Try if possible to integrate in this email these details about yourself a subtle
 -  je suis spécialisé en sculpt / modeling et lookdev
 
 -  je suis aussi également intéressé par le code et le pipeline
+
+-  Mon but est d'aller dans le monde de la 3d au sein de la publicité ou de la mode
+
+-  je suis intéressé par le monde du luxe
