@@ -127,7 +127,8 @@ class POST_CommonApplication:
 
 
 	def delete_company_function(self):
-		studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+		#studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+		studio = self.list_studiolist_display[self.listview_studiolist.index]
 		try:
 			del self.company_dictionnary[studio]
 		except:
@@ -415,7 +416,8 @@ Website of the company : [%s](%s)
 		"""
 		prompt_content = self.textarea_prompt.text
 		user_settings = self.user_settings["UserPromptDetails"]
-		studio_selected = self.company_dictionnary[list(self.company_dictionnary.keys())[self.listview_studiolist.index]]
+		studio_name = self.list_studiolist_display[self.listview_studiolist.index]
+		studio_data = self.company_dictionnary[studio_name]
 
 		try:
 			preset_selected = self.user_preset["mailPreset"][list(self.user_preset["mailPreset"].keys())[self.listview_mailpreset.index]]
@@ -423,7 +425,8 @@ Website of the company : [%s](%s)
 			self.display_error_function("Impossible to get mail preset!")
 			return
 		else:
-			self.display_message_function(preset_selected)
+			#self.display_message_function(preset_selected)
+			pass
 
 		prompt_format = """
 %s\n\n
@@ -436,7 +439,7 @@ if you want more informations about this company to generate the mail, there is 
 
 
 
-"""%( prompt_content, preset_selected, list(self.company_dictionnary.keys())[self.listview_studiolist.index], studio_selected["CompanyWebsite"], )
+"""%( prompt_content, preset_selected, studio_name, studio_data["CompanyWebsite"], )
 		try:
 			if self.letter_verification_function(self.user_settings["UserJobSearched"])==True:
 				prompt_format+="note that you are looking / interested by these positions in the company : \n"
@@ -453,7 +456,7 @@ if you want more informations about this company to generate the mail, there is 
 		try:
 			if self.letter_verification_function(self.company_dictionnary[studio_selected]["CompanyDetails"])==True:
 				prompt_format+="\nHere is a list of details about the company you want to contact,\nWhat they do, their style... : \n"
-				details_list = self.company_dictionnary[studio_selected]["CompanyDetails"].split("-")
+				details_list = self.company_dictionnary[studio_name]["CompanyDetails"].split("-")
 
 				for detail in details_list:
 					if self.letter_verification_function(detail)==True:

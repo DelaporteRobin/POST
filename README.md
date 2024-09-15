@@ -10,6 +10,10 @@
 - Start to implement the tcss theme
 
 
+you pick the date you contacted a studio
+you can set an alert to contact them again
+
+
 
 - Add more details about the studio :
 	- type of studio : commercials, animations, series

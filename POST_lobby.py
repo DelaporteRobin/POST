@@ -378,6 +378,17 @@ class POST_Application(App, POST_CommonApplication):
 		self.user_settings = {}
 		self.user_preset = {}
 
+		self.list_studiolist_display = []
+
+		self.color_theme = "Dark_Theme"
+		self.color_dictionnary = {
+			"Dark_Theme": {
+				"notContacted": "#6a5f83",
+				"contactDateShortAlert": "#ad761b",
+				"contactDateLongAlert": "#ad361b",
+			}
+		}
+
 
 		#self.load_company_dictionnary_function()
 
@@ -396,6 +407,17 @@ class POST_Application(App, POST_CommonApplication):
 				yield Button("ADD CONTACT", id="button_addcontact")
 				yield Button("EDIT CONTACT", id="button_editcontact")
 				yield Button("DELETE CONTACT", id="button_deletecontact", variant="error")
+
+				with Collapsible(id = "collapsible_studiolist_settings", title="COMPANY LIST SETTINGS"):
+					with RadioSet(id = "radioset_studiolist_settings"):
+						yield RadioButton("By alphabetic order")
+						yield RadioButton("By chronologic order")
+						yield RadioButton("By priority order")
+
+
+
+				self.input_studiolist_searchbar = Input(placeholder = "Studio name...", id = "input_studiolist_searchbar")
+				yield self.input_studiolist_searchbar
 
 				self.listview_studiolist = ListView(id="listview_studiolist")
 				self.listview_studiolist.border_title = "Studio list"
@@ -444,6 +466,15 @@ class POST_Application(App, POST_CommonApplication):
 		self.update_informations_function()
 
 
+	def on_radio_set_changed(self, event:RadioSet.Changed) -> None:
+		if event.radio_set.id == "radioset_studiolist_settings":
+			#get index
+			index = event.index
+			self.user_settings["companyDisplayMode"] = index
+			self.save_user_settings_function()
+			self.update_informations_function()
+
+
 	def on_button_pressed(self, event: Button.Pressed) -> None:
 		if event.button.id == "button_createpreset":
 			self.create_mail_preset_function()
@@ -460,6 +491,7 @@ class POST_Application(App, POST_CommonApplication):
 
 
 		if event.button.id == "button_usecopilot":
+			#self.display_message_function(self.company)
 			generate = self.generate_with_copilot_function()
 
 
@@ -511,8 +543,8 @@ class POST_Application(App, POST_CommonApplication):
 			#get the selection
 
 			try:
-				studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
-
+				#studio = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+				studio = self.list_studiolist_display[self.listview_studiolist.index]
 
 				self.push_screen(POST_AddContact("edit", studio))
 			except TypeError:
@@ -580,7 +612,9 @@ class POST_Application(App, POST_CommonApplication):
 			index = self.listview_studiolist.index
 			#get the content of the dictionnary
 			#and fill the markdown viewer with the company informations
-			company_name = list(self.company_dictionnary.keys())[index]
+			
+			#company_name = list(self.company_dictionnary.keys())[index]
+			company_name = self.list_studiolist_display[index]
 			company_data = self.company_dictionnary[company_name]
 			
 			markdown = self.generate_markdown_function(company_name, company_data)
@@ -602,6 +636,15 @@ class POST_Application(App, POST_CommonApplication):
 				self.textarea_mail.insert(self.user_preset["mailPreset"][preset_name],(0,0))
 			except:
 				pass
+
+
+
+
+
+
+
+
+
 
 
 
@@ -634,21 +677,119 @@ class POST_Application(App, POST_CommonApplication):
 
 		#rows = ["Location", "Company"]
 		#self.datatable_studiolist.add_columns(*rows)
+		self.list_studiolist_display = []
+
+		if self.user_settings["companyDisplayMode"] != 2:
+		
+			if ("companyDisplayMode" not in self.user_settings) or (self.user_settings["companyDisplayMode"] == 1):
+				studio_list = list(self.company_dictionnary.keys())
+				
+			elif self.user_settings["companyDisplayMode"] == 0:
+				studio_list = list(self.company_dictionnary.keys())
+				studio_list.sort(key = str.lower)
+
+			i = 0
+			for studio in studio_list:
+				studio_data = self.company_dictionnary[studio]
+
+				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
+
+				
+				if "CompanyDate" not in studio_data:
+					label.styles.background = self.color_dictionnary[self.color_theme]["notContacted"]
+				else:
+					#get the date
+					date = studio_data["CompanyDate"]
+
+					if type(date) == str:
+						date = pendulum.parse(date).to_date_string()
+						date = datetime.strptime(date, "%Y-%m-%d")
+					
+					delta = (datetime.now() - date).days
+					average_month_day = 365.25 / 12
+					delta_month = int(delta / average_month_day)
+					
+					if delta_month >= self.user_settings["UserContactDateAlert"]:
+						label.styles.background = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
+					if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
+						label.styles.background = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
+
+
+
+				#self.datatable_studiolist.add_row(value["CompanyLocation"], key, height=1, key = i,label=Text("hello"))
+				self.listview_studiolist.append(ListItem(label))
+				self.list_studiolist_display.append(studio)
+				i+=1
+
+
+		else:
+			studio_list = list(self.company_dictionnary.keys())
+
+			notcontacted_list = []
+			shortalert_list = []
+			longalert_list = []
+			noalert_list = []
+
+			for studio in studio_list:
+				if "CompanyDate" not in self.company_dictionnary[studio]:
+					notcontacted_list.append(studio)
+					continue
+
+				else:
+					date = self.company_dictionnary[studio]["CompanyDate"]
+
+					if type(date) == str:
+						date = pendulum.parse(date).to_date_string()
+						date = datetime.strptime(date, "%Y-%m-%d")
+					delta = (datetime.now() - date).days
+					average_month_day = 365.25 / 12
+					delta_month = int(delta / average_month_day)
+
+					if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
+						longalert_list.append(studio)
+					elif delta_month >= self.user_settings["UserContactDateAlert"]:
+						shortalert_list.append(studio)
+					else:
+						noalert_list.append(studio)
+
+					
+
+				
+
+			for studio in longalert_list:
+				studio_data = self.company_dictionnary[studio]
+				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
+				label.styles.background = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
+				self.listview_studiolist.append(ListItem(label))
+				self.list_studiolist_display.append(studio)
+
+			for studio in shortalert_list:
+				studio_data = self.company_dictionnary[studio]
+				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
+				label.styles.background = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
+				self.listview_studiolist.append(ListItem(label))
+				self.list_studiolist_display.append(studio)
+
+			for studio in notcontacted_list:
+				studio_data = self.company_dictionnary[studio]
+				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
+				label.styles.background = self.color_dictionnary[self.color_theme]["notContacted"]
+				self.listview_studiolist.append(ListItem(label))
+				self.list_studiolist_display.append(studio)
+
+			for studio in noalert_list:
+				studio_data = self.company_dictionnary[studio]
+				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
+				#label.styles.background = self.color_dictionnary[self.color_theme]["notContacted"]
+				self.listview_studiolist.append(ListItem(label))
+				self.list_studiolist_display.append(studio)
+
+
+
+
 
 		
-		i = 0
-		for key, value in self.company_dictionnary.items():
-
-			label = Label("[ %s ] %s"%(value["CompanyLocation"], key))
-
-			
-			if "CompanyDate" in value:
-				label.styles.background = "#679414"
-			
-
-			#self.datatable_studiolist.add_row(value["CompanyLocation"], key, height=1, key = i,label=Text("hello"))
-			self.listview_studiolist.append(ListItem(label))
-			i+=1
+		
 
 
 		try:

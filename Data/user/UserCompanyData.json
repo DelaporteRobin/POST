@@ -18,7 +18,7 @@
             }
         },
         "CompanyDetails": "-studio produisant beaucoup de publicit\u00e9s de luxe avec des visuels tr\u00e8s percutant\n-je suis tr\u00e8s friant de leur graphisme / direction artistique \u00e0 travers leurs projets",
-        "CompanyDate": "2024-09-11 00:00:00+00:00"
+        "CompanyDate": "2024-02-07 00:00:00+00:00"
     },
     "EVEREST": {
         "CompanyLocation": "Paris",
@@ -42,7 +42,8 @@
                 "website": ""
             }
         },
-        "CompanyDetails": "- createur de visuels sur diff\u00e9rents m\u00e9dias (mapping, publicit\u00e9s, show audiovisuel...)\n"
+        "CompanyDetails": "- createur de visuels sur diff\u00e9rents m\u00e9dias (mapping, publicit\u00e9s, show audiovisuel...)\n",
+        "CompanyDate": "2024-06-05 00:00:00+00:00"
     },
     "BUF": {
         "CompanyLocation": "paris",
@@ -220,5 +221,70 @@
         },
         "CompanyDetails": "-",
         "CompanyDate": "2024-09-11 00:00:00+00:00"
+    },
+    "BLACKMOTION": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://blackmotion.fr",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "- agence artistique bas\u00e9e \u00e0 paris\n- sp\u00e9cialis\u00e9 en 3d, motion design, technologie du web\n- direction artistique audacieuse et vari\u00e9e au travers des projets men\u00e9s",
+        "CompanyDate": "2024-09-12 19:52:32.314811"
+    },
+    "DNEG": {
+        "CompanyLocation": "londres",
+        "CompanyWebsite": "",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": "2024-09-12 00:00:00+00:00"
+    },
+    "Chic Agence": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://agencechic.com/3d-motion-design/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "- agence de publicit\u00e9 parisienne \n- produit de luxe",
+        "CompanyDate": "2024-09-12 00:00:00+00:00"
+    },
+    "STILLA": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://stilla-studio.fr/#contacts",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "-studio parisien \n-studio 3d proposant un studio 3d / vr\n-grande qualit\u00e9 de production\n-le fait que leurs projets incluent ces nouvelles inovations technologiques est vraiment super int\u00e9ressant",
+        "CompanyDate": "2024-09-12 00:00:00+00:00"
+    },
+    "UN OEIL SUR TOUT": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.unoeilsurtout.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "- agence / studio de publicit\u00e9 \u00e0 Paris\n- grande audace et cr\u00e9ativit\u00e9 dans leurs projets\n- beaucoup de changement d'identit\u00e9 visuelle",
+        "CompanyDate": "2024-09-12 00:00:00+00:00"
     }
 }

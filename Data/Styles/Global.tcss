@@ -10,7 +10,10 @@ ListView, TextArea {
 	border-title-align:left;
 	border-title-style:bold;
 }
-
+Collapsible {
+	background: $surface;
+	border: round $secondary;
+}
 
 /*
 ScrollableContainer {

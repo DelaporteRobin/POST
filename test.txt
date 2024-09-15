@@ -1,22 +1,24 @@
-Subject: Excited to apply for a 3D Artist position at Alter Bureau
+Objet : Candidature pour un poste de junior 3D artist - Robin Delaporte
 
-Hello Alter Bureau team,
+Bonjour,
 
-I hope this message finds you well. I am Robin, a recent graduate of ESMA Lyon, with a strong passion for 3D art and a recent success as a co-director for the short film TRASH.
+Je m'appelle Robin, je suis récemment diplômé de l'ESMA Lyon et je suis passionné par l'art 3D. Tout au long de mon parcours scolaire, j'ai été à la recherche constante de l'audace créative et j'ai toujours cherché à faire transparaître dans mes projets un visuel impactant et original.
 
-I came across your studio's incredible work on your website (<https://www.alterbureau.com/>) and was particularly impressed by your blend of creativity, storytelling, and attention to detail in the 3D art you produce. It is with great enthusiasm that I express my interest in joining your team as a 3D Artist.
+Bien que mon école m'oriente plus vers des studios de film d'animation, je suis davantage attiré par le monde de la publicité, des clips, de l'événementiel et de la mode. Je crois que c'est un univers où l'image doit immédiatement capter l'attention et où il faut être constamment à la recherche de l'originalité pour créer quelque chose d'unique et de percutant. Je pense que votre studio, Un Œil Sur Tout, travaille dans cette optique et cela m'intéresse beaucoup.
 
-My specialties lie in sculpting, modeling, and lookdev, and I am constantly eager to learn and grow. I have a strong foundation in industry-standard software such as ZBrush, Maya, Substance Painter, and Mari, which I believe align with the tools you use. Additionally, I have a growing interest in code and pipeline development, allowing me to contribute to process optimization and automation in the studio.
+Curieux de nature, je suis polyvalent et j'ai un goût pour l'apprentissage. J'apprécie me mettre en danger pour toujours repousser mes limites et découvrir de nouvelles choses. Je suis convaincu que cela pourrait être utile dans la réalisation de vos projets. Durant ma dernière année à l'ESMA, j'ai eu l'occasion d'être co-directeur sur le court métrage TRASH, qui a remporté le premier prix lors du Jury de l'ESMA à Montpellier. C'était une expérience passionnante et enrichissante, motivée par l'esprit d'équipe.
 
-My ultimate goal is to combine my skills and passion in the world of 3D, whether in the realm of advertising or fashion. I am also deeply drawn to the luxury industry and the challenges it presents for visually stunning and immersive creations. I believe my background and experience would be an excellent match with Alter Bureau's projects and client base.
+Je me spécialise en modeling et lookdev. Toutefois, je suis également intéressé par le code et le pipeline. Mon but est d'aller dans le monde de la 3D au sein de la publicité ou de la mode. Je suis particulièrement intéressé par le monde du luxe, de la publicité et de la mode. Dans ce monde-là, être créatif, se renouveler, apprendre et tester de nouvelles choses est capital.
 
-I have attached some of my most recent modeling and lookdev projects. I am more than happy to provide more examples, a resume, or discuss any questions about my work.
+Je vous laisse ci-joint mon CV ainsi que le lien pour visualiser ma DemoReel contenant les projets personnels que j'ai pu faire en dehors de mon école, ainsi que des breakdown du court métrage TRASH sur lequel j'ai travaillé cette année.
 
-Thank you for your time and consideration. I eagerly look forward to the opportunity to contribute my skills to the Alter Bureau team and help create even more amazing work.
+Je vous remercie d'avance pour l'attention que vous porterez à ma candidature. J'espère que ma sincérité vous aura convaincu et je serai plus qu'heureux de pouvoir échanger avec vous lors d'un entretien. Dans cette attente, je reste à votre disposition pour toute information complémentaire.
 
-Warm regards,
+Mes sincères salutations.
 
-Robin
+Robin Delaporte
+
+Lien pour regarder ma DemoReel : <https://youtu.be/Rz_nvQpV1SQ>
 
 
 You are a junior 3d artist and you
@@ -26,18 +28,58 @@ Take this template of email and adapt the details and eventually
 add relevant informations to make that email attractive for
 recruiters.
 
+You can add / remove / edit elements of this preset as you want to make this email more coherent and readable / appealing for recruiters, even if the final mail is different from the template.
+
+Don't hesitate to include at the top of the mail a kind of Title for your application
+
+write in : FRENCH
 
 
 
 here is the mail preset you have to adapt : 
 
-hello world! 
+Bonjour,
+
+Je suis un artiste 3d...
+Je suis passionné par l'art, à la recherche constante de l'audace créative et j'essaie
+toujours de faire transparaître dans mes projets un visuel impactant et original.
+
+Bien que mon école m'oriente plus vers des studios de film d'animation, je me sens 
+bien plus attiré par le fait de travailler dans la publicité, les clips, le monde de
+l'événementiel ou encore la mode.
+De mon point de vue, c'est un monde où l'image doit immédiatement capter l'attention et 
+où il faut être constamment à la recherche de l'originalité afin de créer quelque chose d'unique et de percutant.
+Je pense que votre studio travaille dans cette optique et ça m'intéresse beaucoup.
+
+Curieux de nature, j'ai une nature polyvalente et un goût pour l'apprentissage. 
+J'apprécie me mettre en danger afin de toujours repousser mes limites et découvrir 
+des choses nouvelles et je pense que cela pourrait être utile dans la réalisation de vos projets.
+Durant cette dernière année dans mon école j'ai eu l'occasion de travailler sur le court métrage TRASH, qui a remporté le premier prix lors du Jury de l'ESMA à montpellier. c'était une expérience passionante, motivée par l'esprit d'équipe que je trouve très enrichissant.
+
+Je vous laisse ci-joint mon CV ainsi que le lien pour visualiser ma DemoReel
+contenant les projets personnels que j'ai pu faire en dehors de mon école
+ainsi que des breakdown du court métrage TRASH sur lequel j'ai travaillé
+cette année.
+
+Je vous remercie d'avance pour l'attention que vous porterez à ma candidature
+en espérant que ma sincérité vous aura convaincu.
+Je serai plus qu'heureux de pouvoir échanger avec vous lors d'un entretien.
+Dans cette attention je reste à votre disposition pour toute information
+complémentaire.
 
 
 
-adapt the mail so it correspond if you send it to that company : ALTER BUREAU
+Mes sincères salutations.
 
-if you want more informations about this company to generate the mail, there is the website link : https://www.alterbureau.com/
+
+
+Delaporte Robin
+
+
+
+adapt the mail so it correspond if you send it to that company : UN OEIL SUR TOUT
+
+if you want more informations about this company to generate the mail, there is the website link : https://www.unoeilsurtout.com
 
 
 
@@ -51,10 +93,14 @@ Try if possible to integrate in this email these details about yourself a subtle
 
 -  j'ai été co director sur le court métrage TRASH
 
--  je suis spécialisé en sculpt / modeling et lookdev
+-  je suis spécialisé en modeling et lookdev
 
 -  je suis aussi également intéressé par le code et le pipeline
 
 -  Mon but est d'aller dans le monde de la 3d au sein de la publicité ou de la mode
 
--  je suis intéressé par le monde du luxe
+-  je suis intéressé par le monde du luxe, de la publicité et de la mode
+
+-  dans ce monde là être créatif, se renouveler, apprendre et tester de nouvelles choses est capital
+
+- le lien pour regarder ma DemoReel est : https://youtu.be/Rz_nvQpV1SQ
