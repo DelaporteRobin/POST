@@ -17,8 +17,8 @@
                 "website": ""
             }
         },
-        "CompanyDetails": "-studio produisant beaucoup de publicit\u00e9s de luxe avec des visuels tr\u00e8s percutant\n-je suis tr\u00e8s friant de leur graphisme / direction artistique \u00e0 travers leurs projets",
-        "CompanyDate": "2024-02-07 00:00:00+00:00"
+        "CompanyDetails": "-studio produisant beaucoup de publicit\u00e9s de luxe avec des visuels tr\u00e8s percutant\n-je suis tr\u00e8s friant de leur graphisme / direction artistique \u00e0 travers leurs projets\n-c'est le studio phare pour moi dans lequel j'aimerai vraiment travailler",
+        "CompanyDate": "2024-09-18 00:00:00+00:00"
     },
     "EVEREST": {
         "CompanyLocation": "Paris",
@@ -286,5 +286,18 @@
         },
         "CompanyDetails": "- agence / studio de publicit\u00e9 \u00e0 Paris\n- grande audace et cr\u00e9ativit\u00e9 dans leurs projets\n- beaucoup de changement d'identit\u00e9 visuelle",
         "CompanyDate": "2024-09-12 00:00:00+00:00"
+    },
+    "TurboDiesel": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "turbodiesel.studio",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": "2024-09-19 23:08:20.353024"
     }
 }
