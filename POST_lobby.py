@@ -138,11 +138,14 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			yield self.newcompany_website
 			#yield Button("Last time company was reached", id="modal_newcompany_datebutton")
 
-			self.newcompany_contacted_checkbox = Checkbox("")
+			self.newcompany_contacted_checkbox = Checkbox("I have already contacted the company", id="modal_contacted_checkbox")
+			self.newcompany_contacted_checkbox.value = False
+			yield self.newcompany_contacted_checkbox
 			with Collapsible(title = "Last time company was reached : ", id="modal_collapsible_dateselector"):
 				
 				self.modal_dateselect = DateSelect(placeholder="please select",format="YYYY-MM-DD",picker_mount="#modal_collapsible_dateselector",date=pendulum.parse(str(datetime.now())), id="modal_date")
 				yield self.modal_dateselect
+
 
 				   
 				
@@ -182,8 +185,15 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			self.load_company_data_function(Modal_Contact)
 
 		if self.mode == "create":
+			self.query_one("#modal_collapsible_dateselector").disabled = True
 			new_contact = Modal_Contact()
 			self.newcompany_contactlist_container.mount(new_contact)
+
+
+
+	def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
+		if event.checkbox.id == "modal_contacted_checkbox":
+			self.query_one("#modal_collapsible_dateselector").disabled = not self.newcompany_contacted_checkbox.value
 
 
 
@@ -701,19 +711,21 @@ class POST_Application(App, POST_CommonApplication):
 					#get the date
 					date = studio_data["CompanyDate"]
 
-					if type(date) == str:
-						date = pendulum.parse(date).to_date_string()
-						date = datetime.strptime(date, "%Y-%m-%d")
-					
-					delta = (datetime.now() - date).days
-					average_month_day = 365.25 / 12
-					delta_month = int(delta / average_month_day)
-					
-					if delta_month >= self.user_settings["UserContactDateAlert"]:
-						label.styles.background = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
-					if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
-						label.styles.background = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
-
+					if date != None:
+						if type(date) == str:
+							date = pendulum.parse(date).to_date_string()
+							date = datetime.strptime(date, "%Y-%m-%d")
+						
+						delta = (datetime.now() - date).days
+						average_month_day = 365.25 / 12
+						delta_month = int(delta / average_month_day)
+						
+						if delta_month >= self.user_settings["UserContactDateAlert"]:
+							label.styles.background = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
+						if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
+							label.styles.background = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
+					else:
+						pass
 
 
 				#self.datatable_studiolist.add_row(value["CompanyLocation"], key, height=1, key = i,label=Text("hello"))
@@ -738,19 +750,21 @@ class POST_Application(App, POST_CommonApplication):
 				else:
 					date = self.company_dictionnary[studio]["CompanyDate"]
 
-					if type(date) == str:
-						date = pendulum.parse(date).to_date_string()
-						date = datetime.strptime(date, "%Y-%m-%d")
-					delta = (datetime.now() - date).days
-					average_month_day = 365.25 / 12
-					delta_month = int(delta / average_month_day)
 
-					if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
-						longalert_list.append(studio)
-					elif delta_month >= self.user_settings["UserContactDateAlert"]:
-						shortalert_list.append(studio)
-					else:
-						noalert_list.append(studio)
+					if date != None:
+						if type(date) == str:
+							date = pendulum.parse(date).to_date_string()
+							date = datetime.strptime(date, "%Y-%m-%d")
+						delta = (datetime.now() - date).days
+						average_month_day = 365.25 / 12
+						delta_month = int(delta / average_month_day)
+
+						if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
+							longalert_list.append(studio)
+						elif delta_month >= self.user_settings["UserContactDateAlert"]:
+							shortalert_list.append(studio)
+						else:
+							noalert_list.append(studio)
 
 					
 

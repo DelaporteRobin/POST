@@ -83,8 +83,10 @@ class POST_CommonApplication:
 			"CompanyAnswer":None,
 			"CompanyContact":None,
 			"CompanyDetails":self.newcompany_details.text,
-			"CompanyDate":str(self.date)
+			"CompanyDate":None
 		}
+		if self.newcompany_contacted_checkbox.value == True:
+			company_informations["CompanyDate"] = str(self.date)
 		if self.query_one("#modal_newcompany_answer").value == 1:
 			company_informations["CompanyAnswer"] = True
 		elif self.query_one("#modal_newcompany_answer").value == 2:
@@ -166,12 +168,28 @@ class POST_CommonApplication:
 
 			#self.display_message_function(studio_data)
 			if "CompanyDate" in studio_data:
-				self.query_one("#modal_collapsible_dateselector").title = studio_data["CompanyDate"]
+				if studio_data["CompanyDate"] != None:
+					self.newcompany_contacted_checkbox.value = True
+					self.query_one("#modal_collapsible_dateselector").disabled = False
+					self.query_one("#modal_collapsible_dateselector").title = studio_data["CompanyDate"]
 
-				if type(studio_data["CompanyDate"]) == str:
-					self.modal_dateselect.date = pendulum.parse(studio_data["CompanyDate"])
+					if type(studio_data["CompanyDate"]) == str:
+						self.modal_dateselect.date = pendulum.parse(studio_data["CompanyDate"])
+					else:
+						self.modal_dateselect.date = studio_data["CompanyDate"]
 				else:
-					self.modal_dateselect.date = studio_data["CompanyDate"]
+					self.newcompany_contacted_checkbox.value = False
+					
+					self.query_one("#modal_collapsible_dateselector").title = ""
+					self.query_one("#modal_collapsible_dateselector").disabled = True
+			else:
+				self.newcompany_contacted_checkbox.value = False
+					
+				self.query_one("#modal_collapsible_dateselector").title = "Last time company was reached :"
+				self.query_one("#modal_collapsible_dateselector").disabled = True
+					
+
+
 
 			if studio_data["CompanyAnswer"] == True:
 				self.newcompany_answer.value = 1
@@ -260,18 +278,19 @@ Website of the company : [%s](%s)
 			today = datetime.now()
 			date = company_data["CompanyDate"]
 
-			if type(date) == str:
-				date = pendulum.parse(date).to_date_string()
-				date = datetime.strptime(date, "%Y-%m-%d")
-			
+			if date != None:
+				if type(date) == str:
+					date = pendulum.parse(date).to_date_string()
+					date = datetime.strptime(date, "%Y-%m-%d")
+				
 
-			delta = (today - date).days
-			if delta > 7:
-				markdown += "\nIt was %s week(s) ago" % int(delta/7)
-			else:
-				markdown += "\nIt was %s day(s) ago" % delta
+				delta = (today - date).days
+				if delta > 7:
+					markdown += "\nIt was %s week(s) ago" % int(delta/7)
+				else:
+					markdown += "\nIt was %s day(s) ago" % delta
 
-			#self.display_message_function((today - date).days)
+				#self.display_message_function((today - date).days)
 			
 
 		markdown += """

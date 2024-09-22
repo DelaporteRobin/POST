@@ -30,7 +30,8 @@
                 "website": ""
             }
         },
-        "CompanyDetails": "- Studio de publicit\u00e9 (notamment de luxe) sur Paris\n- J'aime beaucoup les entreprises pour lesquels ils peuvent faire des publicit\u00e9s\n"
+        "CompanyDetails": "- Studio de publicit\u00e9 (notamment de luxe) sur Paris\n- J'aime beaucoup les entreprises pour lesquels ils peuvent faire des publicit\u00e9s\n",
+        "CompanyDate": "2024-09-14 00:00:00+00:00"
     },
     "SUPERBIEN": {
         "CompanyLocation": "paris",
@@ -43,7 +44,7 @@
             }
         },
         "CompanyDetails": "- createur de visuels sur diff\u00e9rents m\u00e9dias (mapping, publicit\u00e9s, show audiovisuel...)\n",
-        "CompanyDate": "2024-06-05 00:00:00+00:00"
+        "CompanyDate": "2024-09-22 12:38:07.136021"
     },
     "BUF": {
         "CompanyLocation": "paris",
@@ -181,7 +182,7 @@
             }
         },
         "CompanyDetails": "- tu es particuli\u00e8rement int\u00e9ress\u00e9 par l'identit\u00e9 visuelle de leurs projets",
-        "CompanyDate": "2024-09-11 12:15:18.017292"
+        "CompanyDate": null
     },
     "UNCANNY VALLEY STUDIO": {
         "CompanyLocation": "paris",
@@ -299,5 +300,224 @@
         },
         "CompanyDetails": "",
         "CompanyDate": "2024-09-19 23:08:20.353024"
+    },
+    "EDDY Studio": {
+        "CompanyLocation": "Paris",
+        "CompanyWebsite": "eddy.tv",
+        "CompanyAnswer": null,
+        "CompanyContact": {
+            "Julie": {
+                "mail": "julie@eddy.tv",
+                "website": ""
+            },
+            "Zuka": {
+                "mail": "zuka@eddy.tv",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "- Creation studio based in paris\n- I met them during the ESMA Job fair\n",
+        "CompanyDate": "2024-09-22 12:24:20.335176"
+    },
+    "COCO": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "cococreativestudio.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "- Commercial company based in paris",
+        "CompanyDate": null
+    },
+    "MATHEMATIC": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "mathematic.tv",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "ILLUMINATION Mc Guff": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.illuminationstudiosparis.com/?lang=fr",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "Nki studio": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.nki.tv/#!/fr/works/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "Wizz": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://wizz.fr/about",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "PSYOP": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://wizz.fr/about",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "mathieu poirier": {
+                "mail": "matthieu@wizz.fr",
+                "website": ""
+            },
+            "Amanda Stubbs": {
+                "mail": "amanda@wizz.fr",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "LOGAN": {
+        "CompanyLocation": "amsterdam",
+        "CompanyWebsite": "https://logan.tv/",
+        "CompanyAnswer": "",
+        "CompanyContact": {},
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "H5": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.h5.fr/fr/projects",
+        "CompanyAnswer": "",
+        "CompanyContact": {},
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "passion paris": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.passion-pictures.com/work/passion-paris/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "royal post": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.royalpost.fr/contact/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "HKI - Hellohikimori": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://hki.paris/about",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "UZIK": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.uzik.com/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "The Mill Paris": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://themill.com/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "MakeMePulse": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.makemepulse.com/case-studies/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "Bonjour Lab": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.bonjour-lab.com/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "Pleix": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://pleix.net/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
     }
 }
