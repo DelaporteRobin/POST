@@ -32,37 +32,18 @@ your email should be attractive and make people want to find out more about you.
 [WARNING] You don't have to include all the informations, try to don't talk too much about yourself!
 
 
-. HERE IS THE COMPANY YOU ARE WRITING TO : service généraux
-
-
-. Here are a few details about the studio to help you with your writing : 
-
-[
-
---studio produisant beaucoup de publicités de luxe avec des visuels très percutant
---je suis très friant de leur graphisme / direction artistique à travers leurs projets
---c'est le studio phare pour moi dans lequel j'aimerai vraiment travailler
-]
+. HERE IS THE COMPANY YOU ARE WRITING TO : MATHEMATIC
 
 
 . Here are some details / elements / turn of phrase that you can try incorporate in your mail : 
 
 [
+Bonjour à l'équipe des Services Généraux,
 
-Je suis passionné par l'art, à la recherche constante de l'audace créative et j'essaie
-toujours de faire transparaître dans mes projets un visuel impactant et original.
-
-Bien que mon école m'oriente plus vers des studios de film d'animation, je me sens 
-bien plus attiré par le fait de travailler dans la publicité, les clips, le monde de
-l'événementiel ou encore la mode.
-De mon point de vue, c'est un monde où l'image doit immédiatement capter l'attention et 
-où il faut être constamment à la recherche de l'originalité afin de créer quelque chose d'unique et de percutant.
-
-
-Curieux de nature, j'ai une nature polyvalente et un goût pour l'apprentissage. 
-
-
-
+Je m'appelle Robin et je suis un artiste 3D récemment diplomé de l'ESMA Lyon.
+Je vous écris aujourd'hui pour vous exprimer mon intérêt envers votre studio
+et ses créations.
+hello world! 
 
 ]
 

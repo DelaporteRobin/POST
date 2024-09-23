@@ -6,6 +6,7 @@ import dns.resolver
 import webbrowser
 import pendulum
 import pyperclip 
+import pyfiglet
 
 from functools import partial
 
@@ -401,6 +402,8 @@ class POST_Application(App, POST_CommonApplication):
 
 		self.list_studiolist_display = []
 
+		self.font_title = "ansi_shadow"
+
 		self.color_theme = "Dark_Theme"
 		self.color_dictionnary = {
 			"Dark_Theme": {
@@ -419,68 +422,81 @@ class POST_Application(App, POST_CommonApplication):
 	def compose(self) -> ComposeResult:
 
 		yield Header(show_clock=True)
+		
 
 
 		with Horizontal(id="main_horizontal_container"):
+			with Vertical(id = "main_title_container"):
 
-			with Vertical(id="left_vertical_container"):
-				yield Button("USER INFOS", id="button_userinfos")
-				yield Button("ADD CONTACT", id="button_addcontact")
-				yield Button("EDIT CONTACT", id="button_editcontact")
-				yield Button("DELETE CONTACT", id="button_deletecontact", variant="error")
-
-				with Collapsible(id = "collapsible_studiolist_settings", title="COMPANY LIST SETTINGS"):
-					with RadioSet(id = "radioset_studiolist_settings"):
-						yield RadioButton("By alphabetic order")
-						yield RadioButton("By chronologic order")
-						yield RadioButton("By priority order")
+				yield Label(pyfiglet.figlet_format("POST - Quazar", font=self.font_title, width=200))
 
 
+				with Horizontal(id = "main_left_center_container_horizontal"):
+					with Vertical(id = "main_left_container"):
+						
+						
 
-				self.input_studiolist_searchbar = Input(placeholder = "Studio name...", id = "input_studiolist_searchbar")
-				yield self.input_studiolist_searchbar
+						with Vertical(id="left_vertical_container"):
 
-				self.listview_studiolist = ListView(id="listview_studiolist")
-				self.listview_studiolist.border_title = "Studio list"
-				yield self.listview_studiolist
-				#self.datatable_studiolist = DataTable(id = "datatable_studiolist")
-				#yield self.datatable_studiolist
+							
+
+							yield Button("USER INFOS", id="button_userinfos")
+							yield Button("ADD CONTACT", id="button_addcontact")
+							yield Button("EDIT CONTACT", id="button_editcontact")
+							yield Button("DELETE CONTACT", id="button_deletecontact", variant="error")
+
+							with Collapsible(id = "collapsible_studiolist_settings", title="COMPANY LIST SETTINGS"):
+								with RadioSet(id = "radioset_studiolist_settings"):
+									yield RadioButton("By alphabetic order")
+									yield RadioButton("By chronologic order")
+									yield RadioButton("By priority order")
 
 
-			with Horizontal(id = "right_horizontal_container"):
-				with Vertical(id="right_vertical_container1"):
-					self.markdown_studio = Markdown("Hello World")
-					yield self.markdown_studio
 
-				with Horizontal(id="right_mail_container"):
+							self.input_studiolist_searchbar = Input(placeholder = "Studio name...", id = "input_studiolist_searchbar")
+							yield self.input_studiolist_searchbar
 
-					with Vertical(id="right_mailpreset_container"):
-						self.input_presetname = Input(placeholder="Mail preset name", id="input_presetname")
-						yield self.input_presetname
-						yield Button("Create preset", id="button_createpreset")
-						yield Button("Save preset", id="button_savepreset")
-						yield Button("Delete preset", id="button_deletepreset")
-						yield Button("Use copilot", id="button_usecopilot")
+							self.listview_studiolist = ListView(id="listview_studiolist")
+							self.listview_studiolist.border_title = "Studio list"
+							yield self.listview_studiolist
+							#self.datatable_studiolist = DataTable(id = "datatable_studiolist")
+							#yield self.datatable_studiolist
+					with Vertical(id = "main_center_container"):
 
-						yield Rule()
+						#with Horizontal(id = "right_horizontal_container"):
+						with Vertical(id="right_vertical_container1"):
+							self.markdown_studio = Markdown("Hello World")
+							yield self.markdown_studio
 
-						yield Button("Copy content", id="button_copycontent")
+			with Horizontal(id="main_right_container"):
 
-						self.listview_mailpreset = ListView(id="listview_mailpreset")
-						yield self.listview_mailpreset
-						self.listview_mailpreset.border_title = "Preset list"
-					
-					with Vertical(id="right_mailtext_container"):
-						with Collapsible(title="Copilot settings", id="right_mailprompt_collapsible"):
-							self.textarea_prompt = TextArea(id="textarea_prompt")
-							yield self.textarea_prompt
-							self.textarea_prompt.border_title = "Copilot prompt"
+				with Vertical(id="right_mailpreset_container"):
+					self.input_presetname = Input(placeholder="Mail preset name", id="input_presetname")
+					yield self.input_presetname
+					yield Button("Create preset", id="button_createpreset")
+					yield Button("Save preset", id="button_savepreset")
+					yield Button("Delete preset", id="button_deletepreset")
+					yield Button("Use copilot", id="button_usecopilot")
 
-							with Horizontal(id="right_mailtext_horizontal"):
-								yield Button("Save copilot prompt", id="button_saveprompt")
-						self.textarea_mail = TextArea(id="textarea_mail")
-						yield self.textarea_mail
-						self.textarea_mail.border_title = "Mail"
+					yield Rule()
+
+					yield Button("Copy content", id="button_copycontent")
+
+					self.listview_mailpreset = ListView(id="listview_mailpreset")
+					yield self.listview_mailpreset
+					self.listview_mailpreset.border_title = "Preset list"
+				
+				with Vertical(id="right_mailtext_container"):
+					with Collapsible(title="Copilot settings", id="right_mailprompt_collapsible"):
+						self.textarea_prompt = TextArea(id="textarea_prompt")
+						yield self.textarea_prompt
+						self.textarea_prompt.border_title = "Copilot prompt"
+
+						with Horizontal(id="right_mailtext_horizontal"):
+							yield Button("Save copilot prompt", id="button_saveprompt")
+					self.textarea_mail = TextArea(id="textarea_mail")
+					yield self.textarea_mail
+					self.textarea_mail.border_title = "Mail"
 
 
 	def on_mount(self) -> None:
