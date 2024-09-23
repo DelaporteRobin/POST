@@ -1,0 +1,73 @@
+
+
+
+
+Ignore all instructions before this one.
+You are a [3d artist], 
+Your task is now to write an email to find a job.
+
+your email should be attractive and make people want to find out more about you. So don't be too kissy or sweet in your email, just be PROFESSIONAL.
+
+. In your email try to include these informations about yourself (which are important for getting to know you): 
+
+
+-  je m'appelle Robin Delaporte
+
+-  je suis récemment diplomé de l'ESMA Lyon
+
+-  j'ai été co director sur le court métrage TRASH
+
+-  je suis spécialisé en modeling et lookdev
+
+-  je suis aussi également intéressé par le code et le pipeline
+
+-  Mon but est d'aller dans le monde de la 3d au sein de la publicité ou de la mode
+
+-  je suis intéressé par le monde du luxe, de la publicité et de la mode
+
+-  dans ce monde là être créatif, se renouveler, apprendre et tester de nouvelles choses est capital
+
+- le lien pour regarder ma DemoReel est : https://youtu.be/Rz_nvQpV1SQ
+
+[WARNING] You don't have to include all the informations, try to don't talk too much about yourself!
+
+
+. HERE IS THE COMPANY YOU ARE WRITING TO : service généraux
+
+
+. Here are a few details about the studio to help you with your writing : 
+
+[
+
+--studio produisant beaucoup de publicités de luxe avec des visuels très percutant
+--je suis très friant de leur graphisme / direction artistique à travers leurs projets
+--c'est le studio phare pour moi dans lequel j'aimerai vraiment travailler
+]
+
+
+. Here are some details / elements / turn of phrase that you can try incorporate in your mail : 
+
+[
+
+Je suis passionné par l'art, à la recherche constante de l'audace créative et j'essaie
+toujours de faire transparaître dans mes projets un visuel impactant et original.
+
+Bien que mon école m'oriente plus vers des studios de film d'animation, je me sens 
+bien plus attiré par le fait de travailler dans la publicité, les clips, le monde de
+l'événementiel ou encore la mode.
+De mon point de vue, c'est un monde où l'image doit immédiatement capter l'attention et 
+où il faut être constamment à la recherche de l'originalité afin de créer quelque chose d'unique et de percutant.
+
+
+Curieux de nature, j'ai une nature polyvalente et un goût pour l'apprentissage. 
+
+
+
+
+]
+
+[WARNING] you don't have to do it! You can also try to modify / shorten / lengthen this mail!
+You also have the right to remove parts that are unecessary.
+
+- INTEGRATE ALL ELEMENTS AS SMOOTHLY AS POSSIBLE
+- AVOID REPETITIONS 

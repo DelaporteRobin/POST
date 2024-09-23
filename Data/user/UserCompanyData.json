@@ -512,6 +512,118 @@
         "CompanyWebsite": "https://pleix.net/",
         "CompanyAnswer": "",
         "CompanyContact": {
+            "Pleix Contact 1": {
+                "mail": "all@pleix.net",
+                "website": ""
+            },
+            "Pleix Contact 2 ": {
+                "mail": "leti@pleix.net",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "-",
+        "CompanyDate": null
+    },
+    "CRCR": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "crcr.fr",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "Polynoid": {
+        "CompanyLocation": "berlin",
+        "CompanyWebsite": "https://polynoid.tv/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "Main contact": {
+                "mail": "contact@polynoid.tv <contact@polynoid.tv>",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "-",
+        "CompanyDate": null
+    },
+    "m\u00e9canique g\u00e9n\u00e9rale": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "http://www.mecanique-g.com/about",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "Main contact": {
+                "mail": "jobs@mecanique-g.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "Onirim": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://onirim.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "Main contact": {
+                "mail": "contact@onirim.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "saint-george": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://saint-george.tv/index.php/contact/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "-",
+        "CompanyDate": null
+    },
+    "One More studio": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "onemore-studio.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "MainContact": {
+                "mail": "knock@onemorestud.io",
+                "website": ""
+            },
+            "Gael & Hugo": {
+                "mail": "gael.hugo@onemore-studio.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "FIX": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.fixstudio.com/en",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "Main Job Contact": {
+                "mail": "jobs@fixstudio.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "-",
+        "CompanyDate": null
+    },
+    "nexus studio": {
+        "CompanyLocation": "londres",
+        "CompanyWebsite": "https://nexusstudios.com/our-story/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
             "": {
                 "mail": "",
                 "website": ""

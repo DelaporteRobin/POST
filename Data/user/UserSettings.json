@@ -2,7 +2,7 @@
     "UserContactDateAlert": 2,
     "UserPromptDetails": [
         "",
-        " je m'appelle Robin\n",
+        " je m'appelle Robin Delaporte\n",
         " je suis r\u00e9cemment diplom\u00e9 de l'ESMA Lyon\n",
         " j'ai \u00e9t\u00e9 co director sur le court m\u00e9trage TRASH\n",
         " je suis sp\u00e9cialis\u00e9 en modeling et lookdev\n",
@@ -12,11 +12,12 @@
         " dans ce monde l\u00e0 \u00eatre cr\u00e9atif, se renouveler, apprendre et tester de nouvelles choses est capital\n",
         "le lien pour regarder ma DemoReel est : https://youtu.be/Rz_nvQpV1SQ"
     ],
-    "UserJobSearched": [
+    "UserJobSearched": "3d artist",
+    "companyDisplayMode": 0,
+    "UserSkillSearched": [
         "Modeling",
         "Sculpt",
         "Lookdev",
-        "Pipeline"
-    ],
-    "companyDisplayMode": 0
+        "Surfacing"
+    ]
 }

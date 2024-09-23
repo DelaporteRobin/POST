@@ -296,12 +296,18 @@ class POST_UserInfos(ModalScreen, POST_CommonApplication):
 
 		with VerticalScroll(id="modal_usersettings_vertical_container"):
 
-		
-			self.input_usersettingsjob = Input(placeholder = "What job are you looking for", id="input_usersettingsjob")
+
+			self.input_usersettingsjob = Input(placeholder = "What is your job", id="input_usersettingsjob")
 			yield self.input_usersettingsjob
+		
+			self.input_usersettingsskills = Input(placeholder = "What are your skills", id="input_usersettingsskills")
+			yield self.input_usersettingsskills
+
+			
 
 			self.textarea_usersettings = ExtendedTextArea(id="textarea_usersettings")
 			yield self.textarea_usersettings
+			
 			
 
 			yield Rule(line_style="double")
@@ -325,8 +331,11 @@ class POST_UserInfos(ModalScreen, POST_CommonApplication):
 			#for line in splited_content:
 			#	self.app.display_message_function(line)
 			self.app.user_settings["UserPromptDetails"] = splited_content
-			if self.letter_verification_function(self.input_usersettingsjob.value) == True:
-				self.app.user_settings["UserJobSearched"] = self.input_usersettingsjob.value.split("/")
+			if self.letter_verification_function(self.input_usersettingsskills.value) == True:
+				self.app.user_settings["UserSkillSearched"] = self.input_usersettingsskills.value.split("/")
+
+			if self.letter_verification_function(self.input_usersettingsjob.value)==True:
+				self.app.user_settings["UserJobSearched"] = self.input_usersettingsjob.value
 
 			self.save_user_settings_function()
 
@@ -338,13 +347,15 @@ class POST_UserInfos(ModalScreen, POST_CommonApplication):
 		
 		#self.app.display_message_function(type(content))
 
+
 		for line in content:
 			if self.letter_verification_function(line)==True:
 				#self.app.display_message_function("-%s"%line)
 				self.textarea_usersettings.insert("-%s"%line)
 
 		try:
-			self.input_usersettingsjob.value = "/".join(self.app.user_settings["UserJobSearched"])
+			self.input_usersettingsskills.value = "/".join(self.app.user_settings["UserSkillSearched"])
+			self.input_usersettingsjob.value = self.app.user_settings["UserJobSearched"]
 		except:
 			pass
 

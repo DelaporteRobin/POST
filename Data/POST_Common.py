@@ -424,7 +424,174 @@ Website of the company : [%s](%s)
 
 
 	def generate_with_copilot_function(self):
-		#get all informations
+
+		prompt_format = ""
+		self.display_message_function("Starting to generate...")
+		prompt_format = self.generate_prompt_function_v2()
+		prompt_textarea_content = self.textarea_prompt.text
+	
+		
+		with open(os.path.join(os.getcwd(), "prompt.txt"), "w") as save_file:
+			save_file.write("\n\n%s"%prompt_format)
+
+
+		
+		try:
+			#try:
+			#try to create the client for groq
+			client = Groq(
+				api_key = os.environ.get("GROQ_API_KEY"),
+			)
+
+			chat_completion = client.chat.completions.create(
+			    messages=[
+			        {
+			            "role": "system",
+			            "content": prompt_format.encode("utf-8").decode("utf-8"),
+			        },
+			        {
+			        	"role":"user",
+			        	"content": prompt_textarea_content.encode("utf-8").decode("utf-8")
+			        }
+			    ],
+			    model="mixtral-8x7b-32768",
+			)
+			with open(os.path.join(os.getcwd(), "generated.txt"), "w") as save_file:
+				save_file.write(chat_completion.choices[0].message.content)
+
+			
+		except Exception as e:
+			self.display_error_function("Impossible to use generation model API\n%s"%e)
+		else:
+			#replace the value of the text in the mail text area
+			self.textarea_mail.clear()
+			self.textarea_mail.insert(chat_completion.choices[0].message.content)
+			
+		
+
+				
+			
+			
+
+
+
+
+
+
+
+
+
+	def generate_prompt_function_v2(self):
+
+
+
+		prompt_content = self.textarea_prompt.text
+		user_settings = self.user_settings["UserPromptDetails"]
+
+		try:
+			studio_name = self.list_studiolist_display[self.listview_studiolist.index]
+			studio_data = self.company_dictionnary[studio_name]
+		except TypeError:
+			self.display_error_function("No studio selected")
+			return
+		else:
+			pass
+
+		try:
+			preset_selected = self.user_preset["mailPreset"][list(self.user_preset["mailPreset"].keys())[self.listview_mailpreset.index]]
+		except:
+			self.display_error_function("Impossible to get mail preset!")
+			return
+		else:
+			#self.display_message_function(preset_selected)
+			pass
+
+		prompt_format = """
+
+Ignore all instructions before this one.
+You are a [%s], 
+Your task is now to write an email to find a job.
+
+your email should be attractive and make people want to find out more about you. So don't be too kissy or sweet in your email, just be PROFESSIONAL.
+"""%(self.user_settings["UserJobSearched"])
+		
+
+		
+
+
+		if type(user_settings)==list and (len(user_settings)!=0):
+			prompt_format += """
+. In your email try to include these informations about yourself (which are important for getting to know you): \n
+"""
+			for user_data in user_settings:
+				if self.letter_verification_function(user_data)==True:
+					prompt_format+="\n- %s"%user_data
+
+			prompt_format += """
+
+[WARNING] You don't have to include all the informations, try to don't talk too much about yourself!
+"""
+		
+		prompt_format += """
+
+. HERE IS THE COMPANY YOU ARE WRITING TO : %s
+"""%(studio_name)
+
+		
+		try:
+			if self.letter_verification_function(studio_data["CompanyDetails"]) == True:
+
+				prompt_format += """
+
+. Here are a few details about the studio to help you with your writing : 
+
+[
+"""
+				#get the list of elements
+				studio_data_list = studio_data["CompanyDetails"].split("\n")
+				for info in studio_data_list:
+					if self.letter_verification_function(info)==True:
+						prompt_format+="\n-%s"%info
+				prompt_format += """
+]
+"""
+		except:
+			pass
+
+
+
+		if self.letter_verification_function(preset_selected) == True:
+			prompt_format += """
+
+. Here are some details / elements / turn of phrase that you can try incorporate in your mail : 
+
+[
+%s\n
+]
+"""%preset_selected
+
+
+			prompt_format += """
+[WARNING] you don't have to do it! You can also try to modify / shorten / lengthen this mail!
+You also have the right to remove parts that are unecessary.
+
+- INTEGRATE ALL ELEMENTS AS SMOOTHLY AS POSSIBLE
+- AVOID REPETITIONS 
+"""
+		return prompt_format
+
+
+
+
+
+
+
+
+
+
+
+	def generate_prompt_function_v1(self):
+				#get all informations
 		"""
 			the studio selected
 			the preset selected (content)
@@ -495,47 +662,7 @@ Try if possible to integrate in this email these details about yourself a subtle
 					prompt_format+="- %s\n"%info
 
 
-		
-
-
-
-		#try:
-		#try to create the client for groq
-		client = Groq(
-			api_key = os.environ.get("GROQ_API_KEY"),
-		)
-
-		chat_completion = client.chat.completions.create(
-		    messages=[
-		        {
-		            "role": "user",
-		            "content": prompt_format.encode("utf-8").decode("utf-8"),
-		        }
-		    ],
-		    model="mixtral-8x7b-32768",
-		)
-		"""
-		except Exception as e:
-			self.display_error_function("Impossible to generate with copilot\n%s"%e)
-		else:
-
-
-		"""
-		self.display_message_function("success")
-
-			
-		
-		with open(os.path.join(os.getcwd(), "test.txt"), "w") as save_file:
-			save_file.write(chat_completion.choices[0].message.content)
-
-		with open(os.path.join(os.getcwd(), "test.txt"), "a") as save_file:
-			save_file.write("\n\n%s"%prompt_format)
-
-
-		#replace text in the mail preset area
-		self.textarea_mail.clear()
-		self.textarea_mail.insert(chat_completion.choices[0].message.content)
-				
+		return prompt_format
 
 
 
