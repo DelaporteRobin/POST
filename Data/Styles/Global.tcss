@@ -73,7 +73,9 @@ POST_AddContact, POST_UserInfos	 {
 	margin-left:15;
 }
 
-
+#modal_date {
+	height: 20;
+}
 
 
 

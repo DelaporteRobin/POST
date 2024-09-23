@@ -405,9 +405,20 @@ class POST_Application(App, POST_CommonApplication):
 		self.font_title = "ansi_shadow"
 
 		self.color_theme = "Dark_Theme"
+
+
+
+		#COLORS FOR CONTACTED STUDIO
+		"""
+		FONT COLOR
+			Not contacted yet --> no color
+			Already contacted --> Lighter color?
+			Short time alert --> orange
+			Long time alert --> Red
+		"""
 		self.color_dictionnary = {
 			"Dark_Theme": {
-				"notContacted": "#6a5f83",
+				"notContacted": "#f2e26f",
 				"contactDateShortAlert": "#ad761b",
 				"contactDateLongAlert": "#ad361b",
 			}
@@ -684,17 +695,133 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
-
-
-
-
-
-	
-	
-
-
-
 	def update_informations_function(self):
+
+		self.display_message_function("Refresh informations")
+
+		self.listview_studiolist.clear()
+		self.listview_mailpreset.clear()
+		self.textarea_prompt.clear()
+
+		self.load_company_dictionnary_function()
+		self.load_mail_preset_function()
+		self.load_user_settings_function()
+
+
+		if "CopilotPrompt" in self.user_preset:
+			self.textarea_prompt.insert(self.user_preset["CopilotPrompt"])
+
+		self.list_studiolist_display = []
+
+		
+		#NOT BY PRIORITY ORDER
+		if self.user_settings["companyDisplayMode"] != 2:
+
+
+			self.list_studiolist_display = list(self.company_dictionnary.keys())
+
+			#BY ALPHABETIC ORDER
+			if  (self.user_settings["companyDisplayMode"] == 0):
+				self.list_studiolist_display.sort(key = str.lower)
+
+
+
+		#BY PRIORITY ORDER
+		else:	
+			not_contacted_list = []
+			no_alert_list = []
+			short_alert_list = []
+			long_alert_list = []
+
+			for studio_name, studio_data in self.company_dictionnary.items():
+				if ("CompanyDate" not in studio_data) or (studio_data["CompanyDate"] == None):
+					not_contacted_list.append(studio_name)
+
+				else:
+					date = self.company_dictionnary[studio_name]["CompanyDate"]
+
+					if type(date) == str:
+						date = pendulum.parse(date).to_date_string()
+						date = datetime.strptime(date, "%Y-%m-%d")
+
+					delta = (datetime.now() - date).days
+					average_month_day = 365.25 / 12
+					delta_month = int(delta / average_month_day)
+
+					if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
+						long_alert_list.append(studio_name)
+					elif delta_month >= self.user_settings["UserContactDateAlert"]:
+						short_alert_list.append(studio_name)
+					else:
+						no_alert_list.append(studio_name)
+			#concatenate all list
+			self.list_studiolist_display = long_alert_list + short_alert_list + no_alert_list + not_contacted_list
+
+
+
+
+
+		#FOR EACH STUDIO IN THE STUDIO LIST ADD IT TO THE LIST WITH THE RIGHT COLOR
+		for studio in self.list_studiolist_display:
+
+			studio_data = self.company_dictionnary[studio]
+
+			label = Label(studio)
+
+			self.listview_studiolist.append(ListItem(label))
+
+
+			#CHECK FOR COLORS
+			if ("CompanyDate" not in studio_data) or (studio_data["CompanyDate"] == None):
+				label.styles.color = self.color_dictionnary[self.color_theme]["notContacted"]
+
+			else:
+				date = self.company_dictionnary[studio]["CompanyDate"]
+
+				if type(date) == str:
+					date = pendulum.parse(date).to_date_string()
+					date = datetime.strptime(date, "%Y-%m-%d")
+
+				delta = (datetime.now() - date).days
+				average_month_day = 365.25 / 12
+				delta_month = int(delta / average_month_day)
+
+				if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
+					label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
+				elif delta_month >= self.user_settings["UserContactDateAlert"]:
+					label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
+				else:
+					pass
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+	
+	
+
+
+
+	def update_informations_function_v1(self):
 		
 		self.listview_studiolist.clear()
 		self.listview_mailpreset.clear()
@@ -705,9 +832,9 @@ class POST_Application(App, POST_CommonApplication):
 		self.load_mail_preset_function()
 		self.load_user_settings_function()
 
+
 		if "CopilotPrompt" in self.user_preset:
 			self.textarea_prompt.insert(self.user_preset["CopilotPrompt"])
-
 		#self.display_message_function(self.company_dictionnary)
 		self.display_message_function("UPDATE")
 
@@ -733,7 +860,7 @@ class POST_Application(App, POST_CommonApplication):
 
 				
 				if "CompanyDate" not in studio_data:
-					label.styles.background = self.color_dictionnary[self.color_theme]["notContacted"]
+					label.styles.color = self.color_dictionnary[self.color_theme]["notContacted"]
 				else:
 					#get the date
 					date = studio_data["CompanyDate"]
@@ -748,9 +875,9 @@ class POST_Application(App, POST_CommonApplication):
 						delta_month = int(delta / average_month_day)
 						
 						if delta_month >= self.user_settings["UserContactDateAlert"]:
-							label.styles.background = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
+							label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
 						if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
-							label.styles.background = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
+							label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
 					else:
 						pass
 
@@ -800,21 +927,21 @@ class POST_Application(App, POST_CommonApplication):
 			for studio in longalert_list:
 				studio_data = self.company_dictionnary[studio]
 				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
-				label.styles.background = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
+				label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
 				self.listview_studiolist.append(ListItem(label))
 				self.list_studiolist_display.append(studio)
 
 			for studio in shortalert_list:
 				studio_data = self.company_dictionnary[studio]
 				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
-				label.styles.background = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
+				label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
 				self.listview_studiolist.append(ListItem(label))
 				self.list_studiolist_display.append(studio)
 
 			for studio in notcontacted_list:
 				studio_data = self.company_dictionnary[studio]
 				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
-				label.styles.background = self.color_dictionnary[self.color_theme]["notContacted"]
+				label.styles.color = self.color_dictionnary[self.color_theme]["notContacted"]
 				self.listview_studiolist.append(ListItem(label))
 				self.list_studiolist_display.append(studio)
 
