@@ -18,7 +18,7 @@
             }
         },
         "CompanyDetails": "-studio produisant beaucoup de publicit\u00e9s de luxe avec des visuels tr\u00e8s percutant\n-je suis tr\u00e8s friant de leur graphisme / direction artistique \u00e0 travers leurs projets\n-c'est le studio phare pour moi dans lequel j'aimerai vraiment travailler",
-        "CompanyDate": "2024-05-15 00:00:00+00:00"
+        "CompanyDate": "2024-09-12 00:00:00+00:00"
     },
     "EVEREST": {
         "CompanyLocation": "Paris",
@@ -108,31 +108,34 @@
                 "website": ""
             }
         },
-        "CompanyDetails": "- studio de publicit\u00e9 / visuel\n- tu aimges beaucoup la diversit\u00e9 ainsi que le storytelling derri\u00e8re leurs projets"
+        "CompanyDetails": "- studio de publicit\u00e9 / visuel\n- tu aimges beaucoup la diversit\u00e9 ainsi que le storytelling derri\u00e8re leurs projets",
+        "CompanyDate": "2024-09-10 00:00:00+00:00"
     },
     "FOUND STUDIO": {
         "CompanyLocation": "paris",
         "CompanyWebsite": "https://www.found-studio.com/#navbar",
         "CompanyAnswer": null,
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "General job": {
+                "mail": "jobs@found-studio.com",
                 "website": ""
             }
         },
-        "CompanyDetails": "- studio de publicit\u00e9 / visuel\n- tu aimges beaucoup la diversit\u00e9 ainsi que le storytelling derri\u00e8re leurs projets"
+        "CompanyDetails": "- studio de publicit\u00e9 / visuel\n- tu aimges beaucoup la diversit\u00e9 ainsi que le storytelling derri\u00e8re leurs projets",
+        "CompanyDate": "2024-10-06 02:13:25.077830"
     },
     "HA STUDIO PARIS": {
         "CompanyLocation": "paris",
-        "CompanyWebsite": "Hastudio@unlockcollectif.com",
+        "CompanyWebsite": "https://www.instagram.com/ha.studio.paris/?locale=%E6%AC%A7%E6%B4%B2%E6%9D%AF%E6%8A%95%E6%B3%A8%E5%9C%A8%E5%93%AA%E5%8F%AF%E4%BB%A5(kaiyun.la)%0A.icra&hl=en",
         "CompanyAnswer": null,
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "General mail": {
+                "mail": "Hastudio@unlockcollectif.com",
                 "website": ""
             }
         },
-        "CompanyDetails": "- producteurs d'\u00e9normes projets visuel concernant notamment DJ SNAKE, des jeux vid\u00e9os, la publicit\u00e9...\n-grande vari\u00e9t\u00e9 de projets, de m\u00e9dias\n- tr\u00e8s bon storytelling et identit\u00e9 graphique"
+        "CompanyDetails": "- producteurs d'\u00e9normes projets visuel concernant notamment DJ SNAKE, des jeux vid\u00e9os, la publicit\u00e9...\n-grande vari\u00e9t\u00e9 de projets, de m\u00e9dias\n- tr\u00e8s bon storytelling et identit\u00e9 graphique",
+        "CompanyDate": "2024-10-06 00:00:00+00:00"
     },
     "DIGITAL DISTRICT": {
         "CompanyLocation": "paris",
@@ -144,7 +147,8 @@
                 "website": ""
             }
         },
-        "CompanyDetails": "- studio de concept design / vfx \n- \u00e9norme qualit\u00e9 graphique et de r\u00e9alisation de mani\u00e8re g\u00e9n\u00e9rale sur leurs projets\n- grande vari\u00e9t\u00e9 d'univers trait\u00e9 aux travers de leurs publicit\u00e9 notamment."
+        "CompanyDetails": "- studio de concept design / vfx \n- \u00e9norme qualit\u00e9 graphique et de r\u00e9alisation de mani\u00e8re g\u00e9n\u00e9rale sur leurs projets\n- grande vari\u00e9t\u00e9 d'univers trait\u00e9 aux travers de leurs publicit\u00e9 notamment.",
+        "CompanyDate": "2024-10-01 00:00:00+00:00"
     },
     "(not) alone studio": {
         "CompanyLocation": "paris",
@@ -156,7 +160,8 @@
                 "website": ""
             }
         },
-        "CompanyDetails": ""
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-06 02:43:44.191834"
     },
     "DIORAMA": {
         "CompanyLocation": "paris",
@@ -176,13 +181,13 @@
         "CompanyWebsite": "https://www.alterbureau.com/",
         "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "main contact": {
+                "mail": "studio@alterbureau.com <studio@alterbureau.com",
                 "website": ""
             }
         },
         "CompanyDetails": "- tu es particuli\u00e8rement int\u00e9ress\u00e9 par l'identit\u00e9 visuelle de leurs projets",
-        "CompanyDate": null
+        "CompanyDate": "2024-10-06 02:49:43.671127"
     },
     "UNCANNY VALLEY STUDIO": {
         "CompanyLocation": "paris",
@@ -329,7 +334,7 @@
             }
         },
         "CompanyDetails": "- Commercial company based in paris",
-        "CompanyDate": null
+        "CompanyDate": "2024-10-01 00:00:00+00:00"
     },
     "MATHEMATIC": {
         "CompanyLocation": "paris",
@@ -341,8 +346,8 @@
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-06 02:58:45.972156"
     },
     "ILLUMINATION Mc Guff": {
         "CompanyLocation": "paris",
@@ -362,26 +367,26 @@
         "CompanyWebsite": "https://www.nki.tv/#!/fr/works/",
         "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "general contact": {
+                "mail": "contact@nki.tv",
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-06 03:10:53.201240"
     },
     "Wizz": {
         "CompanyLocation": "paris",
         "CompanyWebsite": "https://wizz.fr/about",
         "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "job mail": {
+                "mail": "jobs@wizz.fr",
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-06 03:15:32.224764"
     },
     "PSYOP": {
         "CompanyLocation": "paris",
@@ -398,14 +403,19 @@
             }
         },
         "CompanyDetails": "-",
-        "CompanyDate": "2024-07-18 00:00:00+00:00"
+        "CompanyDate": null
     },
     "LOGAN": {
         "CompanyLocation": "amsterdam",
         "CompanyWebsite": "https://logan.tv/",
         "CompanyAnswer": "",
-        "CompanyContact": {},
-        "CompanyDetails": "",
+        "CompanyContact": {
+            "job contact": {
+                "mail": "job@logan.tv ",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "-",
         "CompanyDate": null
     },
     "H5": {
@@ -413,8 +423,8 @@
         "CompanyWebsite": "https://www.h5.fr/fr/projects",
         "CompanyAnswer": "",
         "CompanyContact": {},
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-06 03:23:37.610017"
     },
     "passion paris": {
         "CompanyLocation": "paris",
@@ -529,12 +539,12 @@
         "CompanyWebsite": "crcr.fr",
         "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "General contact": {
+                "mail": "mail@crcr.fr\ufeff",
                 "website": ""
             }
         },
-        "CompanyDetails": "",
+        "CompanyDetails": "-",
         "CompanyDate": null
     },
     "Polynoid": {

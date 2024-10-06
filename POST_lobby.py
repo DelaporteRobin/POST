@@ -1,5 +1,36 @@
 import os
 import sys
+import subprocess
+
+lib_list = [
+	"termcolor",
+	"re",
+	"dnspython",
+	"pyperclip",
+	"rich",
+	"threading",
+	"datetime",
+	"textual_datepicker",
+	"groq",
+	"ast",
+	"time",
+	"sys",
+	"colorama",
+	"pyfiglet",
+	"pendulum",
+	"json",
+	"textual"
+	]
+
+
+for lib in lib_list:
+	try:
+		__import__(lib)
+	except ImportError:
+		print("Impossible to load library : %s --> Download running...\n"%lib)
+		subprocess.check_call([sys.executable, "-m", "pip", "install", lib])
+
+
 import time 
 import re
 import dns.resolver
@@ -628,19 +659,28 @@ class POST_Application(App, POST_CommonApplication):
 		link = event.href
 
 		#check if email or internet adress
-		email_regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
-		url_regex = r'^(https?://)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(/.*)?$'
-
+		
+		#email_regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
+		#url_regex = r'^(https?://)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(/.*)?$'
+		
+		pyperclip.copy(link)
+		self.display_message_function("Link copied in clipboard\n%s"%link)
 
 
 		
-
+		"""
 
 		#test the dns check
 		if re.match(url_regex, link):
 			#self.display_message_function("website adress")
 			#open the link in a webbrower
-			webbrowser.open(link)
+			
+			#OPEN THE WEBBROWSER WITH THE LINK
+			#webbrowser.open(link)
+
+			#COPY THE LINK IN THE CLIPBOARD
+			pyperclip.copy(link)
+			self.display_message_function("Link copied in clipboard\n%s"%link)
 		else:
 			try:
 				domain = link.split("@")[1]
@@ -649,6 +689,7 @@ class POST_Application(App, POST_CommonApplication):
 				self.display_error_function("Link not recognized\n%s"%e)
 			else:
 				self.display_message_function("Email adress")
+		"""
 
 		
 
@@ -710,6 +751,13 @@ class POST_Application(App, POST_CommonApplication):
 
 		if "CopilotPrompt" in self.user_preset:
 			self.textarea_prompt.insert(self.user_preset["CopilotPrompt"])
+
+
+		if "mailPreset" in self.user_preset:
+			preset_list = list(self.user_preset["mailPreset"].keys())
+
+			for preset in preset_list:
+				self.listview_mailpreset.append(ListItem(Label(preset)))
 
 		self.list_studiolist_display = []
 

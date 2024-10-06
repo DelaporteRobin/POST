@@ -441,7 +441,7 @@ Website of the company : [%s](%s)
 			#try to create the client for groq
 			client = Groq(
 				api_key = os.environ.get("GROQ_API_KEY"),
-			)
+				)
 
 			chat_completion = client.chat.completions.create(
 			    messages=[
