@@ -22,14 +22,14 @@ lib_list = [
 	"textual"
 	]
 
-
+"""
 for lib in lib_list:
 	try:
 		__import__(lib)
 	except ImportError:
 		print("Impossible to load library : %s --> Download running...\n"%lib)
 		subprocess.check_call([sys.executable, "-m", "pip", "install", lib])
-
+"""
 
 import time 
 import re

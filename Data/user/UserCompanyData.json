@@ -436,8 +436,8 @@
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-06 18:02:21.384727"
     },
     "royal post": {
         "CompanyLocation": "paris",
@@ -457,26 +457,26 @@
         "CompanyWebsite": "https://hki.paris/about",
         "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "job contact": {
+                "mail": "jobs@hki.paris",
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-07 13:49:43.505890"
     },
     "UZIK": {
         "CompanyLocation": "paris",
         "CompanyWebsite": "https://www.uzik.com/",
         "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "job contact": {
+                "mail": "careers@uzik.com",
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-07 13:56:07.511603"
     },
     "The Mill Paris": {
         "CompanyLocation": "paris",
@@ -496,26 +496,26 @@
         "CompanyWebsite": "https://www.makemepulse.com/case-studies/",
         "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "job contact": {
+                "mail": "\tjobs@makemepulse.com",
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-07 14:07:20.470082"
     },
     "Bonjour Lab": {
         "CompanyLocation": "paris",
         "CompanyWebsite": "https://www.bonjour-lab.com/",
         "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "general contact": {
+                "mail": "contact@bonjour-lab.com",
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-07 14:09:24.144829"
     },
     "Pleix": {
         "CompanyLocation": "paris",
@@ -532,7 +532,7 @@
             }
         },
         "CompanyDetails": "-",
-        "CompanyDate": null
+        "CompanyDate": "2024-10-07 14:24:04.291708"
     },
     "CRCR": {
         "CompanyLocation": "paris",
@@ -553,12 +553,12 @@
         "CompanyAnswer": "",
         "CompanyContact": {
             "Main contact": {
-                "mail": "contact@polynoid.tv <contact@polynoid.tv>",
+                "mail": "contact@polynoid.tv ",
                 "website": ""
             }
         },
         "CompanyDetails": "-",
-        "CompanyDate": null
+        "CompanyDate": "2024-10-07 14:26:54.290959"
     },
     "m\u00e9canique g\u00e9n\u00e9rale": {
         "CompanyLocation": "paris",
@@ -570,8 +570,8 @@
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-07 14:41:49.020399"
     },
     "Onirim": {
         "CompanyLocation": "paris",
@@ -583,21 +583,21 @@
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-07 14:44:10.099189"
     },
     "saint-george": {
         "CompanyLocation": "paris",
         "CompanyWebsite": "https://saint-george.tv/index.php/contact/",
         "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "general info mail": {
+                "mail": "info@saint-george.tv",
                 "website": ""
             }
         },
         "CompanyDetails": "-",
-        "CompanyDate": null
+        "CompanyDate": "2024-10-07 14:46:01.928530"
     },
     "One More studio": {
         "CompanyLocation": "paris",
@@ -613,8 +613,8 @@
                 "website": ""
             }
         },
-        "CompanyDetails": "",
-        "CompanyDate": null
+        "CompanyDetails": "-",
+        "CompanyDate": "2024-10-07 14:51:21.437896"
     },
     "FIX": {
         "CompanyLocation": "paris",
@@ -627,19 +627,19 @@
             }
         },
         "CompanyDetails": "-",
-        "CompanyDate": null
+        "CompanyDate": "2024-10-07 14:56:18.573168"
     },
     "nexus studio": {
         "CompanyLocation": "londres",
         "CompanyWebsite": "https://nexusstudios.com/our-story/",
         "CompanyAnswer": "",
         "CompanyContact": {
-            "": {
-                "mail": "",
+            "job contact": {
+                "mail": "jobs@nexusstudios.com",
                 "website": ""
             }
         },
-        "CompanyDetails": "",
+        "CompanyDetails": "-",
         "CompanyDate": null
     }
 }
