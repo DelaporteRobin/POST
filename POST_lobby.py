@@ -2,7 +2,11 @@ import os
 import sys
 import subprocess
 
+
 lib_list = [
+	"re",
+	"unidecode",
+	"Levenshtein",
 	"termcolor",
 	"re",
 	"dnspython",
@@ -22,14 +26,14 @@ lib_list = [
 	"textual"
 	]
 
-"""
+
 for lib in lib_list:
 	try:
 		__import__(lib)
 	except ImportError:
 		print("Impossible to load library : %s --> Download running...\n"%lib)
 		subprocess.check_call([sys.executable, "-m", "pip", "install", lib])
-"""
+
 
 import time 
 import re
@@ -38,6 +42,9 @@ import webbrowser
 import pendulum
 import pyperclip 
 import pyfiglet
+import unidecode
+import re
+import Levenshtein
 
 from functools import partial
 
@@ -189,8 +196,8 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 
 
 			with Horizontal(id="modal_addcontact_container"):
-				yield Button("Add contact", id="modal_addcontacttolist_button")
-				yield Button("Remove contact", id="modal_removecontactfromlist_button")
+				yield Button("Add contact", id="modal_addcontacttolist_button", classes="darken_button primary_button")
+				yield Button("Remove contact", id="modal_removecontactfromlist_button", classes="darken_button error_button")
 			
 			self.newcompany_contactlist_container = ScrollableContainer(id="modal_newcompany_contactlist")
 			yield self.newcompany_contactlist_container
@@ -201,10 +208,10 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 
 			with Horizontal(id="modal_horizontal_container"):
 				if self.mode == "create":
-					yield Button("Create", variant="primary", id="modal_create_contact_button")
+					yield Button("Create", variant="primary", id="modal_create_contact_button", classes="darken_button primary_button")
 				else:
-					yield Button("Save", variant="primary", id="modal_create_contact_button")
-				yield Button("Quit", variant="error", id="modal_cancel_contact_button")
+					yield Button("Save", variant="primary", id="modal_create_contact_button", classes="darken_button primary_button")
+				yield Button("Quit", variant="error", id="modal_cancel_contact_button", classes="darken_button error_button")
 
 
 		
@@ -345,8 +352,8 @@ class POST_UserInfos(ModalScreen, POST_CommonApplication):
 			yield Rule(line_style="double")
 
 			with Horizontal(id="modal_usersettings_horizontal_container"):
-				yield Button("Save", variant="primary", id="modal_usersettings_button_save")
-				yield Button("Quit", variant="error", id="modal_usersettings_button_quit")
+				yield Button("Save", variant="primary", id="modal_usersettings_button_save", classes="darken_button primary_button")
+				yield Button("Quit", variant="error", id="modal_usersettings_button_quit", classes="darken_button error_button")
 
 
 	def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -449,9 +456,9 @@ class POST_Application(App, POST_CommonApplication):
 		"""
 		self.color_dictionnary = {
 			"Dark_Theme": {
-				"notContacted": "#f2e26f",
+				"notContacted": "white",
 				"contactDateShortAlert": "#ad761b",
-				"contactDateLongAlert": "#ad361b",
+				"contactDateLongAlert": "#d81b57",
 			}
 		}
 
@@ -470,7 +477,7 @@ class POST_Application(App, POST_CommonApplication):
 		with Horizontal(id="main_horizontal_container"):
 			with Vertical(id = "main_title_container"):
 
-				yield Label(pyfiglet.figlet_format("POST - Quazar", font=self.font_title, width=200))
+				yield Label(pyfiglet.figlet_format("_@rchive_",font=self.font_title, width=200), id="label_title")
 
 
 				with Horizontal(id = "main_left_center_container_horizontal"):
@@ -481,11 +488,11 @@ class POST_Application(App, POST_CommonApplication):
 						with Vertical(id="left_vertical_container"):
 
 							
-
-							yield Button("USER INFOS", id="button_userinfos")
-							yield Button("ADD CONTACT", id="button_addcontact")
-							yield Button("EDIT CONTACT", id="button_editcontact")
-							yield Button("DELETE CONTACT", id="button_deletecontact", variant="error")
+							with Horizontal(id="left_horizontaloptions_container"):
+								yield Button("USER INFOS", id="button_userinfos")
+								yield Button("ADD CONTACT", id="button_addcontact")
+								yield Button("EDIT CONTACT", id="button_editcontact")
+								yield Button("DELETE CONTACT", id="button_deletecontact", variant="error", classes="error_button")
 
 							with Collapsible(id = "collapsible_studiolist_settings", title="COMPANY LIST SETTINGS"):
 								with RadioSet(id = "radioset_studiolist_settings"):
@@ -518,7 +525,7 @@ class POST_Application(App, POST_CommonApplication):
 					yield Button("Create preset", id="button_createpreset")
 					yield Button("Save preset", id="button_savepreset")
 					yield Button("Delete preset", id="button_deletepreset")
-					yield Button("Use copilot", id="button_usecopilot")
+					yield Button("Use copilot", id="button_usecopilot", classes="primary_button")
 
 					yield Rule()
 
@@ -543,6 +550,16 @@ class POST_Application(App, POST_CommonApplication):
 
 	def on_mount(self) -> None:
 		self.update_informations_function()
+
+
+
+	def on_input_changed(self, event: Input.Changed) -> None:
+		#EVENT FOR THE SEARCHBAR
+		#call the searchbar system function
+		if event.input.id == "input_studiolist_searchbar":
+			#get the value of the searchbar at that moment
+			#self.display_message_function(self.input_studiolist_searchbar.value)
+			self.searchbar_function(self.input_studiolist_searchbar.value)
 
 
 	def on_radio_set_changed(self, event:RadioSet.Changed) -> None:
@@ -655,6 +672,12 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
+
+
+
+
+
+
 	def on_markdown_link_clicked(self, event: Markdown.LinkClicked) -> None:
 		link = event.href
 
@@ -733,6 +756,58 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
+	def searchbar_function(self, content):
+
+		if self.letter_verification_function(content) == True:
+			#remove all capital letter and accent in the content
+			content = unidecode.unidecode(content.lower())
+			#self.display_message_function(content)
+
+
+
+			self.list_studiolist_display = []
+
+
+
+			for i in range(len(self.list_studiolist_filtered)):
+
+				studio_name = self.list_studiolist[i]
+				studio_filtered = self.list_studiolist_filtered[i]
+
+
+				if content in studio_filtered:
+					self.list_studiolist_display.append(studio_name)
+				else:
+					distance = Levenshtein.distance(content, studio_filtered)
+					length = max(len(content), len(studio_filtered))
+					similitude = ((length - distance) / length) * 100
+
+					if similitude > 50:
+						self.list_studiolist_display.append(studio_name)
+
+
+			#self.list_studiolist_display = self.searchbar_studio_list
+			self.listview_studiolist.clear()
+			self.update_studiolist_view()
+
+
+
+
+		else:
+			#append to the studiolist the studiolist
+			self.update_informations_function()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -759,7 +834,17 @@ class POST_Application(App, POST_CommonApplication):
 			for preset in preset_list:
 				self.listview_mailpreset.append(ListItem(Label(preset)))
 
+
+
+
+		self.list_studiolist = list(self.company_dictionnary.keys())
+		self.list_studiolist_filtered = []
+
+		for studio in self.list_studiolist:
+			self.list_studiolist_filtered.append(unidecode.unidecode(studio.lower()))
+
 		self.list_studiolist_display = []
+		#self.list_studiolist_filtered = []
 
 		
 		#NOT BY PRIORITY ORDER
@@ -771,7 +856,6 @@ class POST_Application(App, POST_CommonApplication):
 			#BY ALPHABETIC ORDER
 			if  (self.user_settings["companyDisplayMode"] == 0):
 				self.list_studiolist_display.sort(key = str.lower)
-
 
 
 		#BY PRIORITY ORDER
@@ -806,11 +890,26 @@ class POST_Application(App, POST_CommonApplication):
 			self.list_studiolist_display = long_alert_list + short_alert_list + no_alert_list + not_contacted_list
 
 
+		self.update_studiolist_view()
 
+
+
+	def update_studiolist_view(self):
 
 
 		#FOR EACH STUDIO IN THE STUDIO LIST ADD IT TO THE LIST WITH THE RIGHT COLOR
 		for studio in self.list_studiolist_display:
+
+
+
+			#UPDATE THE FILTERED STUDIO LIST 
+			#remove unwanted informations from studio
+			#remove capital letters / accents
+			#self.list_studiolist_filtered.append(unidecode.unidecode(studio).lower())
+			#self.display_message_function(self.list_studiolist_filtered[-1])
+
+
+
 
 			studio_data = self.company_dictionnary[studio]
 
@@ -821,8 +920,8 @@ class POST_Application(App, POST_CommonApplication):
 
 			#CHECK FOR COLORS
 			if ("CompanyDate" not in studio_data) or (studio_data["CompanyDate"] == None):
-				label.styles.color = self.color_dictionnary[self.color_theme]["notContacted"]
-
+				#label.styles.color = self.color_dictionnary[self.color_theme]["notContacted"]
+				label.classes = "label_primary"
 			else:
 				date = self.company_dictionnary[studio]["CompanyDate"]
 
@@ -835,11 +934,21 @@ class POST_Application(App, POST_CommonApplication):
 				delta_month = int(delta / average_month_day)
 
 				if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
-					label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
+					#label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
+					label.classes = "label_error"
 				elif delta_month >= self.user_settings["UserContactDateAlert"]:
-					label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
+					#label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
+					label.classes = "label_warning"
 				else:
 					pass
+
+
+
+			app.refresh_css()
+
+
+
+
 			
 
 
@@ -988,8 +1097,8 @@ class POST_Application(App, POST_CommonApplication):
 
 			for studio in notcontacted_list:
 				studio_data = self.company_dictionnary[studio]
-				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
-				label.styles.color = self.color_dictionnary[self.color_theme]["notContacted"]
+				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio), classes="label_warning")
+				#label.styles.color = self.color_dictionnary[self.color_theme]["notContacted"]
 				self.listview_studiolist.append(ListItem(label))
 				self.list_studiolist_display.append(studio)
 
@@ -999,6 +1108,10 @@ class POST_Application(App, POST_CommonApplication):
 				#label.styles.background = self.color_dictionnary[self.color_theme]["notContacted"]
 				self.listview_studiolist.append(ListItem(label))
 				self.list_studiolist_display.append(studio)
+
+
+			#try to refresh the application
+			app.refresh_css()
 
 
 

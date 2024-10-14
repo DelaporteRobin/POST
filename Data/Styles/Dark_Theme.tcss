@@ -1,15 +1,16 @@
 /* DARK THEME TCSS */ 
 
-$primary: #a722fd;
-$secondary: #bc7dfb;
+$primary: #74e79e;
+$secondary: #97cbaa;
 
-$primary-background: #222024;
-$secondary-background: #2a272d;
+$primary-background: #74e79e;
+$secondary-background: #97cbaa;
 
-$background: #222024;
 
+$accent: #9ef5bd;
 $error: #d81b57;
 $success: #b3d81b;
+$warning: #edbd77;
 
 
 /*

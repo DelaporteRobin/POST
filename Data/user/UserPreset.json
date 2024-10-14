@@ -6,5 +6,5 @@
         "test_preset": "hello world!",
         "yrdy": "bonjour"
     },
-    "CopilotPrompt": "write in : FRENCH"
+    "CopilotPrompt": "write in : ENGLISH"
 }

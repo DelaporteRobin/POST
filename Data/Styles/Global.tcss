@@ -1,7 +1,20 @@
-/* TCSS FOR THE GLOBAL WIDGETS */
 
+
+
+
+
+
+
+
+
+
+/* TCSS FOR THE GLOBAL WIDGETS */
 ListView {
 	border:round $primary;
+	color: white;
+}
+Label {
+	color: white;
 }
 TextArea {
 	border:round $primary;
@@ -14,12 +27,58 @@ Collapsible {
 	background: $surface;
 	border: round $secondary;
 }
-
-/*
-ScrollableContainer {
-	height:1fr;
+Button {
+	/*background: $background;*/
+	background: $surface;
+	color: white;
+	border: heavy white;
 }
-*/
+
+
+
+
+
+
+
+/* TCSS DEPENDING OF THE CLASS / STATUS OF THE WIDGET */
+.darken_button {
+	background: $background;
+}
+.error_button {
+	border: heavy $error;
+
+
+	background: $error;
+}
+.primary_button {
+	border: heavy $primary;
+	background: $primary;
+}
+
+.label_warning {
+	color: $warning;
+}
+.label_error {
+	color: $error;
+}
+.label_standard {
+	color: white;
+}
+.label_accent {
+	color: $accent;
+}
+.label_primary {
+	color: $primary;
+}
+
+#label_title {
+	color: $accent;
+}
+
+
+
+
+
 
 
 
@@ -83,3 +142,6 @@ POST_AddContact, POST_UserInfos	 {
 
 
 /* CODE ABOUT THE MAIN PAGE */
+#left_horizontaloptions_container {
+	height: 5;
+}
