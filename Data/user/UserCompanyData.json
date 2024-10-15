@@ -654,5 +654,328 @@
         },
         "CompanyDetails": "",
         "CompanyDate": "2024-10-15 00:18:00.786358"
+    },
+    "DIGITEYES": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://digiteyes.fr/a-propos",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "job contact": {
+                "mail": "jobs@digiteyes.fr",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "PointFlottant": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://pointflottant.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "global mail": {
+                "mail": "studio@pointflottant.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "KINGSIZEFX": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.kingsizefx.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "general contact mail": {
+                "mail": "contact@kingsizefx.com",
+                "website": ""
+            },
+            "job contact mail": {
+                "mail": "jobs@kingsizefx.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "-",
+        "CompanyDate": null
+    },
+    "FYGOSTUDIO": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://fygostudio.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "NEELS STUDIO": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.neels.fr",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "BloodyBird studio": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.bloodybird.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "job contact": {
+                "mail": "job@bloodybird.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "AC3": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://ac3-studio.com/contact",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "job contact": {
+                "mail": "jobs@ac3-studio.com",
+                "website": ""
+            },
+            "general contact": {
+                "mail": "hello@ac3-studio.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "Lagoon studio": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "lagoonstudios.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "general contact": {
+                "mail": "contact@lagoonstudios.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "MONARCH": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.monarch.tv/about",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "job contact": {
+                "mail": "job@monarch.tv",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "WEARECODE": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://wearecode.tv/about/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "rebecca rice": {
+                "mail": "rebecca@wearecode.tv",
+                "website": ""
+            },
+            "guillaume cottet": {
+                "mail": "guillaume@wearecode.tv",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "PROTOTYPESTUDIO": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "http://www.prototypestudio.fr/",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "contact": {
+                "mail": "hello@prototypestudio.fr",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "BONHOMME STUDIO": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://bonhommeparis.com/fr/contact",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "job contact": {
+                "mail": "jobs@bonhommeparis.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "PUNCH AGENCY": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://www.punchagency.paris",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "general contact": {
+                "mail": "contact@punchagency.paris",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "WWWESH STUDIO": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://wwwesh.studio",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "general contact": {
+                "mail": "contact@wwweshstudio.fr",
+                "website": ""
+            },
+            "job contact": {
+                "mail": "job@wwweshstudio.fr",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "ALT BORDER": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "alt-border.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "general contact": {
+                "mail": "contact@alt-border.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "Monsieur K studio": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "studio-monsieurk.fr",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "job contact": {
+                "mail": "jobs@studio-monsieurk.fr",
+                "website": ""
+            },
+            "general contact": {
+                "mail": "contact@studio-monsieurk.fr",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "RETAIL3D": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "retail3d.fr",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "I-REEL": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "i-reel.fr",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "general contact": {
+                "mail": "contact@i-reel.fr",
+                "website": ""
+            },
+            "job contact": {
+                "mail": "recrutement@i-reel.fr",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "LA BOITE - MANIFESTO": {
+        "CompanyLocation": "paris dubai tokyo",
+        "CompanyWebsite": "la-boite.org",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "paris general contact": {
+                "mail": "la-boite@manifesto.paris",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "SPOA AGENCY": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://spoagency.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "general contact": {
+                "mail": "hello@spoagency.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "CREASENSO": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://creasenso.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "QUATRE DEUX DEUX": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://quatredeuxdeux.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "LeCreative": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://lecreative.paris",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "": {
+                "mail": "",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
     }
 }
