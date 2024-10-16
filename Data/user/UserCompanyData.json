@@ -977,5 +977,35 @@
         },
         "CompanyDetails": "",
         "CompanyDate": null
+    },
+    "11H16": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://11h16.com",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "general contact": {
+                "mail": "hello@11h16.com",
+                "website": ""
+            },
+            "job contact": {
+                "mail": "job@11h16.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
+    },
+    "CONORELI": {
+        "CompanyLocation": "paris",
+        "CompanyWebsite": "https://conoreli.xyz",
+        "CompanyAnswer": "",
+        "CompanyContact": {
+            "general contact": {
+                "mail": "hello@conoreli.com",
+                "website": ""
+            }
+        },
+        "CompanyDetails": "",
+        "CompanyDate": null
     }
 }

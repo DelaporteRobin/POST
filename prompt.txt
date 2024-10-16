@@ -32,16 +32,16 @@ your email should be attractive and make people want to find out more about you.
 [WARNING] You don't have to include all the informations, try to don't talk too much about yourself!
 
 
-. HERE IS THE COMPANY YOU ARE WRITING TO : HA STUDIO PARIS
+. HERE IS THE COMPANY YOU ARE WRITING TO : service généraux
 
 
 . Here are a few details about the studio to help you with your writing : 
 
 [
 
--- producteurs d'énormes projets visuel concernant notamment DJ SNAKE, des jeux vidéos, la publicité...
---grande variété de projets, de médias
--- très bon storytelling et identité graphique
+--studio produisant beaucoup de publicités de luxe avec des visuels très percutant
+--je suis très friant de leur graphisme / direction artistique à travers leurs projets
+--c'est le studio phare pour moi dans lequel j'aimerai vraiment travailler
 ]
 
 
@@ -49,10 +49,19 @@ your email should be attractive and make people want to find out more about you.
 
 [
 
+I am passionate about art, constantly seeking creative audacity and trying to
+always make a visual impact and original in my projects.
 
-Je m'appelle Robin et je suis un artiste 3D récemment diplomé de l'ESMA Lyon.
-Je vous écris aujourd'hui pour vous exprimer mon intérêt envers votre studio
-et ses créations.
+Although my school is more oriented towards animation film studios, I feel 
+much more attracted by working in advertising, video clips, the world of
+events or fashion.
+From my point of view, it is a world where the image must immediately capture attention and 
+Where you have to constantly look for originality in order to create something unique and impactful.
+
+
+Curious by nature, I have a versatile nature and a taste for learning. 
+
+
 
 
 ]
