@@ -782,7 +782,7 @@ class POST_Application(App, POST_CommonApplication):
 					length = max(len(content), len(studio_filtered))
 					similitude = ((length - distance) / length) * 100
 
-					if similitude > 50:
+					if similitude > 70:
 						self.list_studiolist_display.append(studio_name)
 
 
@@ -813,7 +813,7 @@ class POST_Application(App, POST_CommonApplication):
 
 	def update_informations_function(self):
 
-		self.display_message_function("Refresh informations")
+		#self.display_message_function("Refresh informations")
 
 		self.listview_studiolist.clear()
 		self.listview_mailpreset.clear()
@@ -934,17 +934,17 @@ class POST_Application(App, POST_CommonApplication):
 				delta_month = int(delta / average_month_day)
 
 				if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
-					#label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
-					label.classes = "label_error"
+					label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
+					#label.classes = "label_error"
 				elif delta_month >= self.user_settings["UserContactDateAlert"]:
-					#label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
-					label.classes = "label_warning"
+					label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
+					#label.classes = "label_warning"
 				else:
 					pass
 
 
 
-			app.refresh_css()
+			#app.refresh_css()
 
 
 

@@ -65,8 +65,8 @@ class POST_CommonApplication:
 		except Exception as e:
 			self.display_error_function("Impossible to load company dictionnary\n%s"%e)
 		else:
-			self.display_message_function("Company dictionnary loaded")
-		
+			#self.display_message_function("Company dictionnary loaded")
+			pass
 
 
 
@@ -376,8 +376,9 @@ Website of the company : [%s](%s)
 		except Exception as e:
 			self.display_error_function("Impossible to load mail presets\n%s"%e)
 		else:
-			self.display_message_function("Presets loaded")
+			#self.display_message_function("Presets loaded")
 			#self.display_message_function(self.user_preset)
+			pass
 
 
 
@@ -415,8 +416,8 @@ Website of the company : [%s](%s)
 		except Exception as e:
 			self.display_error_function("Impossible to load user settings\n%s"%e)
 		else:
-			self.display_message_function("User settings loaded")
-
+			#self.display_message_function("User settings loaded")
+			pass
 					
 
 
