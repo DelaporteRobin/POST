@@ -40,6 +40,42 @@ Button {
 
 
 
+/* TCSS FOR THE MAIN PAGE */
+#left_horizontal_option_bar {
+	layout: grid;
+	grid-size: 4 1;
+	height: 5;
+}
+
+#right_mailpreset_container {
+	margin-right: 2;
+}
+#right_mailtext_container {
+	width: 80%;
+}
+
+#right_mailprompt_collapsible {
+	max-height: 40%;
+}
+
+.button_preset {
+	width: 100%;
+}
+
+
+#main_left_container {
+	width: 50%;
+}
+
+
+
+
+
+
+
+
+
+
 /* TCSS DEPENDING OF THE CLASS / STATUS OF THE WIDGET */
 .darken_button {
 	background: $background;
@@ -78,12 +114,6 @@ Button {
 
 
 
-
-
-
-
-
-/* TCSS CODE FOR THE MODAL SCREEN OF USER SETTINGS */
 
 
 
@@ -139,9 +169,3 @@ POST_AddContact, POST_UserInfos	 {
 
 
 
-
-
-/* CODE ABOUT THE MAIN PAGE */
-#left_horizontaloptions_container {
-	height: 5;
-}

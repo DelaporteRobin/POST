@@ -4,7 +4,6 @@ Hello World
 
 ## Tasklist for next versions
 
-- update .tcss files (Global tcss files)
-- studio searchbar (proximity system)
 - update contacted studio status after a certain amount of time
-- increase the quality of the noteblock for email generation
+- update the user settings location system
+

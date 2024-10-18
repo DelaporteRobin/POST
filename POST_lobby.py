@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import ctypes
 
 
 lib_list = [
@@ -435,7 +436,10 @@ class POST_Application(App, POST_CommonApplication):
 
 
 		self.company_dictionnary = {}
-		self.user_settings = {}
+		self.contact_list = {}
+		self.user_settings = {
+			"companyDisplayMode":1,
+		}
 		self.user_preset = {}
 
 		self.list_studiolist_display = []
@@ -488,11 +492,14 @@ class POST_Application(App, POST_CommonApplication):
 						with Vertical(id="left_vertical_container"):
 
 							
-							with Horizontal(id="left_horizontaloptions_container"):
-								yield Button("USER INFOS", id="button_userinfos")
-								yield Button("ADD CONTACT", id="button_addcontact")
-								yield Button("EDIT CONTACT", id="button_editcontact")
-								yield Button("DELETE CONTACT", id="button_deletecontact", variant="error", classes="error_button")
+							with Grid(id = "left_horizontal_option_bar"):
+				
+								
+								yield Button("USER INFOS", id="button_userinfos", classes="button_bar")
+								yield Button("ADD CONTACT", id="button_addcontact", classes="button_bar")
+								yield Button("EDIT CONTACT", id="button_editcontact", classes="button_bar")
+								yield Button("DELETE CONTACT", id="button_deletecontact", variant="error", classes="error_button button_bar")
+								
 
 							with Collapsible(id = "collapsible_studiolist_settings", title="COMPANY LIST SETTINGS"):
 								with RadioSet(id = "radioset_studiolist_settings"):
@@ -517,38 +524,62 @@ class POST_Application(App, POST_CommonApplication):
 							self.markdown_studio = Markdown("Hello World")
 							yield self.markdown_studio
 
-			with Horizontal(id="main_right_container"):
 
-				with Vertical(id="right_mailpreset_container"):
-					self.input_presetname = Input(placeholder="Mail preset name", id="input_presetname")
-					yield self.input_presetname
-					yield Button("Create preset", id="button_createpreset")
-					yield Button("Save preset", id="button_savepreset")
-					yield Button("Delete preset", id="button_deletepreset")
-					yield Button("Use copilot", id="button_usecopilot", classes="primary_button")
+			with Vertical(id = "main_right_container"):
+				with TabbedContent(id="main_righttab_container"):
 
-					yield Rule()
 
-					yield Button("Copy content", id="button_copycontent")
+					with TabPane("Mail editor"):
+						with Horizontal(id="main_righthorizontal_container"):
+							with Vertical(id="right_mailpreset_container"):
+								self.input_presetname = Input(placeholder="Mail preset name", id="input_presetname")
+								yield self.input_presetname
+								yield Button("Create preset", id="button_createpreset", classes="button_preset")
+								yield Button("Save preset", id="button_savepreset", classes="button_preset")
+								yield Button("Delete preset", id="button_deletepreset", classes="button_preset")
+								yield Button("Use copilot", id="button_usecopilot", classes="primary_button button_preset")
 
-					self.listview_mailpreset = ListView(id="listview_mailpreset")
-					yield self.listview_mailpreset
-					self.listview_mailpreset.border_title = "Preset list"
-				
-				with Vertical(id="right_mailtext_container"):
-					with Collapsible(title="Copilot settings", id="right_mailprompt_collapsible"):
-						self.textarea_prompt = TextArea(id="textarea_prompt")
-						yield self.textarea_prompt
-						self.textarea_prompt.border_title = "Copilot prompt"
+								yield Rule()
 
-						with Horizontal(id="right_mailtext_horizontal"):
-							yield Button("Save copilot prompt", id="button_saveprompt")
-					self.textarea_mail = TextArea(id="textarea_mail")
-					yield self.textarea_mail
-					self.textarea_mail.border_title = "Mail"
+								yield Button("Copy content", id="button_copycontent", classes="button_preset")
+
+								self.listview_mailpreset = ListView(id="listview_mailpreset")
+								yield self.listview_mailpreset
+								self.listview_mailpreset.border_title = "Preset list"
+							
+							with Vertical(id="right_mailtext_container"):
+								with Collapsible(title="Copilot settings", id="right_mailprompt_collapsible"):
+									self.textarea_prompt = TextArea(id="textarea_prompt")
+									yield self.textarea_prompt
+									self.textarea_prompt.border_title = "Copilot prompt"
+
+
+
+									with Horizontal(id="right_mailtext_horizontal"):
+										yield Button("Save copilot prompt", id="button_saveprompt")
+
+
+
+								yield Rule()
+
+								self.input_mailcontact = Input(placeholder="Mail contact list")
+								yield self.input_mailcontact
+
+								self.textarea_mail = TextArea(id="textarea_mail")
+								yield self.textarea_mail
+								self.textarea_mail.border_title = "Mail"
+
+
+
+					with TabPane("Mail watcher"):
+						self.listview_contactlist = ListView(id = "listview_contactlist")
+						yield self.listview_contactlist
+
+		
 
 
 	def on_mount(self) -> None:
+		
 		self.update_informations_function()
 
 
@@ -658,14 +689,16 @@ class POST_Application(App, POST_CommonApplication):
 
 	async def on_key(self, event: events.Key) -> None:
 
+		"""
 		if event.key == "delete":
 			#self.display_message_function("hello")
 			#get selected item in list and delete the key from the dictionnary
-			value = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+			value = list(self.company_dictionnary.keys())[self.listview_studiolist.index+1]
 			del self.company_dictionnary[value]
 			self.save_company_dictionnary_function()
 			self.update_informations_function()
 			self.display_message_function("Company removed from dictionnary")
+		"""
 
 
 
@@ -686,6 +719,12 @@ class POST_Application(App, POST_CommonApplication):
 		#email_regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
 		#url_regex = r'^(https?://)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(/.*)?$'
 		
+
+
+		#remove the beginning of the link copied if it starts with mailto:
+		if link.startswith("mailto:"):
+			link = link.replace("mailto:", "")
+
 		pyperclip.copy(link)
 		self.display_message_function("Link copied in clipboard\n%s"%link)
 
@@ -824,6 +863,20 @@ class POST_Application(App, POST_CommonApplication):
 		self.load_user_settings_function()
 
 
+
+		#CREATE THE CONTACT LIST
+		for studio_name, studio_data in self.company_dictionnary.items():
+			for contact_name, contact_data in studio_data["CompanyContact"].items():
+				if self.letter_verification_function(contact_data["mail"])==True:
+					self.contact_list[contact_data["mail"]] = {
+						"studioName":studio_name,
+						"studioContactName":contact_name
+						}
+		for contact_adress, contact_data in self.contact_list.items():
+			label = Label("[ %s ] - %s"%(contact_adress, contact_data["studioName"]))
+			self.listview_contactlist.append(ListItem(label)) 
+
+
 		if "CopilotPrompt" in self.user_preset:
 			self.textarea_prompt.insert(self.user_preset["CopilotPrompt"])
 
@@ -848,14 +901,17 @@ class POST_Application(App, POST_CommonApplication):
 
 		
 		#NOT BY PRIORITY ORDER
-		if self.user_settings["companyDisplayMode"] != 2:
+		try:
+			if self.user_settings["companyDisplayMode"] != 2:
 
 
-			self.list_studiolist_display = list(self.company_dictionnary.keys())
+				self.list_studiolist_display = list(self.company_dictionnary.keys())
 
-			#BY ALPHABETIC ORDER
-			if  (self.user_settings["companyDisplayMode"] == 0):
-				self.list_studiolist_display.sort(key = str.lower)
+				#BY ALPHABETIC ORDER
+				if  (self.user_settings["companyDisplayMode"] == 0):
+					self.list_studiolist_display.sort(key = str.lower)
+		except KeyError:
+			pass
 
 
 		#BY PRIORITY ORDER
@@ -988,6 +1044,11 @@ class POST_Application(App, POST_CommonApplication):
 		self.load_company_dictionnary_function()
 		self.load_mail_preset_function()
 		self.load_user_settings_function()
+
+
+
+		
+
 
 
 		if "CopilotPrompt" in self.user_preset:
@@ -1134,11 +1195,35 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
+#check if admin function
+def is_admin():
+	try:
+		return ctypes.windll.shell32.IsUserAnAdmin()
+	except:
+		return False
+
+
+
+
+
+
+
 
 
 
 
 #launch the application
 if __name__ == "__main__":
-	app = POST_Application()
-	app.run()
+
+
+	#check if the program is launched as admin
+	if is_admin():
+		print("Admin rights checked")
+		app = POST_Application()
+		app.run()
+	else:
+		print("Asking for admin rights...")
+
+		ctypes.windll.shell32.ShellExecuteW(
+			None, "runas", sys.executable, " ".join(sys.argv), None, 1
+		)

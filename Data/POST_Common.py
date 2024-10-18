@@ -41,8 +41,10 @@ class POST_CommonApplication:
 
 
 	def save_company_dictionnary_function(self):
+		os.makedirs("C:/Program Files/@RCHIVE/Data/User/", exist_ok=True)
 		try:
-			with open(os.path.join(os.getcwd(), "Data/User/UserCompanyData.json"), "w") as save_file:
+
+			with open(os.path.join(os.getcwd(), "C:/Program Files/@RCHIVE/Data/User/UserCompanyData.json"), "w") as save_file:
 				json.dump(self.app.company_dictionnary, save_file, indent=4)
 
 		
@@ -58,6 +60,17 @@ class POST_CommonApplication:
 
 
 	def load_company_dictionnary_function(self):
+		#COMMON FOLDER LOCATION FOR USER SETTINGS IS C:/Program Files
+		try:
+			with open(os.path.join("C:/Program Files/@RCHIVE/Data/User/UserCompanyData.json"), "r") as read_file:
+				self.app.company_dictionnary = json.load(read_file)
+		except Exception as e:
+			self.display_error_function("Impossible to load company dictionnary\n%s"%e)
+		else:
+			self.display_message_function("Company dictionnary loaded")
+			#self.display_message_function(self.app.company_dictionnary)
+			pass
+		"""
 		try:	
 			with open(os.path.join(os.getcwd(), "Data/User/UserCompanyData.json"), "r") as read_file:
 				self.app.company_dictionnary = json.load(read_file)
@@ -67,7 +80,7 @@ class POST_CommonApplication:
 		else:
 			#self.display_message_function("Company dictionnary loaded")
 			pass
-
+		"""
 
 
 
@@ -85,8 +98,26 @@ class POST_CommonApplication:
 			"CompanyDetails":self.newcompany_details.text,
 			"CompanyDate":None
 		}
+
+
+		#DATE MODICATION
+		date_value = self.modal_dateselect.date
+		self.display_message_function(date_value)
+
 		if self.newcompany_contacted_checkbox.value == True:
-			company_informations["CompanyDate"] = str(self.date)
+			company_informations["CompanyDate"] = str(date_value)
+		"""
+		if checkbox == True and date == None --> self.date
+		if checkbox == False --> None
+		if checbox == True and date != None --> get date value
+		"""
+		"""
+		if self.newcompany_contacted_checkbox.value == True:
+			if company_informations["CompanyDate"]==None:
+				company_informations["CompanyDate"] = str(self.date)
+		"""
+
+
 		if self.query_one("#modal_newcompany_answer").value == 1:
 			company_informations["CompanyAnswer"] = True
 		elif self.query_one("#modal_newcompany_answer").value == 2:
@@ -99,6 +130,7 @@ class POST_CommonApplication:
 		contact_name_list = self.query("#modal_newcontactname")
 		contact_mail_list = self.query("#modal_newcontactmail")
 		contact_website_list = self.query("#modal_newcontactwebsite")
+
 
 		if len(contact_name_list) != len(contact_mail_list):
 			self.display_error_function("Error trying to get contact informations")
@@ -371,7 +403,7 @@ Website of the company : [%s](%s)
 
 	def load_mail_preset_function(self):
 		try:
-			with open(os.path.join(os.getcwd(), "Data/User/UserPreset.json"), "r") as read_file:
+			with open("C:/Program Files/@RCHIVE/Data/User/UserPreset.json", "r") as read_file:
 				self.user_preset = json.load(read_file)
 		except Exception as e:
 			self.display_error_function("Impossible to load mail presets\n%s"%e)
@@ -384,8 +416,9 @@ Website of the company : [%s](%s)
 
 
 	def save_mail_preset_function(self):
+		os.makedirs("C:/Program Files/@RCHIVE/Data/User/", exist_ok=True)
 		try:
-			with open(os.path.join(os.getcwd(), "Data/User/UserPreset.json"), "w") as save_file:
+			with open("C:/Program Files/@RCHIVE/Data/User/UserPreset.json", "w") as save_file:
 				json.dump(self.user_preset, save_file, indent=4)
 		except Exception as e:
 			self.display_error_function("Impossible to save preset\n%s"%e)
@@ -397,8 +430,9 @@ Website of the company : [%s](%s)
 
 
 	def save_user_settings_function(self):
+		os.makedirs("C:/Program Files/@RCHIVE/Data/User/", exist_ok=True)
 		try:
-			with open("data/user/UserSettings.json", "w") as save_file:
+			with open("C:/Program Files/@RCHIVE/Data/user/UserSettings.json", "w") as save_file:
 				json.dump(self.app.user_settings, save_file, indent=4)
 		except Exception as e:
 			self.app.display_error_function("Impossible to save user settings\n%s"%e)
@@ -411,7 +445,7 @@ Website of the company : [%s](%s)
 
 	def load_user_settings_function(self):
 		try:
-			with open("data/user/UserSettings.json", "r") as read_file:
+			with open("C:/Program Files/@RCHIVE/Data/user/UserSettings.json", "r") as read_file:
 				self.app.user_settings = json.load(read_file)
 		except Exception as e:
 			self.display_error_function("Impossible to load user settings\n%s"%e)
