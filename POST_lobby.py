@@ -437,9 +437,31 @@ class POST_Application(App, POST_CommonApplication):
 
 		self.company_dictionnary = {}
 		self.contact_list = {}
+
+
 		self.user_settings = {
+			"colorTheme":"DarkTheme",
 			"companyDisplayMode":1,
+			"colorDictionnary": {
+				"UserContactShortAlert": {
+					"Color": "#fff03a",
+					"Delta": 3,
+				},
+				"UserContactMediumAlert": {
+					"Color": "#ff7c3a",
+					"Delta": 5,
+				},
+				"UserContactLongAlert": {
+					"Color": "#ff3a3a",
+					"Delta": 7,
+				},
+				"UsernotContacted": {
+					"Color":"#ffffff"
+				},
+			
+			}
 		}
+		
 		self.user_preset = {}
 
 		self.list_studiolist_display = []
@@ -461,7 +483,8 @@ class POST_Application(App, POST_CommonApplication):
 		self.color_dictionnary = {
 			"Dark_Theme": {
 				"notContacted": "white",
-				"contactDateShortAlert": "#ad761b",
+				"contactDateShortAlert": "#e59818",
+				"contactDateMediumAlert": "#e55a1a",
 				"contactDateLongAlert": "#d81b57",
 			}
 		}
@@ -901,25 +924,34 @@ class POST_Application(App, POST_CommonApplication):
 
 		
 		#NOT BY PRIORITY ORDER
-		try:
-			if self.user_settings["companyDisplayMode"] != 2:
+		if self.user_settings["companyDisplayMode"] != 2:
+			try:
+				self.display_message_function("NOT PRIORITY ORDER")
+				if self.user_settings["companyDisplayMode"] != 2:
 
 
-				self.list_studiolist_display = list(self.company_dictionnary.keys())
+					self.list_studiolist_display = list(self.company_dictionnary.keys())
 
-				#BY ALPHABETIC ORDER
-				if  (self.user_settings["companyDisplayMode"] == 0):
-					self.list_studiolist_display.sort(key = str.lower)
-		except KeyError:
-			pass
+					#BY ALPHABETIC ORDER
+					if  (self.user_settings["companyDisplayMode"] == 0):
+						self.list_studiolist_display.sort(key = str.lower)
+			except KeyError:
+				pass
+
+
+
 
 
 		#BY PRIORITY ORDER
 		else:	
+			self.display_message_function("PRIORITY ORDER")
+
 			not_contacted_list = []
 			no_alert_list = []
 			short_alert_list = []
+			medium_alert_list = []
 			long_alert_list = []
+
 
 			for studio_name, studio_data in self.company_dictionnary.items():
 				if ("CompanyDate" not in studio_data) or (studio_data["CompanyDate"] == None):
@@ -936,17 +968,42 @@ class POST_Application(App, POST_CommonApplication):
 					average_month_day = 365.25 / 12
 					delta_month = int(delta / average_month_day)
 
+
+
+					if delta_month >= self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]:
+						long_alert_list.append(studio_name)
+
+					if (delta_month >= self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]) and (delta_month < self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]):
+						medium_alert_list.append(studio_name)
+
+					if (delta_month >= self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Delta"]) and (delta_month < self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]):
+						short_alert_list.append(studio_name)
+
+					else:
+						no_alert_list.append(studio_name)
+
+
+					"""
 					if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
 						long_alert_list.append(studio_name)
 					elif delta_month >= self.user_settings["UserContactDateAlert"]:
 						short_alert_list.append(studio_name)
 					else:
 						no_alert_list.append(studio_name)
+					"""
+
+
+
 			#concatenate all list
-			self.list_studiolist_display = long_alert_list + short_alert_list + no_alert_list + not_contacted_list
+			self.list_studiolist_display = long_alert_list + medium_alert_list + short_alert_list + no_alert_list + not_contacted_list
 
 
 		self.update_studiolist_view()
+
+
+
+
+
 
 
 
@@ -988,17 +1045,31 @@ class POST_Application(App, POST_CommonApplication):
 				delta = (datetime.now() - date).days
 				average_month_day = 365.25 / 12
 				delta_month = int(delta / average_month_day)
+				delta_week = int(delta / 7)
 
-				if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
-					label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
-					#label.classes = "label_error"
-				elif delta_month >= self.user_settings["UserContactDateAlert"]:
-					label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
-					#label.classes = "label_warning"
+
+				if delta_week >= self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]:
+					label.styles.color = self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Color"]
+
+				if (delta_week >= self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]):
+					label.styles.color = self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Color"]
+
+				if (delta_week >= self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]):
+					label.styles.color = self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Color"]
+
+					
+				"""
+				if delta_week >= self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Delta"]:
+					label.styles.color = self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Color"]
+				elif delta_week >= self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]:
+					label.styles.color = self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Color"]
+				elif delta_week >= self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]:
+					label.styles.color = self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Color"]
 				else:
 					pass
+				"""
 
-
+				
 
 			#app.refresh_css()
 
@@ -1091,11 +1162,26 @@ class POST_Application(App, POST_CommonApplication):
 						delta = (datetime.now() - date).days
 						average_month_day = 365.25 / 12
 						delta_month = int(delta / average_month_day)
+						delta_week = int(delta / 7)
 						
+						"""
 						if delta_month >= self.user_settings["UserContactDateAlert"]:
 							label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
 						if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
 							label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
+						"""
+
+
+						#COLOR STUDIO NAME WITH ALERTS COLORS
+						#load
+						if delta_week >= self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Delta"]:
+							label.styles.color = self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Color"]
+						elif delta_week >= self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]:
+							label.styles.color = self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Color"]
+						elif delta_week >= self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]:
+							label.styles.color = self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Color"]
+						else:
+							pass
 					else:
 						pass
 
