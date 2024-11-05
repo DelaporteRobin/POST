@@ -967,30 +967,42 @@ class POST_Application(App, POST_CommonApplication):
 					delta = (datetime.now() - date).days
 					average_month_day = 365.25 / 12
 					delta_month = int(delta / average_month_day)
+					delta_week = int(delta / 7)
 
 
 
-					if delta_month >= self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]:
+					"""
+					if delta_week >= self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]:
 						long_alert_list.append(studio_name)
 
-					if (delta_month >= self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]) and (delta_month < self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]):
+					if (delta_week >= self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]):
 						medium_alert_list.append(studio_name)
 
-					if (delta_month >= self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Delta"]) and (delta_month < self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]):
+					if (delta_week >= self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]):
 						short_alert_list.append(studio_name)
 
 					else:
 						no_alert_list.append(studio_name)
-
-
 					"""
-					if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
+
+
+
+					#CREATION OF ALERT LIST
+					alert_data = self.user_settings["colorDictionnary"]
+
+					if delta_week < alert_data["UserContactShortAlert"]["Delta"]:
+						no_alert_list.append(studio_name)
+
+					elif (delta_week >= alert_data["UserContactShortAlert"]["Delta"]) and (delta_week < alert_data["UserContactMediumAlert"]["Delta"]):
+						short_alert_list.append(studio_name)
+
+					elif (delta_week >= alert_data["UserContactMediumAlert"]["Delta"]) and (delta_week < alert_data["UserContactLongAlert"]["Delta"]):
+						medium_alert_list.append(studio_name)
+
+					else:
 						long_alert_list.append(studio_name)
-					elif delta_month >= self.user_settings["UserContactDateAlert"]:
-						short_alert_list.append(studio_name)
-					else:
-						no_alert_list.append(studio_name)
-					"""
+
+					
 
 
 
@@ -1048,26 +1060,24 @@ class POST_Application(App, POST_CommonApplication):
 				delta_week = int(delta / 7)
 
 
-				if delta_week >= self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]:
-					label.styles.color = self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Color"]
 
-				if (delta_week >= self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]):
+
+				alert_data = self.user_settings["colorDictionnary"]
+					
+				if delta_week < alert_data["UserContactShortAlert"]["Delta"]:
+					pass
+
+				elif (delta_week >= alert_data["UserContactShortAlert"]["Delta"]) and (delta_week < alert_data["UserContactMediumAlert"]["Delta"]):
+					label.styles.color = self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Color"]
+
+				elif (delta_week >= alert_data["UserContactMediumAlert"]["Delta"]) and (delta_week < alert_data["UserContactLongAlert"]["Delta"]):
 					label.styles.color = self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Color"]
 
-				if (delta_week >= self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]):
-					label.styles.color = self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Color"]
+				else:
+					label.styles.color = self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Color"]
 
 					
-				"""
-				if delta_week >= self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Delta"]:
-					label.styles.color = self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Color"]
-				elif delta_week >= self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]:
-					label.styles.color = self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Color"]
-				elif delta_week >= self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]:
-					label.styles.color = self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Color"]
-				else:
-					pass
-				"""
+				
 
 				
 
@@ -1103,176 +1113,6 @@ class POST_Application(App, POST_CommonApplication):
 	
 	
 
-
-
-	def update_informations_function_v1(self):
-		
-		self.listview_studiolist.clear()
-		self.listview_mailpreset.clear()
-		self.textarea_prompt.clear()
-		#self.datatable_studiolist.clear()
-
-		self.load_company_dictionnary_function()
-		self.load_mail_preset_function()
-		self.load_user_settings_function()
-
-
-
-		
-
-
-
-		if "CopilotPrompt" in self.user_preset:
-			self.textarea_prompt.insert(self.user_preset["CopilotPrompt"])
-		#self.display_message_function(self.company_dictionnary)
-		self.display_message_function("UPDATE")
-
-
-		#rows = ["Location", "Company"]
-		#self.datatable_studiolist.add_columns(*rows)
-		self.list_studiolist_display = []
-
-		if self.user_settings["companyDisplayMode"] != 2:
-		
-			if ("companyDisplayMode" not in self.user_settings) or (self.user_settings["companyDisplayMode"] == 1):
-				studio_list = list(self.company_dictionnary.keys())
-				
-			elif self.user_settings["companyDisplayMode"] == 0:
-				studio_list = list(self.company_dictionnary.keys())
-				studio_list.sort(key = str.lower)
-
-			i = 0
-			for studio in studio_list:
-				studio_data = self.company_dictionnary[studio]
-
-				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
-
-				
-				if "CompanyDate" not in studio_data:
-					label.styles.color = self.color_dictionnary[self.color_theme]["notContacted"]
-				else:
-					#get the date
-					date = studio_data["CompanyDate"]
-
-					if date != None:
-						if type(date) == str:
-							date = pendulum.parse(date).to_date_string()
-							date = datetime.strptime(date, "%Y-%m-%d")
-						
-						delta = (datetime.now() - date).days
-						average_month_day = 365.25 / 12
-						delta_month = int(delta / average_month_day)
-						delta_week = int(delta / 7)
-						
-						"""
-						if delta_month >= self.user_settings["UserContactDateAlert"]:
-							label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
-						if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
-							label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
-						"""
-
-
-						#COLOR STUDIO NAME WITH ALERTS COLORS
-						#load
-						if delta_week >= self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Delta"]:
-							label.styles.color = self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Color"]
-						elif delta_week >= self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]:
-							label.styles.color = self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Color"]
-						elif delta_week >= self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]:
-							label.styles.color = self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Color"]
-						else:
-							pass
-					else:
-						pass
-
-
-				#self.datatable_studiolist.add_row(value["CompanyLocation"], key, height=1, key = i,label=Text("hello"))
-				self.listview_studiolist.append(ListItem(label))
-				self.list_studiolist_display.append(studio)
-				i+=1
-
-
-		else:
-			studio_list = list(self.company_dictionnary.keys())
-
-			notcontacted_list = []
-			shortalert_list = []
-			longalert_list = []
-			noalert_list = []
-
-			for studio in studio_list:
-				if "CompanyDate" not in self.company_dictionnary[studio]:
-					notcontacted_list.append(studio)
-					continue
-
-				else:
-					date = self.company_dictionnary[studio]["CompanyDate"]
-
-
-					if date != None:
-						if type(date) == str:
-							date = pendulum.parse(date).to_date_string()
-							date = datetime.strptime(date, "%Y-%m-%d")
-						delta = (datetime.now() - date).days
-						average_month_day = 365.25 / 12
-						delta_month = int(delta / average_month_day)
-
-						if delta_month >= int(self.user_settings["UserContactDateAlert"] * 2):
-							longalert_list.append(studio)
-						elif delta_month >= self.user_settings["UserContactDateAlert"]:
-							shortalert_list.append(studio)
-						else:
-							noalert_list.append(studio)
-
-					
-
-				
-
-			for studio in longalert_list:
-				studio_data = self.company_dictionnary[studio]
-				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
-				label.styles.color = self.color_dictionnary[self.color_theme]["contactDateLongAlert"]
-				self.listview_studiolist.append(ListItem(label))
-				self.list_studiolist_display.append(studio)
-
-			for studio in shortalert_list:
-				studio_data = self.company_dictionnary[studio]
-				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
-				label.styles.color = self.color_dictionnary[self.color_theme]["contactDateShortAlert"]
-				self.listview_studiolist.append(ListItem(label))
-				self.list_studiolist_display.append(studio)
-
-			for studio in notcontacted_list:
-				studio_data = self.company_dictionnary[studio]
-				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio), classes="label_warning")
-				#label.styles.color = self.color_dictionnary[self.color_theme]["notContacted"]
-				self.listview_studiolist.append(ListItem(label))
-				self.list_studiolist_display.append(studio)
-
-			for studio in noalert_list:
-				studio_data = self.company_dictionnary[studio]
-				label = Label("[ %s ] %s"%(studio_data["CompanyLocation"], studio))
-				#label.styles.background = self.color_dictionnary[self.color_theme]["notContacted"]
-				self.listview_studiolist.append(ListItem(label))
-				self.list_studiolist_display.append(studio)
-
-
-			#try to refresh the application
-			app.refresh_css()
-
-
-
-
-
-		
-		
-
-
-		try:
-			for key, value in self.user_preset["mailPreset"].items():
-				self.listview_mailpreset.append(ListItem(Label(key)))
-		except:
-			pass
 
 
 			
