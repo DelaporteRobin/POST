@@ -771,3 +771,29 @@ Try if possible to integrate in this email these details about yourself a subtle
 
 
 
+
+
+	def get_contact_from_filter_function(self):
+		#get value from select fields
+		indexlist = (self.selectionlist_contacttype.selected)
+		contacttype_list = []
+		for index in indexlist:
+			contacttype_list.append(self.kind_list[index])
+
+
+		contact_list = []
+		for studio_name, studio_data in self.company_dictionnary.items():
+			for contact_type, contact_data in studio_data["CompanyContact"].items():
+				if contact_type in contacttype_list:
+					for c_name, c_data in contact_data.items():
+						contact_list.append(c_data["mail"])
+
+		self.optionlist_contact.clear_options()
+		self.optionlist_contact.add_options(contact_list)
+
+
+
+
+
+
+

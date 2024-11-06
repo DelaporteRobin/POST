@@ -272,6 +272,7 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 	def on_button_pressed(self, event: Button.Pressed) -> None:
 		#if event.button.id == "test":
 		#	self.display_message_function(self.query("#modal_newcontactname"))
+	
 
 		if event.button.id == "quit":
 			self.app.exit()
@@ -459,23 +460,26 @@ class POST_Application(App, POST_CommonApplication):
 		self.mail_contact_list = []
 
 
+		self.kind_list = ["MEMBER", "JOB", "GENERAL"]
+
+
 		self.user_settings = {
 			"colorTheme":"DarkTheme",
 			"companyDisplayMode":1,
 			"colorDictionnary": {
-				"UserContactShortAlert": {
+				"RecentContact": {
 					"Color": "#fff03a",
 					"Delta": 3,
 				},
-				"UserContactMediumAlert": {
+				"LatelyContact": {
 					"Color": "#ff7c3a",
 					"Delta": 5,
 				},
-				"UserContactLongAlert": {
+				"PastContact": {
 					"Color": "#ff3a3a",
 					"Delta": 7,
 				},
-				"UsernotContacted": {
+				"NotContacted": {
 					"Color":"#ffffff"
 				},
 			
@@ -502,10 +506,10 @@ class POST_Application(App, POST_CommonApplication):
 		"""
 		self.color_dictionnary = {
 			"Dark_Theme": {
-				"notContacted": "white",
-				"contactDateShortAlert": "#e59818",
-				"contactDateMediumAlert": "#e55a1a",
-				"contactDateLongAlert": "#d81b57",
+				"NotContacted": "white",
+				"RecentContact": "#e59818",
+				"LatelyContact": "#e55a1a",
+				"PastContact": "#d81b57",
 			}
 		}
 
@@ -601,7 +605,15 @@ class POST_Application(App, POST_CommonApplication):
 									
 									with Horizontal(id = "mail_contact_horizontal_container"):
 										with Vertical(id = "mail_contact_left_column"):
-											yield Button("hello")
+											self.selectionlist_contacttype = SelectionList()
+											for i in range(len(self.kind_list)):
+												self.selectionlist_contacttype.add_option((self.kind_list[i], i))
+
+											yield self.selectionlist_contacttype
+
+									
+
+											yield Button("ADD CONTACTS", id = "button_filter_add_contact")
 
 										with Vertical(id = "mail_contact_right_column"):
 											self.optionlist_contact = OptionList(id = "optionlist_contact")
@@ -722,6 +734,11 @@ class POST_Application(App, POST_CommonApplication):
 
 
 	def on_button_pressed(self, event: Button.Pressed) -> None:
+
+		if event.button.id == "button_filter_add_contact":
+			self.get_contact_from_filter_function()
+
+
 		if event.button.id == "button_createpreset":
 			self.create_mail_preset_function()
 
@@ -1083,13 +1100,13 @@ class POST_Application(App, POST_CommonApplication):
 
 
 					"""
-					if delta_week >= self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]:
+					if delta_week >= self.user_settings["colorDictionnary"]["PastContact"]["Delta"]:
 						long_alert_list.append(studio_name)
 
-					if (delta_week >= self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Delta"]):
+					if (delta_week >= self.user_settings["colorDictionnary"]["LatelyContact"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["PastContact"]["Delta"]):
 						medium_alert_list.append(studio_name)
 
-					if (delta_week >= self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Delta"]):
+					if (delta_week >= self.user_settings["colorDictionnary"]["RecentContact"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["LatelyContact"]["Delta"]):
 						short_alert_list.append(studio_name)
 
 					else:
@@ -1101,13 +1118,13 @@ class POST_Application(App, POST_CommonApplication):
 					#CREATION OF ALERT LIST
 					alert_data = self.user_settings["colorDictionnary"]
 
-					if delta_week < alert_data["UserContactShortAlert"]["Delta"]:
+					if delta_week < alert_data["RecentContact"]["Delta"]:
 						no_alert_list.append(studio_name)
 
-					elif (delta_week >= alert_data["UserContactShortAlert"]["Delta"]) and (delta_week < alert_data["UserContactMediumAlert"]["Delta"]):
+					elif (delta_week >= alert_data["RecentContact"]["Delta"]) and (delta_week < alert_data["LatelyContact"]["Delta"]):
 						short_alert_list.append(studio_name)
 
-					elif (delta_week >= alert_data["UserContactMediumAlert"]["Delta"]) and (delta_week < alert_data["UserContactLongAlert"]["Delta"]):
+					elif (delta_week >= alert_data["LatelyContact"]["Delta"]) and (delta_week < alert_data["PastContact"]["Delta"]):
 						medium_alert_list.append(studio_name)
 
 					else:
@@ -1175,17 +1192,17 @@ class POST_Application(App, POST_CommonApplication):
 
 				alert_data = self.user_settings["colorDictionnary"]
 					
-				if delta_week < alert_data["UserContactShortAlert"]["Delta"]:
+				if delta_week < alert_data["RecentContact"]["Delta"]:
 					pass
 
-				elif (delta_week >= alert_data["UserContactShortAlert"]["Delta"]) and (delta_week < alert_data["UserContactMediumAlert"]["Delta"]):
-					label.styles.color = self.user_settings["colorDictionnary"]["UserContactShortAlert"]["Color"]
+				elif (delta_week >= alert_data["RecentContact"]["Delta"]) and (delta_week < alert_data["LatelyContact"]["Delta"]):
+					label.styles.color = self.user_settings["colorDictionnary"]["RecentContact"]["Color"]
 
-				elif (delta_week >= alert_data["UserContactMediumAlert"]["Delta"]) and (delta_week < alert_data["UserContactLongAlert"]["Delta"]):
-					label.styles.color = self.user_settings["colorDictionnary"]["UserContactMediumAlert"]["Color"]
+				elif (delta_week >= alert_data["LatelyContact"]["Delta"]) and (delta_week < alert_data["PastContact"]["Delta"]):
+					label.styles.color = self.user_settings["colorDictionnary"]["LatelyContact"]["Color"]
 
 				else:
-					label.styles.color = self.user_settings["colorDictionnary"]["UserContactLongAlert"]["Color"]
+					label.styles.color = self.user_settings["colorDictionnary"]["PastContact"]["Color"]
 
 					
 				
