@@ -175,7 +175,7 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			self.newcompany_website = Input(placeholder="Company website", type="text", id="modal_newcompany_website")
 
 			
-
+			self.newcompany_tags = Input(placeholder="TAGS / KEYWORDS", type="text", id="modal_newcompany_tags")
 			
 
 			self.newcompany_details = ExtendedTextArea(id="modal_newcompany_details")
@@ -190,6 +190,7 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			yield self.newcompany_name
 			yield self.newcompany_location
 			yield self.newcompany_website
+			yield self.newcompany_tags
 			#yield Button("Last time company was reached", id="modal_newcompany_datebutton")
 
 			self.newcompany_contacted_checkbox = Checkbox("I have already contacted the company", id="modal_contacted_checkbox")
@@ -229,6 +230,12 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 				yield Button("Quit", variant="error", id="modal_cancel_contact_button", classes="darken_button error_button")
 
 
+
+
+		"""
+		if (self.focused.id == "modal_newcompany_tags") and (event.key == "space"):
+			self.newcompany_tags.value = "%s; "%self.newcompany_tags.value
+		"""
 		
 
 
@@ -250,6 +257,10 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 	def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
 		if event.checkbox.id == "modal_contacted_checkbox":
 			self.query_one("#modal_collapsible_dateselector").disabled = not self.newcompany_contacted_checkbox.value
+
+
+
+	
 
 
 
@@ -457,10 +468,11 @@ class POST_Application(App, POST_CommonApplication):
 
 
 		self.studio_suggest_list = []
-		self.mail_contact_list = []
+		self.mail_contact_list = {}
 
 
 		self.kind_list = ["MEMBER", "JOB", "GENERAL"]
+		self.tag_list = []
 
 
 		self.user_settings = {
@@ -605,15 +617,19 @@ class POST_Application(App, POST_CommonApplication):
 									
 									with Horizontal(id = "mail_contact_horizontal_container"):
 										with Vertical(id = "mail_contact_left_column"):
-											self.selectionlist_contacttype = SelectionList()
+											self.selectionlist_contacttype = SelectionList(id = "selectionlist_contacttype")
+											self.selectionlist_tags = SelectionList(id = "selectionlist_tags")
+
 											for i in range(len(self.kind_list)):
 												self.selectionlist_contacttype.add_option((self.kind_list[i], i))
 
 											yield self.selectionlist_contacttype
+											yield self.selectionlist_tags
 
 									
 
 											yield Button("ADD CONTACTS", id = "button_filter_add_contact")
+
 
 										with Vertical(id = "mail_contact_right_column"):
 											self.optionlist_contact = OptionList(id = "optionlist_contact")
@@ -628,6 +644,9 @@ class POST_Application(App, POST_CommonApplication):
 								self.textarea_mail = TextArea(id="textarea_mail")
 								yield self.textarea_mail
 								self.textarea_mail.border_title = "Mail"
+
+								with Horizontal(id="mail_action_horizontal_container"):
+									yield Button("SEND MAIL", id="button_send_mail")
 
 
 
@@ -681,20 +700,78 @@ class POST_Application(App, POST_CommonApplication):
 				self.display_error_function("You have to enter a studio name or email adress!")
 				return
 			else:
-			
 
+				contact_list = {}
+
+				contacttype_index_list = (self.selectionlist_contacttype.selected)
+				contacttype_list = []
+				for index in contacttype_index_list:
+					contacttype_list.append(self.kind_list[index])
+				"""
 				if self.input_mailcontact.value not in list(self.company_dictionnary.keys()):
 					if (self.check_adress_function(self.input_mailcontact.value)) != True:
 						self.display_error_function("This is not a valid studio name or email adress!")
 						return 
 				
-				if self.input_mailcontact.value in self.mail_contact_list:
+				if self.input_mailcontact.value in list(self.mail_contact_list).keys():
 					self.display_error_function("Contact already in list!")
 					return 
 
 				self.mail_contact_list.append(self.input_mailcontact.value)
 				self.optionlist_contact.add_option(self.input_mailcontact.value)
 				self.display_message_function("Contact added to list")
+				"""
+
+				#CHECK THE CATEGORY OF CONTACT SELECTED
+				#GET THE LIST OF CONTACT FOR THIS STUDIO ANND ADD ONLY CONTACT THAT ARE MATCHING
+				
+				#check if it is a studio
+				if self.input_mailcontact.value in list(self.company_dictionnary.keys()):
+					studio_contact_data = self.company_dictionnary[self.input_mailcontact.value]["CompanyContact"]
+
+					
+					for contact_type, contact_data in studio_contact_data.items():
+						
+						if (len(contacttype_list) != 0) and (contact_type in contacttype_list):
+							for c_name, c_data in contact_data.items():
+								if self.letter_verification_function(c_data["mail"])==True:
+									contact_list["[%s] %s"%(self.input_mailcontact.value, c_data["mail"])] = {
+										"studioName":self.input_mailcontact.value,
+										"contactName":c_name,
+										"contactMail":c_data["mail"]
+									}
+						else:
+							for c_name, c_data in contact_data.items():
+								if self.letter_verification_function(c_data["mail"])==True:
+									contact_list["[%s] %s"%(self.input_mailcontact.value, c_data["mail"])] = {
+										"studioName":self.input_mailcontact.value,
+										"contactName":c_name,
+										"contactMail":c_data["mail"]
+									}
+				#check if it is an email adress
+				elif self.check_adress_function(self.input_mailcontact.value)==True:
+					contact_list[self.input_mailcontact.value] = {
+						"studioName":None,
+						"contactMail":self.input_mailcontact.value
+					}
+				else:
+					self.display_error_function("Contact isn't a valid studio name or email adress!")
+					return
+
+
+
+
+				self.display_message_function("field")
+
+				
+				self.mail_contact_list.update(contact_list)
+
+				self.optionlist_contact.clear_options()
+				self.optionlist_contact.add_options(list(self.mail_contact_list.keys()))
+
+
+
+
 
 
 
@@ -704,7 +781,11 @@ class POST_Application(App, POST_CommonApplication):
 			#get the index of the selected item
 			#remove it from the list
 			#refresh the option list
-			self.mail_contact_list.pop(self.optionlist_contact.highlighted)
+			index = (self.optionlist_contact.highlighted)
+			key = list(self.mail_contact_list.keys())[index]
+
+			self.mail_contact_list.pop(key, None)
+
 			self.optionlist_contact.clear_options()
 			self.optionlist_contact.add_options(self.mail_contact_list)
 
@@ -735,6 +816,11 @@ class POST_Application(App, POST_CommonApplication):
 
 	def on_button_pressed(self, event: Button.Pressed) -> None:
 
+
+		if event.button.id == "button_send_mail":
+			self.send_mail_function()
+			
+
 		if event.button.id == "button_filter_add_contact":
 			self.get_contact_from_filter_function()
 
@@ -756,6 +842,24 @@ class POST_Application(App, POST_CommonApplication):
 		if event.button.id == "button_usecopilot":
 			#self.display_message_function(self.company)
 			generate = self.generate_with_copilot_function()
+
+		if event.button.id == "button_deletepreset":
+			index = self.listview_mailpreset.index
+			
+			try:
+				preset_dictionnary = self.user_preset["mailPreset"]
+				preset_list = list(preset_dictionnary.keys())
+				preset_dictionnary.pop(preset_list[index])
+				self.user_preset["mailPreset"] = preset_dictionnary
+			except Exception as e:
+				self.display_error_function("Impossible to remove from dictionnary!\n%s"%e)
+				return
+			else:
+				pass
+
+			self.save_mail_preset_function()
+
+			self.listview_mailpreset.remove_items([index])
 
 
 		if event.button.id == "button_copycontent":
@@ -1008,6 +1112,8 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
+
+
 		#CREATE THE CONTACT LIST
 		"""
 		for studio_name, studio_data in self.company_dictionnary.items():
@@ -1150,6 +1256,10 @@ class POST_Application(App, POST_CommonApplication):
 	def update_studiolist_view(self):
 
 
+		#update the tag list
+		self.tag_list.clear()
+
+
 		#FOR EACH STUDIO IN THE STUDIO LIST ADD IT TO THE LIST WITH THE RIGHT COLOR
 		for studio in self.list_studiolist_display:
 
@@ -1160,6 +1270,21 @@ class POST_Application(App, POST_CommonApplication):
 			#remove capital letters / accents
 			#self.list_studiolist_filtered.append(unidecode.unidecode(studio).lower())
 			#self.display_message_function(self.list_studiolist_filtered[-1])
+
+
+
+
+			#get tag list in company dictionnary
+			studio_tags = self.company_dictionnary[studio]["CompanyTags"]
+			self.selectionlist_tags.clear_options()
+
+			for tag in studio_tags:
+				if tag not in self.tag_list:
+					self.tag_list.append(tag)
+
+			for i in range(len(self.tag_list)):
+				self.selectionlist_tags.add_option((self.tag_list[i], i))
+
 
 
 

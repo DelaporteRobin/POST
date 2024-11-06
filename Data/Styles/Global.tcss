@@ -132,7 +132,7 @@ POST_AddContact, POST_UserInfos	 {
 
 #modal_createcontact_container, #modal_usersettings_vertical_container {
 	padding: 0 1;
-	width: 30%;
+	width: 50%;
 
 	align: center middle;
 

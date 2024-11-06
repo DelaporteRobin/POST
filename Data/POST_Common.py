@@ -5,9 +5,15 @@ from groq import Groq
 import re 
 import dns.resolver
 import pendulum
+import smtplib
+
 
 from functools import partial
 
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 from textual.app import App, ComposeResult
 from textual.widgets import Markdown, RadioSet, RadioButton, Input, Log, Rule, Collapsible, Checkbox, SelectionList, LoadingIndicator, DataTable, Sparkline, DirectoryTree, Rule, Label, Button, Static, ListView, ListItem, OptionList, Header, SelectionList, Footer, Markdown, TabbedContent, TabPane, Input, DirectoryTree, Select, Tabs
@@ -98,8 +104,14 @@ class POST_CommonApplication:
 			"CompanyAnswer":None,
 			"CompanyContact":None,
 			"CompanyDetails":self.newcompany_details.text,
-			"CompanyDate":None
+			"CompanyDate":None,
+			"CompanyTags":[],
 		}
+
+
+		#get tags and split content
+		tags_value = self.newcompany_tags.value.replace(" ", "").split(";")
+		company_informations["CompanyTags"] = tags_value
 
 
 		#DATE MODICATION
@@ -216,6 +228,7 @@ class POST_CommonApplication:
 			self.newcompany_name.value = self.studio 
 			self.newcompany_location.value = studio_data["CompanyLocation"]
 			self.newcompany_website.value = studio_data["CompanyWebsite"]
+			self.newcompany_tags.value = ";".join(studio_data["CompanyTags"])
 
 			try:
 				if self.letter_verification_function(studio_data["CompanyDetails"]) == False:
@@ -775,21 +788,141 @@ Try if possible to integrate in this email these details about yourself a subtle
 
 	def get_contact_from_filter_function(self):
 		#get value from select fields
-		indexlist = (self.selectionlist_contacttype.selected)
+		contacttype_index_list = (self.selectionlist_contacttype.selected)
+		contacttag_index_list = (self.selectionlist_tags.selected)
+
 		contacttype_list = []
-		for index in indexlist:
+		for index in contacttype_index_list:
 			contacttype_list.append(self.kind_list[index])
 
+		contacttag_list = []
+		for index in contacttag_index_list:
+			contacttag_list.append(self.tag_list[index])
 
-		contact_list = []
+
+		#self.display_message_function(contacttype_list)
+		#self.display_message_function(contacttag_list)
+
+
+		contact_list = {}
 		for studio_name, studio_data in self.company_dictionnary.items():
-			for contact_type, contact_data in studio_data["CompanyContact"].items():
-				if contact_type in contacttype_list:
-					for c_name, c_data in contact_data.items():
-						contact_list.append(c_data["mail"])
 
+
+			#TAGS CONDITIONS
+			#	-> if the tag list isn't empty -> check for tags
+			#	-> if one of the studio tag is in the tag list
+
+			studio_tags = studio_data["CompanyTags"]
+			if len(contacttag_list) > 0:
+				found=False
+
+				for tag in studio_tags:
+					if tag in contacttag_list:
+						found=True
+						break
+
+
+			if (len(contacttag_list) == 0) or (found==True):
+				for contact_type, contact_data in studio_data["CompanyContact"].items():
+
+					if contact_type in contacttype_list:
+						for c_name, c_data in contact_data.items():
+							if self.letter_verification_function(c_data["mail"])==True:
+								#contact_list.append(c_data["mail"].replace(" ", ""))
+								contact_list["%s; %s"%(studio_name, c_data["mail"])] = {
+									"studioName":studio_name,
+									"contactName":c_name,
+									"contactMail":c_data["mail"]
+								}
+
+
+
+		self.mail_contact_list = contact_list
 		self.optionlist_contact.clear_options()
-		self.optionlist_contact.add_options(contact_list)
+		self.optionlist_contact.add_options(list(contact_list.keys()))
+
+
+
+
+
+	def send_mail_function(self):
+
+		#GET THE MAIL KEY
+		try:
+			with open("C:/Program Files/@RCHIVE/DATA/mail_key.dll", "r") as load_key:
+				mail_key = load_key.read()
+		except Exception as e:
+			self.display_error_function("Impossible to load key\n%s"%e)
+			return
+		else:
+			self.display_message_function("Key loaded")
+
+
+		#SETUP THE SERVER
+		smtp_server = "smtp.gmail.com"
+		port = 587
+		user_address = self.user_settings["UserMailAdress"]
+
+		#GET THE MAIL CONTENT 
+		mail_header = "This is a mail"
+		mail_body = self.textarea_mail.text
+
+		#GET THE MAIL ATTACHED FILES
+		attached_file = self.user_settings["UserMailAttached"]
+		if os.path.isfile(attached_file)==False:
+			self.display_error_function("Attached file doesn't exists!")
+			return
+
+		
+		#SEND LOOP
+		try:
+			server = smtplib.SMTP(smtp_server, port)
+			server.starttls()
+
+			server.login(user_address, mail_key)
+
+			#BUILD THE MAIL
+			for contact_name, contact_data in self.mail_contact_list.items():
+				msg = MIMEMultipart()
+				msg["From"] = user_address
+				msg["To"] = contact_data["contactMail"]
+				msg["Subject"] = "This is an incredible mail brooo"
+
+				body = mail_body
+				msg.attach(MIMEText(body))
+
+				try:
+					with open(attached_file, "rb") as attach:
+						part = MIMEBase("application", "octet-stream")
+						part.set_payload(attach.read())
+
+				except Exception as e:
+					self.display_error_function("Impossible to read external file and link it to mail\n%s"%e)
+				else:
+					encoders.encode_base64(part)
+					part.add_header(
+						"Content-Disposition",
+						f"attachment; filename = {attached_file}",
+					)
+
+					msg.attach(part)
+					self.display_message_function("File attached")
+
+
+				server.sendmail(user_address, contact_data["contactMail"], msg.as_string())
+				self.display_message_function("MAIL SENT : %s"%contact_data["contactMail"])
+
+
+			server.quit()
+		except Exception as e:
+			self.display_error_function("Impossible to send mail\n%s"%e)
+		else:
+			self.display_message_function("TASK DONE!")
+
+
+
+
+
 
 
 

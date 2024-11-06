@@ -62,48 +62,15 @@ else:
 	for studio_name, studio_data in data.items():
 		print(colored("recreating contacts for [%s]"%studio_name, "yellow"))
 
-		company_old_contact = studio_data["CompanyContact"]
-
-		general_dictionnary = {}
-		job_dictionnary = {}
-		member_dictionnary = {}
-
-		for contact_name, contact_content in company_old_contact.items():
-			job_checklist = ["job", "jobs", "careers", "recrutement"]
-
-			found=False
-
-			for job_key in job_checklist:
-				if (job_key in contact_name.lower()) or (job_key in contact_content["mail"].lower()):
-					found = True
-					break
-
-
-			if found==True:
-				print("job contact : %s"%contact_name)
-				job_dictionnary[contact_name] = {
-					"mail": contact_content["mail"],
-					"website": contact_content["website"],
-				}
-			else:
-				if letter_verification_function(contact_name)==True:
-					print("general contact : %s"%contact_name)
-					general_dictionnary[contact_name] = {
-						"mail": contact_content["mail"],
-						"website": contact_content["website"],
-					}
-				else:
-					print(colored("Contact skipped because empty!", "red"))
-
-
-		studio_data["CompanyContact"] = {
-			"GENERAL": general_dictionnary,
-			"JOB": job_dictionnary, 
-			"MEMBER": member_dictionnary
-		}
-
-
+		studio_data["CompanyTags"] = []
 		data[studio_name] = studio_data
+		
+
+
+
+
+
+
 
 	print(colored("\nDone formating dictionnary", "magenta"))
 
