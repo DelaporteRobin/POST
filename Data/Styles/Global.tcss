@@ -155,8 +155,8 @@ POST_AddContact, POST_UserInfos	 {
 	height:5;
 }
 
-#modal_newcontactname, #modal_newcontactmail, #modal_newcontactwebsite {
-	width:33.33333%;
+#modal_newcontacttype, #modal_newcontactname, #modal_newcontactmail, #modal_newcontactwebsite {
+	width:25%;
 }
 
 #modal_horizontal_container {

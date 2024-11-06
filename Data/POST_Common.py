@@ -129,6 +129,7 @@ class POST_CommonApplication:
 		else:
 			company_informations["CompanyAnswer"] = self.query_one("#modal_newcompany_otheranswer").text
 
+		contact_type_list = self.query("#modal_newcontacttype")
 		contact_name_list = self.query("#modal_newcontactname")
 		contact_mail_list = self.query("#modal_newcontactmail")
 		contact_website_list = self.query("#modal_newcontactwebsite")
@@ -138,13 +139,37 @@ class POST_CommonApplication:
 			self.display_error_function("Error trying to get contact informations")
 			return
 		else:
-			contact_dictionnary = {}
+
+			general_dictionnary = {}
+			job_dictionnary = {}
+			member_dictionnary = {}
 			
-			for i in range(len(contact_name_list)):
-				contact_dictionnary[contact_name_list[i].value] = {
+
+			for i in range(len(contact_type_list)):
+				self.display_message_function(contact_type_list[i].value)
+
+				dictionnary = {
 					"mail": contact_mail_list[i].value,
-					"website": contact_website_list[i].value,
+					"website": contact_website_list[i].value
 				}
+
+				if contact_type_list[i].value == "GENERAL":
+					general_dictionnary[contact_name_list[i].value] = dictionnary 
+				elif contact_type_list[i].value == "MEMBER":
+					member_dictionnary[contact_name_list[i].value] = dictionnary
+				elif contact_type_list[i].value == "JOB":
+					job_dictionnary[contact_name_list[i].value] = dictionnary
+				else:
+					pass
+
+
+
+			contact_dictionnary = {
+				"GENERAL": general_dictionnary,
+				"JOB": job_dictionnary,
+				"MEMBER":member_dictionnary
+			}
+
 
 			#replace the value in the company dictionnary
 			company_informations["CompanyContact"] = contact_dictionnary
@@ -237,7 +262,8 @@ class POST_CommonApplication:
 				self.newcompany_otheranswer.text = studio_data["CompanyAnswer"]
 
 
-			#create contact
+			#LOAD CONTACTS IN PAGE
+			"""
 			if studio_data["CompanyContact"] != None:
 				for i in range(len(list(studio_data["CompanyContact"].keys()))):
 
@@ -247,8 +273,21 @@ class POST_CommonApplication:
 					contact_website = studio_data["CompanyContact"][contact_name]["website"]
 
 					#self.display_message_function(contact_name)
-					new_contact = Modal_Contact(contact_name, contact_mail, contact_website)
+					new_contact = Modal_Contact("JOB", contact_name, contact_mail, contact_website)
 					self.newcompany_contactlist_container.mount(new_contact)
+			"""
+			if studio_data["CompanyContact"] != None:
+				for contact_type, contact in studio_data["CompanyContact"].items():
+					for c_name, c_data in contact.items():
+
+						contact_name = c_name
+						contact_mail = c_data["mail"]
+						contact_website = c_data["website"]
+
+						new_contact = Modal_Contact(contact_type, contact_name, contact_mail, contact_website)
+						self.newcompany_contactlist_container.mount(new_contact)
+
+
 
 
 
@@ -331,12 +370,17 @@ Website of the company : [%s](%s)
 ## Contact from the company 
 """
 		if company_data["CompanyContact"] != {}:
-			for contact_name, contact_data in company_data["CompanyContact"].items():
-				markdown += """
-- %s
-	- Mail : %s
-	- Website : %s
-"""%(contact_name, contact_data["mail"], contact_data["website"])
+			for contact_type, contact in company_data["CompanyContact"].items():
+				
+				if contact != {}:
+					markdown += "CONTACT - %s\n"%contact_type
+					for c_name, c_data in contact.items():
+						markdown+="""
+%s\n
+- mail : %s\n
+- website : %s\n
+"""%(c_name,c_data["mail"], c_data["website"])
+				
 		else:
 			markdown += """
 > [!WARNING]

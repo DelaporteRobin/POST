@@ -102,28 +102,41 @@ class ExtendedTextArea(TextArea):
 class Modal_Contact(Static):
 	
 
-	def __init__(self, name="", mail="", website=""):
+	def __init__(self, kind = "MEMBER", name="", mail="", website=""):
 
 		super().__init__()
 
 		#self.app.display_message_function("%s ; %s ; %s"%(name, mail, website))
+		self.kind = kind
 		self.contact_name = name 
 		self.website = website
 		self.mail = mail 
+
+
+
+		self.kind_list = ["MEMBER", "JOB", "GENERAL"]
+		
+
 		
 
 		#self.app.display_message_function(name)
 
 
 	def compose(self) -> ComposeResult:
+		
+
 		with Horizontal(id="modal_newcontact_container"):
+			self.modal_newcontacttype = Select.from_values(self.kind_list, id = "modal_newcontacttype")
 			self.modal_newcontactname = Input(placeholder="Name", value = self.contact_name, type="text", id="modal_newcontactname")
 			self.modal_newcontactmail = Input(placeholder="Mail", value = self.mail, type="text", id="modal_newcontactmail")
 			self.modal_newcontactwebsite = Input(placeholder="Website", value=self.website, type="text", id="modal_newcontactwebsite")
 
+			yield self.modal_newcontacttype
 			yield self.modal_newcontactname
 			yield self.modal_newcontactmail
 			yield self.modal_newcontactwebsite
+
+			self.modal_newcontacttype.value = self.kind
 
 
 
