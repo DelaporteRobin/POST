@@ -50,6 +50,7 @@ import Levenshtein
 from functools import partial
 
 
+from textual.suggester import SuggestFromList, Suggester
 from textual.app import App, ComposeResult
 from textual.widgets import Markdown, MarkdownViewer, DataTable,TextArea, RadioSet, RadioButton, Input, Log, Rule, Collapsible, Checkbox, SelectionList, LoadingIndicator, DataTable, Sparkline, DirectoryTree, Rule, Label, Button, Static, ListView, ListItem, OptionList, Header, SelectionList, Footer, Markdown, TabbedContent, TabPane, Input, DirectoryTree, Select, Tabs
 from textual.widgets.option_list import Option, Separator
@@ -216,6 +217,8 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 
 
 		
+
+
 	
 
 	def on_mount(self) -> None:
@@ -439,6 +442,10 @@ class POST_Application(App, POST_CommonApplication):
 		self.contact_list = {}
 
 
+		self.studio_suggest_list = []
+		self.mail_contact_list = []
+
+
 		self.user_settings = {
 			"colorTheme":"DarkTheme",
 			"companyDisplayMode":1,
@@ -571,26 +578,46 @@ class POST_Application(App, POST_CommonApplication):
 								self.listview_mailpreset.border_title = "Preset list"
 							
 							with Vertical(id="right_mailtext_container"):
-								with Collapsible(title="Copilot settings", id="right_mailprompt_collapsible"):
-									self.textarea_prompt = TextArea(id="textarea_prompt")
-									yield self.textarea_prompt
-									self.textarea_prompt.border_title = "Copilot prompt"
+								
+								
 
 
+								with Collapsible(title="Contact list", id="collapsible_mail_contact_list"):
+									self.input_mailcontact = Input(placeholder="Mail contact list", id="input_mailcontact", suggester=SuggestFromList(self.studio_suggest_list, case_sensitive=False))
+									yield self.input_mailcontact
+									
+									with Horizontal(id = "mail_contact_horizontal_container"):
+										with Vertical(id = "mail_contact_left_column"):
+											yield Button("hello")
 
-									with Horizontal(id="right_mailtext_horizontal"):
-										yield Button("Save copilot prompt", id="button_saveprompt")
-
+										with Vertical(id = "mail_contact_right_column"):
+											self.optionlist_contact = OptionList(id = "optionlist_contact")
+											self.optionlist_contact.border_title = "Mail contact list"
+											yield self.optionlist_contact
 
 
 								yield Rule()
 
-								self.input_mailcontact = Input(placeholder="Mail contact list")
-								yield self.input_mailcontact
+								
 
 								self.textarea_mail = TextArea(id="textarea_mail")
 								yield self.textarea_mail
 								self.textarea_mail.border_title = "Mail"
+
+
+
+					with TabPane("Mail Settings"):
+						with Vertical(id = "main_settings_container"):
+							with Collapsible(title="Copilot settings", id="right_mailprompt_collapsible"):
+								self.textarea_prompt = TextArea(id="textarea_prompt")
+								yield self.textarea_prompt
+								self.textarea_prompt.border_title = "Copilot prompt"
+
+
+
+								with Horizontal(id="right_mailtext_horizontal"):
+									yield Button("Save copilot prompt", id="button_saveprompt")
+
 
 
 
@@ -607,6 +634,10 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
+
+
+
+
 	def on_input_changed(self, event: Input.Changed) -> None:
 		#EVENT FOR THE SEARCHBAR
 		#call the searchbar system function
@@ -614,6 +645,58 @@ class POST_Application(App, POST_CommonApplication):
 			#get the value of the searchbar at that moment
 			#self.display_message_function(self.input_studiolist_searchbar.value)
 			self.searchbar_function(self.input_studiolist_searchbar.value)
+
+
+	def on_input_submitted(self, event: Input.Submitted) -> None:
+		if event.input.id == "input_mailcontact":
+			#get the value of the input field
+			#check if the name is in the studio list
+			#otherwise check if it is an email adress
+			if self.letter_verification_function(self.input_mailcontact.value)!=True:
+				self.display_error_function("You have to enter a studio name or email adress!")
+				return
+			else:
+			
+
+				if self.input_mailcontact.value not in list(self.company_dictionnary.keys()):
+					if (self.check_adress_function(self.input_mailcontact.value)) != True:
+						self.display_error_function("This is not a valid studio name or email adress!")
+						return 
+				
+				if self.input_mailcontact.value in self.mail_contact_list:
+					self.display_error_function("Contact already in list!")
+					return 
+
+				self.mail_contact_list.append(self.input_mailcontact.value)
+				self.optionlist_contact.add_option(self.input_mailcontact.value)
+				self.display_message_function("Contact added to list")
+
+
+
+	def on_option_list_option_highlighted(self, event: OptionList.OptionHighlighted) -> None:
+		if event.option_list.id == "optionlist_contact":
+			
+			#get the index of the selected item
+			#remove it from the list
+			#refresh the option list
+			self.mail_contact_list.pop(self.optionlist_contact.highlighted)
+			self.optionlist_contact.clear_options()
+			self.optionlist_contact.add_options(self.mail_contact_list)
+
+
+						
+
+
+
+
+
+			
+
+	"""
+	async def on_key(self, event: events.Key):
+		if (self.focused.id == "input_mailcontact") and (event.key == "right"):
+			self.input_mailcontact.value = "%s;"%self.input_mailcontact.value
+	"""
 
 
 	def on_radio_set_changed(self, event:RadioSet.Changed) -> None:
@@ -710,18 +793,7 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
-	async def on_key(self, event: events.Key) -> None:
 
-		"""
-		if event.key == "delete":
-			#self.display_message_function("hello")
-			#get selected item in list and delete the key from the dictionnary
-			value = list(self.company_dictionnary.keys())[self.listview_studiolist.index+1]
-			del self.company_dictionnary[value]
-			self.save_company_dictionnary_function()
-			self.update_informations_function()
-			self.display_message_function("Company removed from dictionnary")
-		"""
 
 
 
@@ -875,8 +947,15 @@ class POST_Application(App, POST_CommonApplication):
 
 	def update_informations_function(self):
 
+
+
+
+
+
 		#self.display_message_function("Refresh informations")
 
+
+		#LOAD ALL INFORMATIONS CONTAINED IN USER SETTINGS FILES
 		self.listview_studiolist.clear()
 		self.listview_mailpreset.clear()
 		self.textarea_prompt.clear()
@@ -887,7 +966,20 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
+
+		#create the studio suggest list for mail contact
+		self.studio_suggest_list.clear()
+		self.studio_suggest_list = list(self.company_dictionnary.keys())
+		self.input_mailcontact.suggester=SuggestFromList(self.studio_suggest_list, case_sensitive=False)
+
+		self.listview_contactlist.clear()
+		for suggest in self.studio_suggest_list:
+			self.listview_contactlist.append(ListItem(Label(suggest)))
+
+
+
 		#CREATE THE CONTACT LIST
+		"""
 		for studio_name, studio_data in self.company_dictionnary.items():
 			for contact_name, contact_data in studio_data["CompanyContact"].items():
 				if self.letter_verification_function(contact_data["mail"])==True:
@@ -898,6 +990,12 @@ class POST_Application(App, POST_CommonApplication):
 		for contact_adress, contact_data in self.contact_list.items():
 			label = Label("[ %s ] - %s"%(contact_adress, contact_data["studioName"]))
 			self.listview_contactlist.append(ListItem(label)) 
+		"""
+
+
+
+
+
 
 
 		if "CopilotPrompt" in self.user_preset:

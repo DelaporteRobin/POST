@@ -67,6 +67,13 @@ Button {
 	width: 50%;
 }
 
+#collapsible_mail_contact_list {
+	max-height: 50%;
+}
+
+#contact_button_container {
+	layout: grid;
+}
 
 
 

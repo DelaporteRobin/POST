@@ -2,6 +2,8 @@ import os
 import sys
 import time 
 from groq import Groq
+import re 
+import dns.resolver
 import pendulum
 
 from functools import partial
@@ -699,6 +701,28 @@ Try if possible to integrate in this email these details about yourself a subtle
 
 		return prompt_format
 
+
+
+
+
+
+
+	#check if email adress is valid by syntax or domain?
+	def check_adress_function(self, content):
+		pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+
+		if re.match(pattern, content):
+			domain = content.split("@")[1]
+
+			try:
+				dns.resolver.resolve(domain, "MX")
+				return True
+
+			except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
+				return False
+
+
+		return False
 
 
 
