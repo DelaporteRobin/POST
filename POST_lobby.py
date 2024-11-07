@@ -48,6 +48,7 @@ import re
 import Levenshtein
 
 from functools import partial
+from typing import  Iterable
 
 
 from textual.suggester import SuggestFromList, Suggester
@@ -175,7 +176,7 @@ class POST_AddContact(ModalScreen, POST_CommonApplication):
 			self.newcompany_website = Input(placeholder="Company website", type="text", id="modal_newcompany_website")
 
 			
-			self.newcompany_tags = Input(placeholder="TAGS / KEYWORDS", type="text", id="modal_newcompany_tags")
+			self.newcompany_tags = Input(placeholder="TAGS / KEYWORDS", type="text", id="modal_newcompany_tags", suggester=SuggestFromList(app.tag_list, case_sensitive=False))
 			
 
 			self.newcompany_details = ExtendedTextArea(id="modal_newcompany_details")
@@ -438,6 +439,54 @@ class POST_UserInfos(ModalScreen, POST_CommonApplication):
 
 
 
+class SuggestFromList(Suggester):
+
+
+
+	def __init__(self, suggestions= Iterable[str], *, case_sensitive: bool=True) -> None:
+		super().__init__(case_sensitive=case_sensitive)
+
+		self._suggestions = list(suggestions)
+		self._for_comparison = (
+			self._suggestions
+			if self.case_sensitive
+			else [suggestion.casefold() for suggestion in self._suggestions]
+		)
+
+
+	async def get_suggestion(self, value: str) -> str | None:
+		"""Gets a completion from the given possibilities.
+
+		Args:
+			value: The current value.
+
+		Returns:
+			A valid completion suggestion or `None`.
+		"""
+
+		#get the word to check and suggestion
+		first_values = value.split(";")
+		del first_values[-1]
+		last_value = value.split(";")[-1]
+
+		for idx, suggestion in enumerate(self._for_comparison):
+			if suggestion.startswith(last_value):
+				if len(first_values) != 0:
+					return "%s;%s"%(";".join(first_values),self._suggestions[idx])
+				else:
+					return self._suggestions[idx]
+
+		"""
+		for idx, suggestion in enumerate(self._for_comparison):
+			#self.display_message_function(idx)
+			if suggestion.startswith(value):
+				return self._suggestions[idx]
+		return None
+		"""
+
+
+
+
 
 
 
@@ -473,12 +522,24 @@ class POST_Application(App, POST_CommonApplication):
 
 		self.kind_list = ["MEMBER", "JOB", "GENERAL"]
 		self.tag_list = []
+		self.highlight_tag_list = []
+		self.highlight_studio_list = []
+
+
+		self.not_contacted_list = []
+		self.no_alert_list = []
+		self.short_alert_list = []
+		self.medium_alert_list = []
+		self.long_alert_list = []
 
 
 		self.user_settings = {
 			"colorTheme":"DarkTheme",
 			"companyDisplayMode":1,
 			"colorDictionnary": {
+				"HighlightColor": "#6d76ba",
+			},
+			"alertDictionnary": {
 				"RecentContact": {
 					"Color": "#fff03a",
 					"Delta": 3,
@@ -495,7 +556,15 @@ class POST_Application(App, POST_CommonApplication):
 					"Color":"#ffffff"
 				},
 			
-			}
+			},
+			"UserPromptDetails":[],
+			"UserSkillSearched":[],
+			"UserJobSearched":"",
+			"UserMailAddress":"archive-user-test@maildomain.com",
+			"UserMailAttached":"c:/users/username/folder1/folder2/user_resume.pdf",
+			"UserMailKey":"xxxx xxxx xxxx xxxx",
+			"UserDemoReelLink":"https://youtube.com/DemoReelLink",
+			"UserDemoReelPassword":None,
 		}
 		
 		self.user_preset = {}
@@ -561,10 +630,21 @@ class POST_Application(App, POST_CommonApplication):
 								
 
 							with Collapsible(id = "collapsible_studiolist_settings", title="COMPANY LIST SETTINGS"):
-								with RadioSet(id = "radioset_studiolist_settings"):
-									yield RadioButton("By alphabetic order")
-									yield RadioButton("By chronologic order")
-									yield RadioButton("By priority order")
+								with ScrollableContainer(id = "scrollable_studiolist_settings"):
+									with RadioSet(id = "radioset_studiolist_settings"):
+										yield RadioButton("By alphabetic order")
+										yield RadioButton("By chronologic order")
+										yield RadioButton("By priority order")
+
+									yield Rule(line_style="double")
+
+									self.selectionlist_tags_settings = SelectionList(id = "selectionlist_tags_settings")
+									yield self.selectionlist_tags_settings
+
+									with Horizontal(id="horizontal_tag_container"):
+										yield Button("Remove Tags", id = "button_remove_tag")
+										yield Button("Highlight", id="button_highlight_tag")
+										yield Button("Erase", id="button_erase_tag", classes="error_button")
 
 
 
@@ -576,7 +656,13 @@ class POST_Application(App, POST_CommonApplication):
 							yield self.listview_studiolist
 							#self.datatable_studiolist = DataTable(id = "datatable_studiolist")
 							#yield self.datatable_studiolist
+
+
+
 					with Vertical(id = "main_center_container"):
+
+						self.input_tag_lobby = Input(placeholder="TAG LIST", id="input_tag_lobby", suggester=SuggestFromList(self.tag_list, case_sensitive=False))
+						yield self.input_tag_lobby 
 
 						#with Horizontal(id = "right_horizontal_container"):
 						with Vertical(id="right_vertical_container1"):
@@ -612,36 +698,46 @@ class POST_Application(App, POST_CommonApplication):
 
 
 								with Collapsible(title="Contact list", id="collapsible_mail_contact_list"):
-									self.input_mailcontact = Input(placeholder="Mail contact list", id="input_mailcontact", suggester=SuggestFromList(self.studio_suggest_list, case_sensitive=False))
-									yield self.input_mailcontact
-									
-									with Horizontal(id = "mail_contact_horizontal_container"):
-										with Vertical(id = "mail_contact_left_column"):
-											self.selectionlist_contacttype = SelectionList(id = "selectionlist_contacttype")
-											self.selectionlist_tags = SelectionList(id = "selectionlist_tags")
+									with VerticalScroll(id = "verticalscroll_mail_contact_list"):
+										self.input_mailcontact = Input(placeholder="Mail contact list", id="input_mailcontact", suggester=SuggestFromList(self.studio_suggest_list, case_sensitive=False))
+										yield self.input_mailcontact
+										
+										with Horizontal(id = "mail_contact_horizontal_container"):
+											with Vertical(id = "mail_contact_left_column"):
+												self.selectionlist_contacttype = SelectionList(id = "selectionlist_contacttype")
+												self.selectionlist_tags = SelectionList(id = "selectionlist_tags")
+												self.selectionlist_delta = SelectionList(id = "selectionlist_delta")
 
-											for i in range(len(self.kind_list)):
-												self.selectionlist_contacttype.add_option((self.kind_list[i], i))
+												for i in range(len(self.user_settings["alertDictionnary"])):
+													self.selectionlist_delta.add_option(( list(self.user_settings["alertDictionnary"].keys())[i], i))
 
-											yield self.selectionlist_contacttype
-											yield self.selectionlist_tags
+												for i in range(len(self.kind_list)):
+													self.selectionlist_contacttype.add_option((self.kind_list[i], i))
 
-									
+												yield self.selectionlist_contacttype
+												yield self.selectionlist_delta
+												yield self.selectionlist_tags
 
-											yield Button("ADD CONTACTS", id = "button_filter_add_contact")
+										
+
+												yield Button("LOAD CONTACT", id = "button_filter_add_contact")
+												yield Button("CLEAR CONTACT", id = "button_clear_contact", classes="error_button")
 
 
-										with Vertical(id = "mail_contact_right_column"):
-											self.optionlist_contact = OptionList(id = "optionlist_contact")
-											self.optionlist_contact.border_title = "Mail contact list"
-											yield self.optionlist_contact
+											with Vertical(id = "mail_contact_right_column"):
+												self.optionlist_contact = OptionList(id = "optionlist_contact")
+												self.optionlist_contact.border_title = "Mail contact list"
+												yield self.optionlist_contact
 
 
 								yield Rule()
 
 								
 
+								self.input_mail_header = Input(placeholder="Mail header", id="input_mail_header")
 								self.textarea_mail = TextArea(id="textarea_mail")
+
+								yield self.input_mail_header
 								yield self.textarea_mail
 								self.textarea_mail.border_title = "Mail"
 
@@ -661,6 +757,20 @@ class POST_Application(App, POST_CommonApplication):
 
 								with Horizontal(id="right_mailtext_horizontal"):
 									yield Button("Save copilot prompt", id="button_saveprompt")
+
+							yield Rule()
+
+
+							self.input_mailkey = Input(placeholder="Mail key", id="input_mail_key")
+							self.input_useraddress = Input(placeholder="User email address", id = "input_useraddress")
+							self.input_demolink = Input(placeholder="DemoReel link", id = "input_demolink")
+							self.input_demopassword = Input(placeholder = "DemoReel password", id="input_demopassword")
+							self.input_resume = Input(placeholder="Resume filepath", id="input_resume")
+
+							yield self.input_mailkey
+							yield self.input_useraddress
+							yield self.input_demolink
+							yield self.input_resume
 
 
 
@@ -692,12 +802,42 @@ class POST_Application(App, POST_CommonApplication):
 
 
 	def on_input_submitted(self, event: Input.Submitted) -> None:
+
+
+		if event.input.id in ["input_useraddress", "input_mailkey", "input_demolink", "input_demopassword", "input_resume"]:
+			#get all informations in fields
+			#check all informations
+			self.check_user_informations_function()
+			self.save_user_settings_function()
+
+			self.display_message_function("Informations saved!")
+
+
+		if event.input.id == "input_tag_lobby":
+			#get the studio selected
+			#get the list of tags
+
+			#replace the studio tags in dictionnary
+			#call the update function
+			studio_name = list(self.company_dictionnary.keys())[self.listview_studiolist.index]
+			studio_data = self.company_dictionnary[list(self.company_dictionnary.keys())[self.listview_studiolist.index]]
+
+			tag_list = (self.input_tag_lobby.value).lower().split(";")
+			studio_data["CompanyTags"] = tag_list
+
+			self.company_dictionnary[studio_name] = studio_data 
+			self.save_company_dictionnary_function()
+			self.update_informations_function()
+
+
+
+
 		if event.input.id == "input_mailcontact":
 			#get the value of the input field
 			#check if the name is in the studio list
-			#otherwise check if it is an email adress
+			#otherwise check if it is an email addres
 			if self.letter_verification_function(self.input_mailcontact.value)!=True:
-				self.display_error_function("You have to enter a studio name or email adress!")
+				self.display_error_function("You have to enter a studio name or email addres!")
 				return
 			else:
 
@@ -705,12 +845,15 @@ class POST_Application(App, POST_CommonApplication):
 
 				contacttype_index_list = (self.selectionlist_contacttype.selected)
 				contacttype_list = []
+
 				for index in contacttype_index_list:
 					contacttype_list.append(self.kind_list[index])
+
+				self.display_message_function(contacttype_list)
 				"""
 				if self.input_mailcontact.value not in list(self.company_dictionnary.keys()):
-					if (self.check_adress_function(self.input_mailcontact.value)) != True:
-						self.display_error_function("This is not a valid studio name or email adress!")
+					if (self.check_addres_function(self.input_mailcontact.value)) != True:
+						self.display_error_function("This is not a valid studio name or email addres!")
 						return 
 				
 				if self.input_mailcontact.value in list(self.mail_contact_list).keys():
@@ -732,14 +875,17 @@ class POST_Application(App, POST_CommonApplication):
 					
 					for contact_type, contact_data in studio_contact_data.items():
 						
-						if (len(contacttype_list) != 0) and (contact_type in contacttype_list):
+						
+						if len(contacttype_list) > 0:
+							#self.display_message_function("CHECKER HUH")
 							for c_name, c_data in contact_data.items():
 								if self.letter_verification_function(c_data["mail"])==True:
-									contact_list["[%s] %s"%(self.input_mailcontact.value, c_data["mail"])] = {
-										"studioName":self.input_mailcontact.value,
-										"contactName":c_name,
-										"contactMail":c_data["mail"]
-									}
+									if contact_type in contacttype_list:
+										contact_list["[%s] %s"%(self.input_mailcontact.value, c_data["mail"])] = {
+											"studioName":self.input_mailcontact.value,
+											"contactName":c_name,
+											"contactMail":c_data["mail"]
+										}
 						else:
 							for c_name, c_data in contact_data.items():
 								if self.letter_verification_function(c_data["mail"])==True:
@@ -748,26 +894,28 @@ class POST_Application(App, POST_CommonApplication):
 										"contactName":c_name,
 										"contactMail":c_data["mail"]
 									}
-				#check if it is an email adress
-				elif self.check_adress_function(self.input_mailcontact.value)==True:
+				#check if it is an email addres
+				elif self.check_addres_function(self.input_mailcontact.value)==True:
 					contact_list[self.input_mailcontact.value] = {
 						"studioName":None,
 						"contactMail":self.input_mailcontact.value
 					}
 				else:
-					self.display_error_function("Contact isn't a valid studio name or email adress!")
+					self.display_error_function("Contact isn't a valid studio name or email addres!")
 					return
 
 
 
 
-				self.display_message_function("field")
+				#self.display_message_function("field")
 
 				
 				self.mail_contact_list.update(contact_list)
 
 				self.optionlist_contact.clear_options()
 				self.optionlist_contact.add_options(list(self.mail_contact_list.keys()))
+
+
 
 
 
@@ -817,9 +965,56 @@ class POST_Application(App, POST_CommonApplication):
 	def on_button_pressed(self, event: Button.Pressed) -> None:
 
 
+		if event.button.id == "button_highlight_tag":
+			self.highlight_tag_list.clear()
+			index_list = self.selectionlist_tags_settings.selected
+			tag_list = []
+			for index in index_list:
+				self.highlight_tag_list.append(self.tag_list[index])
+
+			self.update_informations_function()
+
+
+		if event.button.id == "button_erase_tag":
+			self.highlight_tag_list.clear()
+			self.update_informations_function()
+
+
+
+
+		if event.button.id == "button_remove_tag":
+			#get the selection in selection list
+			index_list = self.selectionlist_tags_settings.selected
+			tag_list = []
+			for index in index_list:
+				tag_list.append(self.tag_list[index])
+
+			for studio_name, studio_data in self.company_dictionnary.items():
+				studio_tag = studio_data["CompanyTags"]
+				for tag in tag_list:
+					try:
+						studio_tag.remove(tag)
+					except ValueError:
+						pass
+
+				studio_data["CompanyTags"] = studio_tag 
+
+				self.company_dictionnary[studio_name] = studio_data
+			self.save_company_dictionnary_function()
+			self.update_informations_function()
+
+
+
 		if event.button.id == "button_send_mail":
+
 			with self.suspend():
 				self.send_mail_function()
+
+			#save user settings
+			self.save_company_dictionnary_function()
+			#refresh informations
+			self.update_informations_function()
+
 			
 
 		if event.button.id == "button_filter_add_contact":
@@ -944,7 +1139,7 @@ class POST_Application(App, POST_CommonApplication):
 	def on_markdown_link_clicked(self, event: Markdown.LinkClicked) -> None:
 		link = event.href
 
-		#check if email or internet adress
+		#check if email or internet addres
 		
 		#email_regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
 		#url_regex = r'^(https?://)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(/.*)?$'
@@ -964,7 +1159,7 @@ class POST_Application(App, POST_CommonApplication):
 
 		#test the dns check
 		if re.match(url_regex, link):
-			#self.display_message_function("website adress")
+			#self.display_message_function("website addres")
 			#open the link in a webbrower
 			
 			#OPEN THE WEBBROWSER WITH THE LINK
@@ -980,7 +1175,7 @@ class POST_Application(App, POST_CommonApplication):
 			except Exception as e:
 				self.display_error_function("Link not recognized\n%s"%e)
 			else:
-				self.display_message_function("Email adress")
+				self.display_message_function("Email addres")
 		"""
 
 		
@@ -1001,6 +1196,11 @@ class POST_Application(App, POST_CommonApplication):
 			markdown = self.generate_markdown_function(company_name, company_data)
 
 			self.markdown_studio.update(markdown)
+
+
+			#load the content of tag list for this studio
+			tag_list = ";".join(company_data["CompanyTags"])
+			self.input_tag_lobby.value = tag_list
 
 
 		if event.list_view.id == "listview_mailpreset":
@@ -1102,6 +1302,16 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
+		self.input_mailkey.value = str(self.user_settings["UserMailKey"])
+		self.input_useraddress.value = str(self.user_settings["UserMailAddress"])
+		self.input_demolink.value = str(self.user_settings["UserDemoReelLink"])
+		self.input_demopassword.value = str(self.user_settings["UserDemoReelPassword"])
+		self.input_resume.value = str(self.user_settings["UserMailAttached"])
+
+
+
+
+
 		#create the studio suggest list for mail contact
 		self.studio_suggest_list.clear()
 		self.studio_suggest_list = list(self.company_dictionnary.keys())
@@ -1124,8 +1334,8 @@ class POST_Application(App, POST_CommonApplication):
 						"studioName":studio_name,
 						"studioContactName":contact_name
 						}
-		for contact_adress, contact_data in self.contact_list.items():
-			label = Label("[ %s ] - %s"%(contact_adress, contact_data["studioName"]))
+		for contact_addres, contact_data in self.contact_list.items():
+			label = Label("[ %s ] - %s"%(contact_addres, contact_data["studioName"]))
 			self.listview_contactlist.append(ListItem(label)) 
 		"""
 
@@ -1157,6 +1367,8 @@ class POST_Application(App, POST_CommonApplication):
 		self.list_studiolist_display = []
 		#self.list_studiolist_filtered = []
 
+
+
 		
 		#NOT BY PRIORITY ORDER
 		if self.user_settings["companyDisplayMode"] != 2:
@@ -1181,16 +1393,27 @@ class POST_Application(App, POST_CommonApplication):
 		else:	
 			self.display_message_function("PRIORITY ORDER")
 
-			not_contacted_list = []
-			no_alert_list = []
-			short_alert_list = []
-			medium_alert_list = []
-			long_alert_list = []
+			self.not_contacted_list.clear()
+			self.no_alert_list.clear()
+			self.short_alert_list.clear()
+			self.medium_alert_list.clear()
+			self.long_alert_list.clear()
+			
+
+			self.highlight_studio_list.clear()
 
 
 			for studio_name, studio_data in self.company_dictionnary.items():
+
+				#check the highlight list
+				#check tag in studio_data 
+				
+
+
+
+
 				if ("CompanyDate" not in studio_data) or (studio_data["CompanyDate"] == None):
-					not_contacted_list.append(studio_name)
+					self.not_contacted_list.append(studio_name)
 
 				else:
 					date = self.company_dictionnary[studio_name]["CompanyDate"]
@@ -1207,13 +1430,13 @@ class POST_Application(App, POST_CommonApplication):
 
 
 					"""
-					if delta_week >= self.user_settings["colorDictionnary"]["PastContact"]["Delta"]:
+					if delta_week >= self.user_settings["alertDictionnary"]["PastContact"]["Delta"]:
 						long_alert_list.append(studio_name)
 
-					if (delta_week >= self.user_settings["colorDictionnary"]["LatelyContact"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["PastContact"]["Delta"]):
+					if (delta_week >= self.user_settings["alertDictionnary"]["LatelyContact"]["Delta"]) and (delta_week < self.user_settings["alertDictionnary"]["PastContact"]["Delta"]):
 						medium_alert_list.append(studio_name)
 
-					if (delta_week >= self.user_settings["colorDictionnary"]["RecentContact"]["Delta"]) and (delta_week < self.user_settings["colorDictionnary"]["LatelyContact"]["Delta"]):
+					if (delta_week >= self.user_settings["alertDictionnary"]["RecentContact"]["Delta"]) and (delta_week < self.user_settings["alertDictionnary"]["LatelyContact"]["Delta"]):
 						short_alert_list.append(studio_name)
 
 					else:
@@ -1223,26 +1446,26 @@ class POST_Application(App, POST_CommonApplication):
 
 
 					#CREATION OF ALERT LIST
-					alert_data = self.user_settings["colorDictionnary"]
+					alert_data = self.user_settings["alertDictionnary"]
 
 					if delta_week < alert_data["RecentContact"]["Delta"]:
-						no_alert_list.append(studio_name)
+						self.no_alert_list.append(studio_name)
 
 					elif (delta_week >= alert_data["RecentContact"]["Delta"]) and (delta_week < alert_data["LatelyContact"]["Delta"]):
-						short_alert_list.append(studio_name)
+						self.short_alert_list.append(studio_name)
 
 					elif (delta_week >= alert_data["LatelyContact"]["Delta"]) and (delta_week < alert_data["PastContact"]["Delta"]):
-						medium_alert_list.append(studio_name)
+						self.medium_alert_list.append(studio_name)
 
 					else:
-						long_alert_list.append(studio_name)
+						self.long_alert_list.append(studio_name)
 
 					
 
 
 
 			#concatenate all list
-			self.list_studiolist_display = long_alert_list + medium_alert_list + short_alert_list + no_alert_list + not_contacted_list
+			self.list_studiolist_display = self.long_alert_list + self.medium_alert_list + self.short_alert_list + self.no_alert_list + self.not_contacted_list
 
 
 		self.update_studiolist_view()
@@ -1259,6 +1482,7 @@ class POST_Application(App, POST_CommonApplication):
 
 		#update the tag list
 		self.tag_list.clear()
+
 
 
 		#FOR EACH STUDIO IN THE STUDIO LIST ADD IT TO THE LIST WITH THE RIGHT COLOR
@@ -1278,6 +1502,7 @@ class POST_Application(App, POST_CommonApplication):
 			#get tag list in company dictionnary
 			studio_tags = self.company_dictionnary[studio]["CompanyTags"]
 			self.selectionlist_tags.clear_options()
+			self.selectionlist_tags_settings.clear_options()
 
 			for tag in studio_tags:
 				if tag not in self.tag_list:
@@ -1285,6 +1510,7 @@ class POST_Application(App, POST_CommonApplication):
 
 			for i in range(len(self.tag_list)):
 				self.selectionlist_tags.add_option((self.tag_list[i], i))
+				self.selectionlist_tags_settings.add_option((self.tag_list[i], i))
 
 
 
@@ -1295,6 +1521,16 @@ class POST_Application(App, POST_CommonApplication):
 			label = Label(studio)
 
 			self.listview_studiolist.append(ListItem(label))
+
+
+
+
+			#HIGHLIGHT TAGGED STUDIOS
+			for tag in studio_tags:
+				if tag in self.highlight_tag_list:
+
+
+					label.styles.background = self.user_settings["colorDictionnary"]["HighlightColor"]
 
 
 			#CHECK FOR COLORS
@@ -1316,19 +1552,19 @@ class POST_Application(App, POST_CommonApplication):
 
 
 
-				alert_data = self.user_settings["colorDictionnary"]
+				alert_data = self.user_settings["alertDictionnary"]
 					
 				if delta_week < alert_data["RecentContact"]["Delta"]:
 					pass
 
 				elif (delta_week >= alert_data["RecentContact"]["Delta"]) and (delta_week < alert_data["LatelyContact"]["Delta"]):
-					label.styles.color = self.user_settings["colorDictionnary"]["RecentContact"]["Color"]
+					label.styles.color = self.user_settings["alertDictionnary"]["RecentContact"]["Color"]
 
 				elif (delta_week >= alert_data["LatelyContact"]["Delta"]) and (delta_week < alert_data["PastContact"]["Delta"]):
-					label.styles.color = self.user_settings["colorDictionnary"]["LatelyContact"]["Color"]
+					label.styles.color = self.user_settings["alertDictionnary"]["LatelyContact"]["Color"]
 
 				else:
-					label.styles.color = self.user_settings["colorDictionnary"]["PastContact"]["Color"]
+					label.styles.color = self.user_settings["alertDictionnary"]["PastContact"]["Color"]
 
 					
 				
@@ -1336,6 +1572,8 @@ class POST_Application(App, POST_CommonApplication):
 				
 
 			#app.refresh_css()
+		#update the tag list in searchbar
+		self.input_tag_lobby.suggester=SuggestFromList(self.tag_list, case_sensitive=False)
 
 
 

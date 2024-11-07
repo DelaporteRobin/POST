@@ -19,7 +19,7 @@ Label {
 TextArea {
 	border:round $primary;
 }
-ListView, TextArea {
+ListView, TextArea, OptionList, SelectionList {
 	border-title-align:left;
 	border-title-style:bold;
 }
@@ -47,6 +47,11 @@ Button {
 	height: 5;
 }
 
+#input_tag_lobby {
+	margin-top: 5;
+	margin-right: 2;
+	margin-left: 2;
+}
 #right_mailpreset_container {
 	margin-right: 2;
 }
@@ -62,19 +67,38 @@ Button {
 	width: 100%;
 }
 
-
-#main_left_container {
-	width: 50%;
+#button_remove_tag, #button_highlight_tag, #button_erase_tag {
+	width: 33%;
 }
 
-#collapsible_mail_contact_list {
+
+
+#collapsible_studiolist_settings {
 	max-height: 50%;
 }
+#collapsible_mail_contact_list {
+	max-height: 70%;
+}
 
+#verticalscroll_main_contact_list {
+	height: 1fr;
+}
 #contact_button_container {
 	layout: grid;
 }
 
+
+#button_filter_add_contact, #button_clear_contact {
+	width: 50%;
+}
+
+#mail_contact_right_column {
+	width: 70%;
+}
+
+#optionlist_contact {
+	height: 90%;
+}
 
 
 

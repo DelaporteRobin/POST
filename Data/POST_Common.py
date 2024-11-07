@@ -7,7 +7,7 @@ import dns.resolver
 import pendulum
 import smtplib
 import pyfiglet
-
+import requests
 
 from functools import partial
 
@@ -767,8 +767,8 @@ Try if possible to integrate in this email these details about yourself a subtle
 
 
 
-	#check if email adress is valid by syntax or domain?
-	def check_adress_function(self, content):
+	#check if email address is valid by syntax or domain?
+	def check_address_function(self, content):
 		pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
 
 		if re.match(pattern, content):
@@ -793,6 +793,7 @@ Try if possible to integrate in this email these details about yourself a subtle
 		#get value from select fields
 		contacttype_index_list = (self.selectionlist_contacttype.selected)
 		contacttag_index_list = (self.selectionlist_tags.selected)
+		contactdelta_index_list = (self.selectionlist_delta.selected)
 
 		contacttype_list = []
 		for index in contacttype_index_list:
@@ -802,6 +803,25 @@ Try if possible to integrate in this email these details about yourself a subtle
 		for index in contacttag_index_list:
 			contacttag_list.append(self.tag_list[index])
 
+		contactdelta_list = []
+		for index in contactdelta_index_list:
+			contactdelta_list.append(list(self.user_settings["alertDictionnary"])[index])
+
+
+
+		delta_studio_list = []
+
+		if "RecentContact" in contactdelta_list:
+			delta_studio_list.extend(self.short_alert_list)
+		if "LatelyContact" in contactdelta_list:
+			delta_studio_list.extend(self.medium_alert_list)
+		if "PastContact" in contactdelta_list:
+			delta_studio_list.extend(self.long_alert_list)
+		if "NotContacted" in contactdelta_list:
+			delta_studio_list.extend(self.not_contacted_list)
+
+
+		self.display_message_function(delta_studio_list)
 
 		#self.display_message_function(contacttype_list)
 		#self.display_message_function(contacttag_list)
@@ -810,7 +830,9 @@ Try if possible to integrate in this email these details about yourself a subtle
 		contact_list = {}
 		for studio_name, studio_data in self.company_dictionnary.items():
 
-
+			if len(delta_studio_list) != 0:
+				if studio_name not in delta_studio_list:
+					continue
 			#TAGS CONDITIONS
 			#	-> if the tag list isn't empty -> check for tags
 			#	-> if one of the studio tag is in the tag list
@@ -866,18 +888,47 @@ Try if possible to integrate in this email these details about yourself a subtle
 		#SETUP THE SERVER
 		smtp_server = "smtp.gmail.com"
 		port = 587
-		user_address = self.user_settings["UserMailAdress"]
+		user_address = self.user_settings["UserMailAddress"]
 
 		#GET THE MAIL CONTENT 
-		mail_header = "This is a mail"
+		mail_header = self.input_mail_header.value
 		mail_body = self.textarea_mail.text
-		header = "This is an incredible mail brooo"
+
+		if self.letter_verification_function(mail_header)==False or self.letter_verification_function(mail_body)==False:
+			print(colored("MAIL BODY OR MAIL HEADER IS EMPTY!", "red"))
+			os.system("pause")
+			return
+
+		if len(list(self.mail_contact_list.keys()))==0:
+			print(colored("Contact list is empty!", "red"))
+			os.system("pause")
+			return
 
 		#GET THE MAIL ATTACHED FILES
 		attached_file = self.user_settings["UserMailAttached"]
 		if os.path.isfile(attached_file)==False:
 			print(colored("Attached file doesn't exists!", "red"))
 			return
+
+
+
+
+		#DISPLAY FINAL CHOICE TO THE USER BEFORE SENDING THE MAIL
+		print(colored("Mail formatting ...", "cyan"))
+		print(colored("Your address : ", "cyan"), user_address)
+		print(colored("Mail header : ", "cyan"), mail_header)
+		print(colored("Mail body :\n", "cyan"), mail_body)
+
+		while True:
+			print(colored("Are you sure you want to launch mail sender function?", "cyan"))
+			user = input(colored("Y / N ", "magenta"))
+
+			if user == "Y":
+				break
+			elif user == "N":
+				return
+			else:
+				continue
 
 		
 		#SEND LOOP
@@ -886,27 +937,62 @@ Try if possible to integrate in this email these details about yourself a subtle
 			server.starttls()
 
 			print("Server started ... \n%s"%server)
-			print("User adress : %s\nUser Key : %s"%(user_address, mail_key))
+			print("User address : %s\nUser Key : %s"%(user_address, mail_key))
 
 
 			server.login(user_address, mail_key)
 
+
+			contact_list_length = len(list(self.mail_contact_list.keys()))
+			i = 0
+
+
+			header_proxy = mail_header 
+			body_proxy = mail_body
+
+
+
 			#BUILD THE MAIL
 			for contact_name, contact_data in self.mail_contact_list.items():
+
+
+				mail_header = header_proxy
+				mail_body = body_proxy
+
+
+				#REPLACE VARIABLES IN EMAIL BODY
+				if ("[STUDIONAME]" in mail_header) or ("[STUDIONAME]" in mail_body):
+					print("Studioname replaced in mail...")
+					if contact_data["studioName"] in list(self.company_dictionnary.keys()):
+						mail_header = mail_header.replace("[STUDIONAME]", contact_data["studioName"])
+						mail_body = mail_body.replace("[STUDIONAME]", contact_data["studioName"])
+					else:
+						print(colored("Studio skipped because impossible to replace variables!", "red"))
+						continue
+
+				if ("[DEMO_LINK]" in mail_header) or ("[DEMO_LINK]" in mail_body):
+					print("DemoLink replaced in mail...")
+					mail_header = mail_header.replace("[DEMO_LINK]", str(self.user_settings["UserDemoReelLink"]))
+					mail_body = mail_body.replace("[DEMO_LINK]", str(self.user_settings["UserDemoReelLink"]))
+
+				if ("[DEMO_PASSWORD]" in mail_header) or ("[DEMO_PASSWORD]" in mail_body):
+					print("DemoPassword replaced in mail...")
+					mail_header = mail_header.replace("[DEMO_PASSWORD]", str(self.user_settings["UserDemoReelPassword"]))
+					mail_body = mail_body.replace("[DEMO_PASSWORD]", str(self.user_settings["UserDemoReelPassword"]))
+
+
+
+
 				msg = MIMEMultipart()
 				msg["From"] = user_address
 				msg["To"] = contact_data["contactMail"]
-				msg["Subject"] = header 
+				msg["Subject"] = mail_header 
 
 
-				print(colored("MAIL CONTENT", "cyan"))
+				print(colored("[%s / %s] NEW MAIL CREATED"%(i, contact_list_length), "cyan"))
 				content = """
-From : %s
 To : %s
-Subject : %s
-Body : %s
-"""%(user_address, contact_data["contactMail"], header, mail_body)
-				print(content)
+"""%(contact_data["contactMail"])
 
 				body = mail_body
 				msg.attach(MIMEText(body))
@@ -933,7 +1019,25 @@ Body : %s
 				except Exception as e:
 					print(colored("Impossible to send mail\n%s"%e, "red"))
 				else:
+					
+
+					#get date to update user dictionnary (last time contacted)		
+					if contact_data["studioName"] in list(self.company_dictionnary.keys()):
+						#get today date
+						date_value = pendulum.parse(str(datetime.now()))
+						#get data
+						studio_data = self.company_dictionnary[contact_data["studioName"]]
+						studio_data["CompanyDate"] = str(date_value)
+
+						print("Date refreshed in user data...")
+
+
+
+
+
 					print(colored("MAIL SENT : %s\n\n"%contact_data["contactMail"], "green"))
+				i+=1
+
 
 
 			server.quit()
@@ -951,6 +1055,45 @@ Body : %s
 
 
 
+
+
+	def check_user_informations_function(self):
+		#get all informations in textfield
+		user_address = self.input_useraddress.value
+		user_mailkey = self.input_mailkey.value
+		user_demolink = self.input_demolink.value 
+		user_demopassword = self.input_demopassword.value 
+		user_resume = self.input_resume.value
+
+		if self.check_address_function(user_address)==False:
+			self.display_error_function("Invalid email address")
+		else:
+			self.user_settings["UserAddress"] = user_address
+			
+
+		if self.letter_verification_function(user_mailkey)==False:
+			self.display_error_function("Mail key is empty!")
+			
+		else:
+			self.user_settings["UserMailKey"] = user_mailkey
+
+		#check the connection with demoreel link
+		try:
+			response = requests.get(user_demolink, timeout=5)
+		except:
+			self.display_error_function("Invalid DemoReel link!")
+		else:
+			self.display_message_function("DemoReel link checked")
+			self.user_settings["UserDemoReelLink"] = user_demolink
+
+		if self.letter_verification_function(user_demopassword) == False:
+			self.user_settings["UserDemoPassword"] = None
+
+		if os.path.isfile(user_resume)==False:
+			self.display_error_function("Invalid filepath for Resume!")
+			return 
+		else:
+			self.user_settings["UserMailAttached"] = user_resume
 
 
 

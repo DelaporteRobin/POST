@@ -7,5 +7,4 @@ Hello World
 - add the tag filter system when picking contact list
 - update TUI with user settings for mails
 - create a tags manager process (with colors or not)
-
-
+- update the "last time contacted" after sending email
