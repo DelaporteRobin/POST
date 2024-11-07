@@ -2,8 +2,10 @@
 
 Hello World
 
-## Tasklist for next versions
+## TASKLIST
+- create an autocompletion system for tags when creating / editing a studio
+- add the tag filter system when picking contact list
+- update TUI with user settings for mails
+- create a tags manager process (with colors or not)
 
-- update contacted studio status after a certain amount of time
-- update the user settings location system
 

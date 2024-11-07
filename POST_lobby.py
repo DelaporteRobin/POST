@@ -818,7 +818,8 @@ class POST_Application(App, POST_CommonApplication):
 
 
 		if event.button.id == "button_send_mail":
-			self.send_mail_function()
+			with self.suspend():
+				self.send_mail_function()
 			
 
 		if event.button.id == "button_filter_add_contact":

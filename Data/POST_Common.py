@@ -6,9 +6,12 @@ import re
 import dns.resolver
 import pendulum
 import smtplib
+import pyfiglet
 
 
 from functools import partial
+
+from termcolor import *
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -846,16 +849,18 @@ Try if possible to integrate in this email these details about yourself a subtle
 
 
 	def send_mail_function(self):
+		os.system("cls")
+		print(colored("\n\n\n%s"%pyfiglet.figlet_format("MAIL PORTAL", font="the_edge"), "cyan"))
 
 		#GET THE MAIL KEY
 		try:
 			with open("C:/Program Files/@RCHIVE/DATA/mail_key.dll", "r") as load_key:
 				mail_key = load_key.read()
 		except Exception as e:
-			self.display_error_function("Impossible to load key\n%s"%e)
+			print(colored("Impossible to load key\n%s"%e, "red"))
 			return
 		else:
-			self.display_message_function("Key loaded")
+			print(colored("Key loaded", "green"))
 
 
 		#SETUP THE SERVER
@@ -866,11 +871,12 @@ Try if possible to integrate in this email these details about yourself a subtle
 		#GET THE MAIL CONTENT 
 		mail_header = "This is a mail"
 		mail_body = self.textarea_mail.text
+		header = "This is an incredible mail brooo"
 
 		#GET THE MAIL ATTACHED FILES
 		attached_file = self.user_settings["UserMailAttached"]
 		if os.path.isfile(attached_file)==False:
-			self.display_error_function("Attached file doesn't exists!")
+			print(colored("Attached file doesn't exists!", "red"))
 			return
 
 		
@@ -879,6 +885,10 @@ Try if possible to integrate in this email these details about yourself a subtle
 			server = smtplib.SMTP(smtp_server, port)
 			server.starttls()
 
+			print("Server started ... \n%s"%server)
+			print("User adress : %s\nUser Key : %s"%(user_address, mail_key))
+
+
 			server.login(user_address, mail_key)
 
 			#BUILD THE MAIL
@@ -886,7 +896,17 @@ Try if possible to integrate in this email these details about yourself a subtle
 				msg = MIMEMultipart()
 				msg["From"] = user_address
 				msg["To"] = contact_data["contactMail"]
-				msg["Subject"] = "This is an incredible mail brooo"
+				msg["Subject"] = header 
+
+
+				print(colored("MAIL CONTENT", "cyan"))
+				content = """
+From : %s
+To : %s
+Subject : %s
+Body : %s
+"""%(user_address, contact_data["contactMail"], header, mail_body)
+				print(content)
 
 				body = mail_body
 				msg.attach(MIMEText(body))
@@ -897,7 +917,7 @@ Try if possible to integrate in this email these details about yourself a subtle
 						part.set_payload(attach.read())
 
 				except Exception as e:
-					self.display_error_function("Impossible to read external file and link it to mail\n%s"%e)
+					print(colored("Impossible to read external file and link it to mail\n%s"%e, "red"))
 				else:
 					encoders.encode_base64(part)
 					part.add_header(
@@ -906,18 +926,24 @@ Try if possible to integrate in this email these details about yourself a subtle
 					)
 
 					msg.attach(part)
-					self.display_message_function("File attached")
+					print(colored("External file attached to mail : %s"%attached_file))
 
-
-				server.sendmail(user_address, contact_data["contactMail"], msg.as_string())
-				self.display_message_function("MAIL SENT : %s"%contact_data["contactMail"])
+				try:
+					server.sendmail(user_address, contact_data["contactMail"], msg.as_string())
+				except Exception as e:
+					print(colored("Impossible to send mail\n%s"%e, "red"))
+				else:
+					print(colored("MAIL SENT : %s\n\n"%contact_data["contactMail"], "green"))
 
 
 			server.quit()
 		except Exception as e:
-			self.display_error_function("Impossible to send mail\n%s"%e)
+			print(colored("Impossible to connect to server\n%s"%e, "red"))
 		else:
-			self.display_message_function("TASK DONE!")
+			print(colored("TASK DONE", "cyan"))
+		
+
+		os.system("pause")
 
 
 
